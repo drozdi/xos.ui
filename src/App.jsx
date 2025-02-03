@@ -1,7 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { AppProvider } from "./components/app";
-import { BtnExample, BtnGroupExample, HomeExample } from "./components/example";
-//import { ThemeProviderToggler } from "./components/hooks/useTheme";
+import {
+	BtnExample,
+	BtnGroupExample,
+	HomeExample,
+	LinkExample,
+	ListExample,
+} from "./components/example";
+import { ThemeProviderToggler } from "./components/hooks/useTheme";
 import { XIcon, XItem, XItemLabel, XItemSection, XList } from "./components/ui";
 import { XLayout } from "./components/ui/layout";
 function App() {
@@ -123,8 +129,8 @@ function App() {
 							</XList>
 						);
 					},
-					//header: <ThemeProviderToggler></ThemeProviderToggler>,
-					header: "header",
+					header: <ThemeProviderToggler></ThemeProviderToggler>,
+					//header: "header",
 					footer: "footer",
 					//right: 'right',
 					default: (props) => (
@@ -135,6 +141,8 @@ function App() {
 								path="/btn-group"
 								element={<BtnGroupExample />}
 							/>
+							<Route path="/list" element={<ListExample />} />
+							<Route path="/link" element={<LinkExample />} />
 						</Routes>
 					),
 				}}

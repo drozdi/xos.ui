@@ -1,22 +1,22 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { forwardRefWithAs } from '../../internal/render';
-import './style.css';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { forwardRefWithAs } from "../../internal/render";
+import "./style.css";
 export const XCollapse = forwardRefWithAs(function CollapseFN(
 	{ className, children, active, ...props },
-	ref,
+	ref
 ) {
 	return (
 		<div
 			className={classNames(
-				'x-collapse',
+				"x-collapse",
 				{
-					'x-collapse--active': active,
+					"x-collapse--active": active,
 				},
-				className,
+				className
 			)}
 		>
-			<div className="x-accordion-panel">
+			<div className="x-collapse-panel">
 				<div className="x-collapse-content" ref={ref}>
 					{children}
 				</div>

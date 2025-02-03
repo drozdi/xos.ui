@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "@style";
 
 .x-btn-group {
 	@apply flex;
@@ -8,7 +8,7 @@
 }
 .x-btn-group > .x-btn {
 	@apply !shadow-none;
-	@apply focus:outline focus:outline-1 focus:outline-current focus:outline-offset-2;
+	@apply focus:!outline focus:!outline-solid focus:!outline-1 focus:!outline-current focus:!outline-offset-2;
 }
 
 .x-btn-group--grow > * {
@@ -39,9 +39,9 @@
 	@apply flex-col;
 }
 
-.x-btn-group--vertical:not(.x-btn-group--pills):not(.x-btn-group--round) > * {
+.x-btn-group--vertical:not(.x-btn-group--pills, .x-btn-group--round) > * {
 	&:not(:first-child) {
-		@apply -mt-[1px] rounded-t-none;
+		@apply -mt-px rounded-t-none;
 	}
 	&:not(:last-child) {
 		@apply rounded-b-none;
@@ -55,15 +55,15 @@
 	}
 }
 .x-btn-group--round > * + * {
-	@apply ml-[3rem];
+	@apply ml-3;
 }
 .x-btn-group--round.x-btn-group--vertical {
 	@apply inline-flex;
 }
 .x-btn-group--round.x-btn-group--vertical > * + * {
-	@apply mt-[3rem];
+	@apply mt-3;
 }
 
 .x-btn-group--pills {
-	@apply gap-[3rem];
+	@apply gap-3;
 }

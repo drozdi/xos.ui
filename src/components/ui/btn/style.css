@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "@style";
 
 .x-btn {
 	@apply relative flex items-center justify-center select-none cursor-pointer rounded px-6 py-2 uppercase box-border border-current border-0 overflow-hidden focus:outline-none focus-visible:outline-none shadow !shadow-black/50;
@@ -10,7 +10,7 @@
 			@apply shadow-lg;
 		}
 		&:active {
-			@apply scale-[0.98] shadow-none shadow-inner;
+			@apply scale-[0.98] shadow-none inset-shadow-md;
 		}
 	}
 }
@@ -48,10 +48,10 @@
 	@apply top-full items-center justify-center;
 }
 .x-btn--loading {
-	& .x-btn-content {
+	.x-btn-content {
 		@apply translate-y-[calc(-100%-0.5rem)];
 	}
-	& .x-btn-loader {
+	.x-btn-loader {
 		@apply top-0;
 	}
 }
@@ -211,4 +211,106 @@
 .x-btn--warning,
 .x-btn--dimmed {
 	@apply text-white;
+}
+
+.x-btn--primary {
+	@apply bg-primary;
+	&:where(
+			.x-btn--tonal,
+			.x-btn--outline,
+			.x-btn--text,
+			.x-btn--plain,
+			.x-btn--link
+		) {
+		@apply text-primary;
+	}
+}
+
+.x-btn--secondary {
+	@apply bg-secondary;
+	&:where(
+			.x-btn--tonal,
+			.x-btn--outline,
+			.x-btn--text,
+			.x-btn--plain,
+			.x-btn--link
+		) {
+		@apply text-secondary;
+	}
+}
+
+.x-btn--accent {
+	@apply bg-accent;
+	&:where(
+			.x-btn--tonal,
+			.x-btn--outline,
+			.x-btn--text,
+			.x-btn--plain,
+			.x-btn--link
+		) {
+		@apply text-accent;
+	}
+}
+
+.x-btn--positive {
+	@apply bg-positive;
+	&:where(
+			.x-btn--tonal,
+			.x-btn--outline,
+			.x-btn--text,
+			.x-btn--plain,
+			.x-btn--link
+		) {
+		@apply text-positive;
+	}
+}
+
+.x-btn--negative {
+	@apply bg-negative;
+	&:where(
+			.x-btn--tonal,
+			.x-btn--outline,
+			.x-btn--text,
+			.x-btn--plain,
+			.x-btn--link
+		) {
+		@apply text-negative;
+	}
+}
+
+.x-btn--info {
+	@apply bg-info;
+	&:where(
+			.x-btn--tonal,
+			.x-btn--outline,
+			.x-btn--text,
+			.x-btn--plain,
+			.x-btn--link
+		) {
+		@apply text-info;
+	}
+}
+
+.x-btn--warning {
+	@apply bg-warning;
+	&:where(
+			.x-btn--tonal,
+			.x-btn--outline,
+			.x-btn--text,
+			.x-btn--plain,
+			.x-btn--link
+		) {
+		@apply text-warning;
+	}
+}
+
+.x-btn--link {
+	@apply normal-case hover:underline;
+}
+
+.x-btn--dimmed {
+	@apply !bg-dimmed;
+	&::after {
+		@apply border-color;
+	}
 }

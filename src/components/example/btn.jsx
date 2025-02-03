@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { XBtn } from '../ui';
-import { Form, useProps } from './utils';
+import { useState } from "react";
+import { XBtn } from "../ui";
+import { Form, useProps } from "./utils";
 
 export function BtnExample() {
-	const [label, setLabel] = useState('Example');
+	const [label, setLabel] = useState("Example");
 	const [disables, setDisables] = useState({
 		default: false,
 		primary: false,
@@ -17,8 +17,8 @@ export function BtnExample() {
 
 	const btnExample = useProps(
 		{
-			color: '',
-			size: '',
+			color: "",
+			size: "",
 			dimmed: false,
 			flat: false,
 			outline: false,
@@ -33,18 +33,18 @@ export function BtnExample() {
 			link: false,
 			active: false,
 			loading: false,
-			leftSection: '',
-			rightSection: '',
+			leftSection: "",
+			rightSection: "",
 		},
-		'XBtn',
-		label,
+		"XBtn",
+		label
 	);
 
 	return (
 		<div className="max-w-4xl m-auto py-4">
 			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XBtn</h2>
 			{true && (
-				<table className="table-auto w-full border-collapse border-spacing-0 border border-separator">
+				<table className="table-auto w-full border-collapse border-spacing-0 border border-color">
 					<thead>
 						<tr className="*:text-center">
 							<td>color</td>
@@ -58,12 +58,12 @@ export function BtnExample() {
 						</tr>
 					</thead>
 					<tbody>
-						{'default primary secondary accent positive negative info warning dimmed'
+						{"default primary secondary accent positive negative info warning dimmed"
 							.split(/\s+/)
 							.map((color) => (
 								<tr
 									key={color}
-									className="*:border *:border-separator *:p-2 *:text-center"
+									className="*:border *:border-color *:p-2 *:text-center"
 								>
 									<td>
 										{color}
@@ -75,7 +75,8 @@ export function BtnExample() {
 												onChange={({ target }) =>
 													setDisables((v) => ({
 														...v,
-														[target.name]: !v[target.name],
+														[target.name]:
+															!v[target.name],
 													}))
 												}
 											/>
@@ -85,7 +86,10 @@ export function BtnExample() {
 										</label>
 									</td>
 									<td>
-										<XBtn disabled={disables[color]} color={color}>
+										<XBtn
+											disabled={disables[color]}
+											color={color}
+										>
 											Default
 										</XBtn>
 									</td>
@@ -150,7 +154,7 @@ export function BtnExample() {
 			)}
 
 			<hr className="my-2" />
-			<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-separator">
+			<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-color">
 				<div>
 					<XBtn {...btnExample.props}>{label}</XBtn>
 					<pre className="bg-sky-500/50 text-white p-2 rounded-md mt-4 select-text">
@@ -159,7 +163,9 @@ export function BtnExample() {
 				</div>
 				<div>
 					<label className="block">
-						<span className="block font-medium text-slate-500">label</span>
+						<span className="block font-medium text-slate-500">
+							label
+						</span>
 						<input
 							className="bg-slate-700 border border-blue-900 p-2"
 							type="text"
@@ -170,39 +176,45 @@ export function BtnExample() {
 					{Form(
 						{
 							color: {
-								type: 'select',
+								type: "select",
 								values: [
-									'primary',
-									'secondary',
-									'accent',
-									'positive',
-									'negative',
-									'info',
-									'warning',
+									"primary",
+									"secondary",
+									"accent",
+									"positive",
+									"negative",
+									"info",
+									"warning",
 								],
 							},
 							size: {
-								type: 'select',
-								values: ['xs', 'sm', 'lg'],
+								type: "select",
+								values: ["xs", "sm", "lg"],
 							},
-							leftSection: { type: 'checkbox', val: 'mdi-map-marker' },
-							rightSection: { type: 'checkbox', val: 'mdi-close' },
-							flat: { type: 'checkbox' },
-							dimmed: { type: 'checkbox' },
-							outline: { type: 'checkbox' },
-							tonal: { type: 'checkbox' },
-							plain: { type: 'checkbox' },
-							loading: { type: 'checkbox' },
-							text: { type: 'checkbox' },
-							block: { type: 'checkbox' },
-							square: { type: 'checkbox' },
-							rounded: { type: 'checkbox' },
-							round: { type: 'checkbox' },
-							disabled: { type: 'checkbox' },
-							link: { type: 'checkbox' },
-							active: { type: 'checkbox' },
+							leftSection: {
+								type: "checkbox",
+								val: "mdi-map-marker",
+							},
+							rightSection: {
+								type: "checkbox",
+								val: "mdi-close",
+							},
+							flat: { type: "checkbox" },
+							dimmed: { type: "checkbox" },
+							outline: { type: "checkbox" },
+							tonal: { type: "checkbox" },
+							plain: { type: "checkbox" },
+							loading: { type: "checkbox" },
+							text: { type: "checkbox" },
+							block: { type: "checkbox" },
+							square: { type: "checkbox" },
+							rounded: { type: "checkbox" },
+							round: { type: "checkbox" },
+							disabled: { type: "checkbox" },
+							link: { type: "checkbox" },
+							active: { type: "checkbox" },
 						},
-						btnExample,
+						btnExample
 					)}
 				</div>
 			</div>

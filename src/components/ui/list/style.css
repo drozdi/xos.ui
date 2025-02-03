@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "@style";
 .x-list {
 	@apply flex flex-col;
 }
@@ -6,5 +6,5 @@
 	@apply border border-black/20;
 }
 .x-list--separator {
-	/*@apply divide-y divide-separator;*/
+	@apply divide-y divide-color;
 }

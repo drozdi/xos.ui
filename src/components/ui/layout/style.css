@@ -1,14 +1,14 @@
-@import "tailwindcss";
+@import "@style";
 
 .xLayout-container {
 	@apply relative w-full h-full;
 }
 .xLayout {
-	@apply grid w-full max-h-full h-full grid-rows-[minmax(min-content,auto)_minmax(auto,1fr)_minmax(min-content,auto)]  grid-cols-[minmax(min-content,auto)_minmax(auto,1fr)_minmax(min-content,auto)];
+	@apply grid w-full max-h-full h-full grid-rows-(--grid-row-layout) grid-cols-(--grid-col-layout);
 }
 .xLayout-header,
 .xLayout-footer {
-	@apply border-solid border-current bg-black/20 max-w-full min-h-12
+	@apply border-solid border-color bg-black/20 max-w-full min-h-12
         col-start-1 col-end-4 z-20;
 }
 .xLayout-main {

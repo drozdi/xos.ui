@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
-import { XBtn, XIcon } from '../ui';
-import { Form, useProps } from './utils';
+import { useMemo, useState } from "react";
+import { XBtn, XIcon } from "../ui";
+import { Form, useProps } from "./utils";
 export function BtnGroupExample() {
 	const [val, setVal] = useState();
 	const btnGroupExample = useProps(
@@ -25,14 +25,20 @@ export function BtnGroupExample() {
 			round: false,
 			disabled: false,
 		},
-		'XBtn.Group',
-		'\n \
+		"XBtn.Group",
+		"\n \
 		<XBtn value={1}>btn1</XBtn>\n \
 		<XBtn value={2}>btn2</XBtn>\n \
-		<XBtn value={3}>btn3</XBtn>\n',
+		<XBtn value={3}>btn3</XBtn>\n"
 	);
-	const btnGroupProps = useMemo(() => btnGroupExample.props, [btnGroupExample.props]);
-	const btnGroupCode = useMemo(() => btnGroupExample.code, [btnGroupExample.code]);
+	const btnGroupProps = useMemo(
+		() => btnGroupExample.props,
+		[btnGroupExample.props]
+	);
+	const btnGroupCode = useMemo(
+		() => btnGroupExample.code,
+		[btnGroupExample.code]
+	);
 
 	return (
 		<div className="max-w-4xl m-auto py-4">
@@ -78,52 +84,52 @@ export function BtnGroupExample() {
 				<div>
 					{Form(
 						{
-							'XBtn.Group options': { type: 'header' },
-							switchable: { type: 'checkbox' },
-							selectable: { type: 'checkbox' },
-							multiple: { type: 'checkbox' },
+							"XBtn.Group options": { type: "header" },
+							switchable: { type: "checkbox" },
+							selectable: { type: "checkbox" },
+							multiple: { type: "checkbox" },
 
-							separator: { type: 'checkbox' },
-							vertical: { type: 'checkbox' },
-							grow: { type: 'checkbox' },
-							pills: { type: 'checkbox' },
+							separator: { type: "checkbox" },
+							vertical: { type: "checkbox" },
+							grow: { type: "checkbox" },
+							pills: { type: "checkbox" },
 
 							align: {
-								type: 'select',
-								values: ['start', 'center', 'between', 'end'],
+								type: "select",
+								values: ["start", "center", "between", "end"],
 							},
 
-							'XBtn options': { type: 'header' },
+							"XBtn options": { type: "header" },
 							color: {
-								type: 'select',
+								type: "select",
 								values: [
-									'primary',
-									'secondary',
-									'accent',
-									'positive',
-									'negative',
-									'info',
-									'warning',
+									"primary",
+									"secondary",
+									"accent",
+									"positive",
+									"negative",
+									"info",
+									"warning",
 								],
 							},
 							size: {
-								type: 'select',
-								values: ['xs', 'sm', 'lg'],
+								type: "select",
+								values: ["xs", "sm", "lg"],
 							},
-							flat: { type: 'checkbox' },
-							dimmed: { type: 'checkbox' },
-							outline: { type: 'checkbox' },
-							tonal: { type: 'checkbox' },
-							plain: { type: 'checkbox' },
-							text: { type: 'checkbox' },
-							block: { type: 'checkbox' },
-							square: { type: 'checkbox' },
-							rounded: { type: 'checkbox' },
-							round: { type: 'checkbox' },
-							disabled: { type: 'checkbox' },
-							link: { type: 'checkbox' },
+							flat: { type: "checkbox" },
+							dimmed: { type: "checkbox" },
+							outline: { type: "checkbox" },
+							tonal: { type: "checkbox" },
+							plain: { type: "checkbox" },
+							text: { type: "checkbox" },
+							block: { type: "checkbox" },
+							square: { type: "checkbox" },
+							rounded: { type: "checkbox" },
+							round: { type: "checkbox" },
+							disabled: { type: "checkbox" },
+							link: { type: "checkbox" },
 						},
-						btnGroupExample,
+						btnGroupExample
 					)}
 				</div>
 			</div>

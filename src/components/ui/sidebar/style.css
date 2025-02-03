@@ -1,8 +1,8 @@
-@import "tailwindcss";
+@import "@style";
 
 .xSidebar {
 	@apply min-w-14 w-64 flex flex-col justify-between max-h-full h-full absolute top-0 bottom-0 
-        border-r border-solid border-current z-50;
+	bg-surface border-r border-solid border-color z-50;
 }
 .xSidebar-container {
 	@apply w-64 relative border-none max-h-full;
@@ -11,7 +11,7 @@
 	@apply max-w-full max-h-full overflow-y-auto overflow-x-hidden;
 }
 .xSidebar-toggle-mini {
-	@apply w-full border-t border-current;
+	@apply w-full border-t border-color;
 }
 
 .xSidebar-toggle {

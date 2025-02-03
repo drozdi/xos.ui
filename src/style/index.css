@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
 	--body-bg: #ffffff;
 	--body-color: #000000;
 
-	/*--link-color: 0, 0, 0;
-	--link-hover-color: 0, 0, 0;*/
+	--link-color: #000000;
+	--link-hover-color: #000000;
 
 	--border-color: rgb(0, 0, 0, 0.2);
 	--scrollbar-color: rgba(0, 0, 0, 0.3) rgba(255, 255, 255, 0.2);
@@ -13,9 +15,9 @@
 	--selection-bg: rgba(0, 0, 0, 0.2);
 	--selection-color: #eee;
 
-	--x-color-separator: rgba(0, 0, 0, 0.15);
-	--x-color-divider: rgba(0, 0, 0, 0.15);
-	--x-color-dimmed: rgba(0, 0, 0, 0.2);
+	--color-separator: rgba(0, 0, 0, 0.15);
+	--color-divider: rgba(0, 0, 0, 0.15);
+	--color-dimmed: rgba(0, 0, 0, 0.2);
 
 	--color-primary: #1975d2;
 	--color-secondary: #5cbbf6;
@@ -39,6 +41,37 @@
 	--color-on-surface: #000000;
 	--color-background: var(--body-bg);
 	--color-on-background: var(--body-color);
+
+	--color-bgmb1: rgba(190, 155, 100, 0.5);
+	--color-bgmb2: rgba(245, 137, 116, 0.5);
+	--color-bgmb3: rgba(158, 25, 58, 0.5);
+	--color-bgmb4: rgba(207, 92, 118, 0.5);
+	--color-bgmb5: rgba(14, 100, 95, 0.5);
+
+	--inset-shadow-md: inset 0 3px 5px rgb(0 0 0 / 0.25);
+
+	--grid-row-layout: minmax(min-content, auto) minmax(auto, 1fr)
+		minmax(min-content, auto);
+	--grid-col-layout: minmax(min-content, auto) minmax(auto, 1fr)
+		minmax(min-content, auto);
+}
+
+.dark {
+	--body-bg: #002650;
+	--body-color: #ffffffb3;
+
+	--link-color: #00aeff;
+	--link-hover-color: #ffffff;
+
+	--border-color: #ffffff33;
+
+	--scrollbar-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.2);
+
+	--color-surface: #15171e;
+	--color-on-surface: #ffffff;
+
+	--color-separator: #ffffff26;
+	--color-divider: #ffffff26;
 }
 
 @layer base {
@@ -56,15 +89,15 @@
 		height: 100%;
 	}
 	body {
-		background-color: rgb(var(--body-bg));
-		color: rgb(var(--body-color));
+		background-color: var(--body-bg);
+		color: var(--body-color);
 	}
 	a {
-		/*color: rgb(var(--link-color));*/
+		color: var(--link-color);
 		text-decoration: none;
 	}
 	a[href]:hover {
-		/*color: rgb(var(--link-hover-color));*/
+		color: var(--link-hover-color);
 		text-decoration: underline;
 	}
 	* {
@@ -79,3 +112,4 @@
 }
 
 @import "./x-bg.css";
+@import "./border.css";
