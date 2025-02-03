@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+	--body-bg: #ffffff;
+	--body-color: #000000;
+
+	/*--link-color: 0, 0, 0;
+	--link-hover-color: 0, 0, 0;*/
+
+	--border-color: rgb(0, 0, 0, 0.2);
+	--scrollbar-color: rgba(0, 0, 0, 0.3) rgba(255, 255, 255, 0.2);
+
+	--selection-bg: rgba(0, 0, 0, 0.2);
+	--selection-color: #eee;
+
+	--x-color-separator: rgba(0, 0, 0, 0.15);
+	--x-color-divider: rgba(0, 0, 0, 0.15);
+	--x-color-dimmed: rgba(0, 0, 0, 0.2);
+
+	--color-primary: #1975d2;
+	--color-secondary: #5cbbf6;
+	--color-accent: #9c27b0;
+	--color-positive: #4caf50;
+	--color-negative: #dc3545;
+	--color-info: #2196f3;
+	--color-warning: #fb8c00;
+	--color-dark: #1d1d1d;
+
+	--color-on-primary: #ffffff;
+	--color-on-secondary: #ffffff;
+	--color-on-accent: #ffffff;
+	--color-on-positive: #ffffff;
+	--color-on-negative: #ffffff;
+	--color-on-info: #ffffff;
+	--color-on-warning: #ffffff;
+	--color-on-dark: #ffffff;
+
+	--color-surface: #ffffff;
+	--color-on-surface: #000000;
+	--color-background: var(--body-bg);
+	--color-on-background: var(--body-color);
+}
+
+@layer base {
+	*,
+	*:before,
+	*::after {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+	html,
+	body,
+	#root {
+		width: 100%;
+		height: 100%;
+	}
+	body {
+		background-color: rgb(var(--body-bg));
+		color: rgb(var(--body-color));
+	}
+	a {
+		/*color: rgb(var(--link-color));*/
+		text-decoration: none;
+	}
+	a[href]:hover {
+		/*color: rgb(var(--link-hover-color));*/
+		text-decoration: underline;
+	}
+	* {
+		scrollbar-color: var(--scrollbar-color);
+		scrollbar-width: thin;
+	}
+	*::-moz-selection,
+	*::selection {
+		color: var(--selection-color);
+		background: var(--selection-bg);
+	}
+}
+
+@import "./x-bg.css";

@@ -1,0 +1,4 @@
+@utility x-bg-* {
+	background-color: --value(--color- *);
+	color: --value(--color-on- *);
+}
