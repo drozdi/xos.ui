@@ -1,4 +1,4 @@
-import { XChevron, XIcon, XLink } from '../ui';
+import { XChevron, XIcon, XLink } from "../ui";
 
 export function LinkExample() {
 	return (
@@ -14,7 +14,7 @@ export function LinkExample() {
 					<XLink
 						href="#required-for-focus"
 						label="With right section"
-						leftSection={<XIcon>mdi-gauge</XIcon>}
+						leftSection="mdi-gauge"
 						rightSection={<XChevron />}
 					/>
 					<XLink
@@ -100,7 +100,11 @@ export function LinkExample() {
 				<div className="grid grid-cols-2">
 					<div>
 						<XLink label="label" href="#1" leftSection="mdi-close">
-							<XLink label="label" href="#1" leftSection="mdi-home">
+							<XLink
+								label="label"
+								href="#1"
+								leftSection="mdi-home"
+							>
 								<XLink
 									label="label"
 									leftSection="mdi-home"
@@ -156,7 +160,11 @@ export function LinkExample() {
 							</XLink>
 						</XLink>
 						<XLink label="label" href="#1" leftSection="mdi-close">
-							<XLink label="label" href="#1" leftSection="mdi-home">
+							<XLink
+								label="label"
+								href="#1"
+								leftSection="mdi-home"
+							>
 								<XLink
 									label="label"
 									leftSection="mdi-home"

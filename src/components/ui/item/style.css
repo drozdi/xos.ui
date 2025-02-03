@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+.x-item {
+	@apply flex flex-nowrap relative min-h-12 px-3 py-2 text-inherit cursor-default;
+}
+.x-item,
+.x-item::before,
+.x-item::after,
+.x-item * {
+	@apply transition-all ease-in-out duration-200;
+}
+.x-item--vertical {
+	@apply flex-col;
+}
+.x-item--active {
+	@apply text-blue-600;
+}
+.x-item--clickable {
+	@apply cursor-pointer;
+}
+.x-item--disabled,
+.x-item:has(input:disabled) {
+	@apply cursor-not-allowed opacity-60;
+}
+
+.x-item---vertical .x-item__section + .x-item__section {
+	@apply mt-2;
+}
+
+.x-item--dense,
+.x-list--dense .x-item {
+	@apply min-h-8 px-2 py-1;
+}
+
+.x-item--hoverable::before {
+	@apply absolute right-0 top-0 w-full h-full contain-layout bg-current opacity-0;
+	content: " ";
+}
+.x-item--hoverable:not(
+		.x-item--disabled,
+		:has(input:disabled),
+		:disabled
+	):hover::before {
+	@apply opacity-15;
+}
+
+.x-item:not(.x-item--vertical) .x-item__section--main + .x-item__section--main {
+	@apply ml-2;
+}
+.x-item__section {
+	@apply flex flex-col justify-center pr-3 items-start w-auto min-w-0 max-w-full;
+}
+.x-item__section--main {
+	@apply flex-1;
+}
+.x-item__section--top {
+	@apply justify-start;
+}
+.x-item__section--nowrap {
+	@apply text-nowrap;
+}
+.x-item__section--thumbnail img {
+	@apply max-h-14 max-w-24 h-auto w-auto;
+}
+.x-item__section ~ .x-item__section--side {
+	@apply items-end pl-3 pr-0;
+}
+.x-item__section--side > .x-icon {
+	@apply text-2xl/none;
+}
+
+.x-item > .x-item__section--thumbnail:first-child {
+	@apply -ml-3;
+}
+.x-item > .x-item__section--thumbnail:last-of-type {
+	@apply -mr-3;
+}
+
+.x-item__section--main.x-item__section--thumbnail {
+	@apply ml-0 -mr-3;
+}
+
+.x-item__label {
+	@apply max-w-full;
+}
+.x-item__label--header {
+	@apply px-3 opacity-65;
+}
+.x-item__label--overline {
+	@apply text-xs font-medium tracking-widest uppercase opacity-70;
+}
+.x-item__label--caption {
+	@apply text-xs font-normal opacity-60;
+}
+.x-item__label--lines {
+	@apply truncate;
+}
