@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+.xLayout-container {
+	@apply relative w-full h-full;
+}
+.xLayout {
+	@apply grid w-full max-h-full h-full grid-rows-[minmax(min-content,auto)_minmax(auto,1fr)_minmax(min-content,auto)]  grid-cols-[minmax(min-content,auto)_minmax(auto,1fr)_minmax(min-content,auto)];
+}
+.xLayout-header,
+.xLayout-footer {
+	@apply border-solid border-current bg-black/20 max-w-full min-h-12
+        col-start-1 col-end-4 z-20;
+}
+.xLayout-main {
+	@apply col-start-2 col-end-3 row-start-2 row-end-3 overflow-hidden relative z-10;
+}
+.xLayout-content {
+	@apply absolute top-0 bottom-0 left-0 right-0 overflow-auto;
+}
+.xLayout-header {
+	@apply row-start-1 row-end-2 border-b;
+}
+.xLayout-footer {
+	@apply row-start-3 row-end-4 border-t;
+}
+
+.xLayout-sidebar {
+	@apply min-w-14 max-w-96 row-start-2 row-end-3 z-30;
+}
+.xLayout-sidebar--left {
+	@apply col-start-1 col-end-2;
+}
+.xLayout-sidebar--right {
+	@apply col-start-3 col-end-4;
+}
+
+.xLayout--hl {
+	.xLayout-header {
+		@apply col-start-2;
+	}
+	.xLayout-sidebar--left {
+		@apply row-start-1;
+	}
+}
+.xLayout--hr {
+	.xLayout-header {
+		@apply col-end-3;
+	}
+	.xLayout-sidebar--right {
+		@apply row-start-1;
+	}
+}
+.xLayout--fl {
+	.xLayout-footer {
+		@apply col-start-2;
+	}
+	.xLayout-sidebar--left {
+		@apply row-end-4;
+	}
+}
+.xLayout--fr {
+	.xLayout-footer {
+		@apply col-end-3;
+	}
+	.xLayout-sidebar--right {
+		@apply row-end-4;
+	}
+}

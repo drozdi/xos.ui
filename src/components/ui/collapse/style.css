@@ -1,0 +1,18 @@
+.x-collapse {
+	@apply grid transition-all ease-in-out duration-200	relative;
+	grid-template-rows: 0fr;
+}
+.x-collapse-panel,
+.x-collapse-panel {
+	@apply m-0 p-0;
+}
+.x-collapse-panel {
+	@apply overflow-hidden transition-all ease-in-out duration-200;
+}
+
+.x-collapse--active {
+	grid-template-rows: 1fr;
+}
+.x-collapse--active .x-collapse-content {
+	@apply block;
+}

@@ -1,0 +1,310 @@
+@import "tailwindcss";
+
+.x-btn {
+	@apply relative flex items-center justify-center select-none cursor-pointer rounded px-6 py-2 uppercase box-border border-current border-0 overflow-hidden focus:outline-none focus-visible:outline-none shadow !shadow-black/50;
+	&:not(:disabled, .x-btn--disabled, .x-btn--loading) {
+		&:hover {
+			@apply shadow-xl;
+		}
+		&:focus {
+			@apply shadow-lg;
+		}
+		&:active {
+			@apply scale-[0.98] shadow-none shadow-inner;
+		}
+	}
+}
+.x-btn:disabled,
+.x-btn--disabled,
+.x-btn--loading {
+	@apply !shadow-none !opacity-50 !cursor-not-allowed !transform-none;
+}
+.x-btn::after,
+.x-btn::before,
+.x-btn-loader {
+	@apply absolute top-0 left-0 w-full h-full rounded-s-[inherit];
+}
+.x-btn::after {
+	@apply bg-transparent border border-current opacity-80;
+}
+.x-btn--outline::after {
+	content: "";
+}
+.x-btn::before {
+	@apply bg-black opacity-0;
+	content: " ";
+}
+.x-btn,
+.x-btn::before,
+.x-btn::after,
+.x-btn * {
+	@apply transition-all duration-200 ease-in-out;
+}
+.x-btn-content,
+.x-btn-loader {
+	@apply flex z-10;
+}
+.x-btn-loader {
+	@apply top-full items-center justify-center;
+}
+.x-btn--loading {
+	& .x-btn-content {
+		@apply translate-y-[calc(-100%-0.5rem)];
+	}
+	& .x-btn-loader {
+		@apply top-0;
+	}
+}
+.x-btn-section {
+	@apply flex items-center justify-center;
+	& > svg {
+		@apply block;
+	}
+}
+.x-btn:not(.x-btn--icon) .x-btn-section {
+	&:is(*:first-child) {
+		@apply mr-3;
+	}
+	&:is(*:last-child) {
+		@apply ml-3;
+	}
+}
+.x-btn:not(
+		:disabled,
+		.x-btn--disabled,
+		.x-btn--loading,
+		.x-btn--text
+	):hover::before {
+	@apply opacity-15;
+}
+.x-btn:not(
+		:disabled,
+		.x-btn--disabled,
+		.x-btn--loading,
+		.x-btn--text
+	):focus::before {
+	@apply opacity-20;
+}
+.x-btn:not(
+		:disabled,
+		.x-btn--disabled,
+		.x-btn--loading,
+		.x-btn--text
+	):active::before {
+	@apply opacity-25;
+}
+
+.x-btn--outline,
+.x-btn--plain,
+.x-btn--text,
+.x-btn--link {
+	@apply !bg-transparent;
+}
+.x-btn--tonal {
+	background-color: color-mix(
+		in srgb,
+		currentColor 20%,
+		transparent
+	) !important;
+}
+.x-btn--plain,
+.x-btn--text,
+.x-btn--link {
+	&::before {
+		@apply bg-current;
+	}
+}
+.x-btn--flat {
+	@apply !shadow-none;
+}
+.x-btn--outline:not(:disabled, .x-btn--disabled, .x-btn--loading):hover::after {
+	@apply opacity-100;
+}
+.x-btn--text,
+.x-btn--plain {
+	.x-btn-label {
+		@apply opacity-80;
+	}
+}
+.x-btn--text,
+.x-btn--plain {
+	&:not(:disabled, .x-btn--disabled, .x-btn--loading) {
+		&:hover,
+		&.x-btn--active {
+			.x-btn-label {
+				@apply opacity-100;
+			}
+		}
+	}
+}
+.x-btn--active {
+	@apply shadow-md;
+	&::before {
+		@apply !bg-current !opacity-20;
+	}
+}
+
+.x-btn--xs {
+	@apply rounded px-2 py-1 text-xs;
+}
+.x-btn--xs:not(.x-btn--icon) .x-btn-section {
+	&:is(*:first-child) {
+		@apply mr-2;
+	}
+	&:is(*:last-child) {
+		@apply ml-2;
+	}
+}
+.x-btn--sm {
+	@apply rounded px-4 py-1 text-sm;
+}
+.x-btn--sm:not(.x-btn--icon) .x-btn-section {
+	&:is(*:first-child) {
+		@apply mr-2;
+	}
+	&:is(*:last-child) {
+		@apply ml-2;
+	}
+}
+.x-btn--lg {
+	@apply rounded px-7 py-3 text-lg;
+}
+.x-btn--lg:not(.x-btn--icon) .x-btn-section {
+	&:is(*:first-child) {
+		@apply mr-4;
+	}
+	&:is(*:last-child) {
+		@apply ml-4;
+	}
+}
+.x-btn--icon {
+	@apply px-2;
+}
+.x-btn--icon.x-btn--xs {
+	@apply px-1;
+}
+.x-btn--icon.x-btn--sm {
+	@apply px-1;
+}
+.x-btn--icon.x-btn--lg {
+	@apply px-3;
+}
+.x-btn--block {
+	@apply w-full;
+}
+.x-btn--rounded {
+	@apply rounded-full;
+}
+.x-btn--square {
+	@apply rounded-none;
+}
+.x-btn--round {
+	@apply p-0 rounded-[50%] min-w-8 min-h-8;
+}
+
+.x-btn--primary,
+.x-btn--secondary,
+.x-btn--accent,
+.x-btn--positive,
+.x-btn--negative,
+.x-btn--info,
+.x-btn--warning,
+.x-btn--dimmed {
+	@apply text-white;
+}
+
+.x-btn--primary {
+	@apply bg-primary;
+}
+.x-btn--primary:where(
+		.x-btn--tonal,
+		.x-btn--outline,
+		.x-btn--text,
+		.x-btn--plain,
+		.x-btn--link
+	) {
+	@apply text-primary;
+}
+.x-btn--secondary {
+	@apply bg-secondary;
+}
+.x-btn--secondary:where(
+		.x-btn--tonal,
+		.x-btn--outline,
+		.x-btn--text,
+		.x-btn--plain,
+		.x-btn--link
+	) {
+	@apply text-secondary;
+}
+.x-btn--accent {
+	@apply bg-accent;
+}
+.x-btn--accent:where(
+		.x-btn--tonal,
+		.x-btn--outline,
+		.x-btn--text,
+		.x-btn--plain,
+		.x-btn--link
+	) {
+	@apply text-accent;
+}
+.x-btn--positive {
+	@apply bg-positive;
+}
+.x-btn--positive:where(
+		.x-btn--tonal,
+		.x-btn--outline,
+		.x-btn--text,
+		.x-btn--plain,
+		.x-btn--link
+	) {
+	@apply text-positive;
+}
+.x-btn--negative {
+	@apply bg-negative;
+}
+.x-btn--negative:where(
+		.x-btn--tonal,
+		.x-btn--outline,
+		.x-btn--text,
+		.x-btn--plain,
+		.x-btn--link
+	) {
+	@apply text-negative;
+}
+.x-btn--info {
+	@apply bg-info;
+}
+.x-btn--info:where(
+		.x-btn--tonal,
+		.x-btn--outline,
+		.x-btn--text,
+		.x-btn--plain,
+		.x-btn--link
+	) {
+	@apply text-info;
+}
+.x-btn--warning {
+	@apply bg-warning;
+}
+.x-btn--warning:where(
+		.x-btn--tonal,
+		.x-btn--outline,
+		.x-btn--text,
+		.x-btn--plain,
+		.x-btn--link
+	) {
+	@apply text-warning;
+}
+
+.x-btn--link {
+	@apply normal-case hover:underline;
+}
+
+.x-btn--dimmed {
+	@apply !bg-dimmed;
+}
+.x-btn--dimmed::after {
+	@apply border-color;
+}

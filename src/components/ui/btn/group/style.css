@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+.x-btn-group {
+	@apply flex;
+}
+.x-btn-group > * {
+	@apply !shadow-none;
+}
+.x-btn-group > .x-btn {
+	@apply !shadow-none;
+	@apply focus:outline focus:outline-1 focus:outline-current focus:outline-offset-2;
+}
+
+.x-btn-group--grow > * {
+	@apply grow;
+}
+
+.x-btn-group:not(
+		.x-btn-group--pills,
+		.x-btn-group--vertical,
+		.x-btn-group--round
+	)
+	> * {
+	&:not(:first-child) {
+		@apply rounded-l-none;
+	}
+	&:not(:last-child) {
+		@apply rounded-r-none;
+	}
+}
+.x-btn-group--separator:not(.x-btn-group--vertical) {
+	.x-btn:not(:first-child) {
+		.x-btn-outline {
+			@apply block border-l;
+		}
+	}
+}
+.x-btn-group--vertical {
+	@apply flex-col;
+}
+
+.x-btn-group--vertical:not(.x-btn-group--pills):not(.x-btn-group--round) > * {
+	&:not(:first-child) {
+		@apply -mt-[1px] rounded-t-none;
+	}
+	&:not(:last-child) {
+		@apply rounded-b-none;
+	}
+}
+.x-btn-group--vertical.x-btn-group--separator {
+	.x-btn:not(:first-child) {
+		.x-btn-outline {
+			@apply block border-t;
+		}
+	}
+}
+.x-btn-group--round > * + * {
+	@apply ml-[3rem];
+}
+.x-btn-group--round.x-btn-group--vertical {
+	@apply inline-flex;
+}
+.x-btn-group--round.x-btn-group--vertical > * + * {
+	@apply mt-[3rem];
+}
+
+.x-btn-group--pills {
+	@apply gap-[3rem];
+}

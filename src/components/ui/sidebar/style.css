@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+.xSidebar {
+	@apply min-w-14 w-64 flex flex-col justify-between max-h-full h-full absolute top-0 bottom-0 
+        border-r border-solid border-current z-50;
+}
+.xSidebar-container {
+	@apply w-64 relative border-none max-h-full;
+}
+.xSidebar-content {
+	@apply max-w-full max-h-full overflow-y-auto overflow-x-hidden;
+}
+.xSidebar-toggle-mini {
+	@apply w-full border-t border-current;
+}
+
+.xSidebar-toggle {
+	@apply absolute top-12 right-0 translate-x-1/2;
+}
+.xSidebar--right .xSidebar-toggle {
+	@apply right-auto left-0 -translate-x-1/2;
+}
+
+.xSidebar-res {
+	@apply w-2 cursor-col-resize bg-transparent absolute top-0 bottom-0 z-10;
+}
+.xSidebar--animate {
+	@apply transition-all duration-200 ease-in-out;
+}
+.xSidebar--left {
+	@apply left-0 border-r;
+}
+.xSidebar--left .xSidebar-res {
+	@apply -right-1;
+}
+.xSidebar--right {
+	@apply right-0 border-l;
+}
+.xSidebar--right .xSidebar-res {
+	@apply -left-1;
+}
+.xSidebar--mini {
+	@apply w-14;
+}
+
+.xSidebar-container:has(.xSidebar--mini-overlay) {
+	@apply w-14;
+}
+.xSidebar-container:has(.xSidebar--overlay:not(.xSidebar--mini-overlay)) {
+	@apply w-0;
+}
+.xSidebar-container:has(.xSidebar--mini) {
+	@apply w-14;
+}
+.xSidebar-container:has(.xSidebar--close) {
+	@apply w-0;
+}
+.xSidebar--close {
+	@apply w-0 border-0;
+}
+.xSidebar-container:has(.xSidebar:not(.is-mounted)) {
+	@apply overflow-hidden;
+}
+.xSidebar-container:has(.is-mounted) {
+	@apply !min-w-0;
+}
+.xSidebar.is-mounted {
+	@apply !min-w-0;
+}
