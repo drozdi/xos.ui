@@ -24,73 +24,87 @@ function App() {
 		{
 			icon: "mdi-home",
 			label: "Home",
-			to: "/",
+			path: "/",
+			element: <HomeExample />,
 		},
 		{
 			icon: "mdi-table-column",
 			label: "XAccordion",
-			to: "/accordion",
+			path: "/accordion",
+			element: <AccordionExample />,
 		},
 		{
 			icon: "mdi-button-pointer",
 			label: "XBtn",
-			to: "/btn",
+			path: "/btn",
+			element: <BtnExample />,
 		},
 		{
 			icon: "mdi-card-outline",
 			label: "XBtnGroup",
-			to: "/btn-group",
+			path: "/btn-group",
+			element: <BtnGroupExample />,
 		},
 
 		{
 			icon: "mdi-cards",
 			label: "XCards",
-			to: "/cards",
+			path: "/cards",
+			element: <CardsExample />,
 		},
 		{
 			icon: "mdi-message",
 			label: "XPopover",
-			to: "/popover",
+			path: "/popover",
+			element: <PopoverExample />,
 		},
 		{
 			icon: "mdi-form-textbox",
 			label: "XInput",
-			to: "/input",
+			path: "/input",
+			element: <InputExample />,
 		},
 		{
 			icon: "mdi-select",
 			label: "XSelect",
-			to: "/select",
+			path: "/select",
+			element: <SelectExample />,
 		},
 		{
 			icon: "mdi-link",
 			label: "XLink",
-			to: "/link",
+			path: "/link",
+			element: <LinkExample />,
 		},
 		{
 			icon: "mdi-view-list",
 			label: "XList",
-			to: "/list",
+			path: "/list",
+			element: <ListExample />,
 		},
 		{
 			icon: "mdi-message-alert-outline",
 			label: "XMessage",
-			to: "/message",
+			path: "/message",
+			element: <MessageExample />,
 		},
 		{
 			icon: "mdi-progress-helper",
 			label: "XProgress",
-			to: "/progress",
+			path: "/progress",
+			element: <ProgressExample />,
 		},
 		{
 			icon: "mdi-reload",
 			label: "XSpinner",
-			to: "/spinner",
+			path: "/spinner",
+			element: <SpinnerExample />,
 		},
 		{
 			icon: "mdi-tab",
 			label: "XTabs",
-			to: "/tabs",
+			path: "/tabs",
+			element: <TabsExample />,
 		},
 	];
 
@@ -103,7 +117,7 @@ function App() {
 						return (
 							<XList separator>
 								{routers.map((item, index) => (
-									<XItem key={index} to={item.to}>
+									<XItem key={index} to={item.path}>
 										<XItemSection side>
 											<XIcon>{item.icon}</XIcon>
 										</XItemSection>
@@ -123,42 +137,13 @@ function App() {
 					//right: 'right',
 					default: (props) => (
 						<Routes>
-							<Route path="/" element={<HomeExample />} />
-							<Route path="/btn" element={<BtnExample />} />
-							<Route
-								path="/btn-group"
-								element={<BtnGroupExample />}
-							/>
-							<Route path="/input" element={<InputExample />} />
-							<Route path="/link" element={<LinkExample />} />
-							<Route path="/list" element={<ListExample />} />
-							<Route
-								path="/message"
-								element={<MessageExample />}
-							/>
-							<Route
-								path="/spinner"
-								element={<SpinnerExample />}
-							/>
-							<Route path="/tabs" element={<TabsExample />} />
-							<Route
-								path="/progress"
-								element={<ProgressExample />}
-							/>
-							<Route path="/cards" element={<CardsExample />} />
-							<Route
-								path="/accordion"
-								element={<AccordionExample />}
-							/>
-							<Route
-								path="/accordion"
-								element={<AccordionExample />}
-							/>
-							<Route path="/select" element={<SelectExample />} />
-							<Route
-								path="/popover"
-								element={<PopoverExample />}
-							/>
+							{routers.map((item, index) => (
+								<Route
+									key={index}
+									path={item.path}
+									element={item.element}
+								/>
+							))}
 						</Routes>
 					),
 				}}
