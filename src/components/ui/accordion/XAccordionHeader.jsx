@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
-import { XChevron } from '../icon';
-import './style.css';
+import PropTypes from "prop-types";
+import { XChevron } from "../icon";
+import "./style.css";
 
-import classNames from 'classnames';
-import { useXAccordionTabContext } from './XAccordionTabContext';
+import classNames from "classnames";
+import { useXAccordionTabContext } from "./XAccordionTabContext";
 export function XAccordionHeader({ className, children, onClick, ...props }) {
 	const {
 		value,
@@ -32,7 +32,7 @@ export function XAccordionHeader({ className, children, onClick, ...props }) {
 		<button
 			{...props}
 			id={getHeaderId(value)}
-			className={classNames('x-accordion-control', className)}
+			className={classNames("x-accordion-control", className)}
 			role="button"
 			disabled={disabled}
 			aria-disabled={disabled}
