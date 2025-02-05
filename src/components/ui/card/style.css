@@ -1,0 +1,64 @@
+@import "@style";
+
+.x-card {
+	@apply relative align-top rounded-lg shadow-xl;
+}
+
+.x-card > div,
+.x-card > img {
+	@apply shadow-none;
+}
+.x-card > img {
+	@apply block w-full max-w-full border-0;
+}
+
+.x-card--border {
+	@apply border border-color;
+}
+.x-card--flat {
+	@apply shadow-none;
+}
+.x-card--square {
+	@apply rounded-none;
+}
+
+.x-card > * {
+	&:first-child {
+		@apply rounded-t-[inherit];
+	}
+	&:last-child {
+		@apply rounded-b-[inherit];
+	}
+}
+
+.x-card__section--horizontal > * {
+	&:first-child {
+		@apply rounded-tl-[inherit];
+	}
+	&:last-child {
+		@apply rounded-tr-[inherit];
+	}
+}
+
+.x-card__section {
+	@apply relative;
+}
+.x-card__section:not(.x-card__section--horizontal) {
+	@apply p-4;
+}
+
+.x-card__section--horizontal {
+	@apply flex flex-row flex-nowrap *:flex-auto;
+}
+
+.x-card__actions {
+	@apply p-2 items-center gap-2;
+}
+
+.x-card__actions:not(.x-card__actions--horizontal) {
+	@apply flex flex-col;
+}
+
+.x-card__actions--horizontal {
+	@apply flex flex-row;
+}

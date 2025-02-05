@@ -1,16 +1,99 @@
 import { Route, Routes } from "react-router-dom";
 import { AppProvider } from "./components/app";
 import {
+	AccordionExample,
 	BtnExample,
 	BtnGroupExample,
+	CardsExample,
 	HomeExample,
+	InputExample,
 	LinkExample,
 	ListExample,
+	MessageExample,
+	PopoverExample,
+	ProgressExample,
+	SelectExample,
+	SpinnerExample,
+	TabsExample,
 } from "./components/example";
 import { ThemeProviderToggler } from "./components/hooks/useTheme";
 import { XIcon, XItem, XItemLabel, XItemSection, XList } from "./components/ui";
 import { XLayout } from "./components/ui/layout";
 function App() {
+	const routers = [
+		{
+			icon: "mdi-home",
+			label: "Home",
+			to: "/",
+		},
+		{
+			icon: "mdi-table-column",
+			label: "XAccordion",
+			to: "/accordion",
+		},
+		{
+			icon: "mdi-button-pointer",
+			label: "XBtn",
+			to: "/btn",
+		},
+		{
+			icon: "mdi-card-outline",
+			label: "XBtnGroup",
+			to: "/btn-group",
+		},
+
+		{
+			icon: "mdi-cards",
+			label: "XCards",
+			to: "/cards",
+		},
+		{
+			icon: "mdi-message",
+			label: "XPopover",
+			to: "/popover",
+		},
+		{
+			icon: "mdi-form-textbox",
+			label: "XInput",
+			to: "/input",
+		},
+		{
+			icon: "mdi-select",
+			label: "XSelect",
+			to: "/select",
+		},
+		{
+			icon: "mdi-link",
+			label: "XLink",
+			to: "/link",
+		},
+		{
+			icon: "mdi-view-list",
+			label: "XList",
+			to: "/list",
+		},
+		{
+			icon: "mdi-message-alert-outline",
+			label: "XMessage",
+			to: "/message",
+		},
+		{
+			icon: "mdi-progress-helper",
+			label: "XProgress",
+			to: "/progress",
+		},
+		{
+			icon: "mdi-reload",
+			label: "XSpinner",
+			to: "/spinner",
+		},
+		{
+			icon: "mdi-tab",
+			label: "XTabs",
+			to: "/tabs",
+		},
+	];
+
 	return (
 		<AppProvider config={{ smKey: "app-1" }}>
 			<XLayout container overlay toggle view="lhr lpr lff">
@@ -19,113 +102,18 @@ function App() {
 						//return "left";
 						return (
 							<XList separator>
-								<XItem to="/">
-									<XItemSection side>
-										<XIcon>mdi-home</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>Home</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/accordion">
-									<XItemSection side>
-										<XIcon>mdi-table-column</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>
-											XAccordion
-										</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/btn">
-									<XItemSection side>
-										<XIcon>mdi-button-pointer</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XBtn</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/btn-group">
-									<XItemSection side>
-										<XIcon>mdi-card-outline</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XBtnGroup</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/cards">
-									<XItemSection side>
-										<XIcon>mdi-cards</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XCards</XItemLabel>
-									</XItemSection>
-								</XItem>
-
-								<XItem to="/input">
-									<XItemSection side>
-										<XIcon>mdi-form-textbox</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XInput</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/select">
-									<XItemSection side>
-										<XIcon>mdi-select</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XSelect</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/link">
-									<XItemSection side>
-										<XIcon>mdi-link</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XLink</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/list">
-									<XItemSection side>
-										<XIcon>mdi-view-list</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XList</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/message">
-									<XItemSection side>
-										<XIcon>mdi-message-alert-outline</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XMessage</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/progress">
-									<XItemSection side>
-										<XIcon>mdi-progress-helper</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XProgress</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/spinner">
-									<XItemSection side>
-										<XIcon>mdi-reload</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XSpinner</XItemLabel>
-									</XItemSection>
-								</XItem>
-								<XItem to="/tabs">
-									<XItemSection side>
-										<XIcon>mdi-tab</XIcon>
-									</XItemSection>
-									<XItemSection>
-										<XItemLabel lines>XTabs</XItemLabel>
-									</XItemSection>
-								</XItem>
+								{routers.map((item, index) => (
+									<XItem key={index} to={item.to}>
+										<XItemSection side>
+											<XIcon>{item.icon}</XIcon>
+										</XItemSection>
+										<XItemSection>
+											<XItemLabel lines>
+												{item.label}
+											</XItemLabel>
+										</XItemSection>
+									</XItem>
+								))}
 							</XList>
 						);
 					},
@@ -141,8 +129,36 @@ function App() {
 								path="/btn-group"
 								element={<BtnGroupExample />}
 							/>
-							<Route path="/list" element={<ListExample />} />
+							<Route path="/input" element={<InputExample />} />
 							<Route path="/link" element={<LinkExample />} />
+							<Route path="/list" element={<ListExample />} />
+							<Route
+								path="/message"
+								element={<MessageExample />}
+							/>
+							<Route
+								path="/spinner"
+								element={<SpinnerExample />}
+							/>
+							<Route path="/tabs" element={<TabsExample />} />
+							<Route
+								path="/progress"
+								element={<ProgressExample />}
+							/>
+							<Route path="/cards" element={<CardsExample />} />
+							<Route
+								path="/accordion"
+								element={<AccordionExample />}
+							/>
+							<Route
+								path="/accordion"
+								element={<AccordionExample />}
+							/>
+							<Route path="/select" element={<SelectExample />} />
+							<Route
+								path="/popover"
+								element={<PopoverExample />}
+							/>
 						</Routes>
 					),
 				}}

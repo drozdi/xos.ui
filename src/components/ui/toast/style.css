@@ -1,0 +1,39 @@
+@import "@style";
+
+.x-toast {
+	@apply fixed right-4 top-4 max-w-64 h-auto z-50;
+}
+
+.x-toast .x-message {
+	@apply backdrop-blur shadow-lg shadow-black/10;
+}
+
+.x-toast--left-top {
+	@apply left-4 top-4 right-auto bottom-auto;
+}
+.x-toast--left-center {
+	@apply left-auto top-auto right-auto bottom-auto;
+}
+.x-toast--left-bottom {
+	@apply left-4 top-auto right-auto bottom-4;
+}
+
+.x-toast--center-top {
+	@apply left-1/2 top-4 right-auto bottom-auto -translate-x-1/2;
+}
+.x-toast--center-center {
+	@apply left-1/2 top-1/2 right-auto bottom-auto -translate-x-1/2 -translate-y-1/2;
+}
+.x-toast--center-bottom {
+	@apply left-1/2 top-auto right-auto bottom-4 -translate-x-1/2;
+}
+
+.x-toast--right-top {
+	@apply left-auto top-4 right-4 bottom-auto;
+}
+.x-toast--right-bottom {
+	@apply left-auto top-auto right-4 bottom-4;
+}
+.x-toast--right-center {
+	@apply left-auto top-auto right-4 bottom-1/2 -translate-y-1/2;
+}

@@ -1,0 +1,8 @@
+@import "@style";
+
+.x-messages {
+	@apply flex flex-col gap-2;
+}
+.x-messages--row {
+	@apply flex-row;
+}

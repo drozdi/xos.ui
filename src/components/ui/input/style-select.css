@@ -1,0 +1,24 @@
+@import "@style";
+
+select.x-input-native {
+	@apply appearance-none bg-surface cursor-pointer;
+	& option:not(:disabled) {
+		@apply x-bg-surface;
+	}
+	&:not(:checked) option {
+		@apply opacity-50;
+	}
+	&:checked option {
+		@apply text-white;
+	}
+}
+
+.x-input-container:has(select) {
+	@apply p-[1px];
+}
+
+.x-input--outline {
+	/*select.x-input-native {
+		@apply border border-solid border-inherit;
+	}*/
+}

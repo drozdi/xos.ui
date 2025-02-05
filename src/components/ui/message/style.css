@@ -1,0 +1,98 @@
+@import "@style";
+
+.x-message {
+	@apply flex relative justify-start rounded cursor-default p-3 shadow-2 shadow-black/50;
+	background-color: color-mix(in srgb, currentColor 20%, transparent);
+}
+
+.x-message::before {
+	@apply absolute top-0 left-0 w-full h-full rounded-[inherit] contain-layout pointer-events-none border-0 border-current;
+	content: "";
+}
+
+.x-message__body {
+	@apply flex-1;
+}
+.x-message__label {
+	@apply text-sm/normal;
+}
+.x-message__description {
+	@apply block text-xs/normal opacity-80 overflow-hidden text-ellipsis;
+}
+.x-message > .x-icon,
+.x-message > .x-spinner {
+	@apply mr-3 text-2xl/none;
+}
+
+.x-message__close {
+	@apply ml-3 flex justify-start items-start;
+}
+
+.x-message--square {
+	@apply rounded-none;
+}
+.x-message--flat {
+	@apply !shadow-none;
+}
+.x-message--outline::before {
+	@apply border;
+}
+.x-message--underlined-top::before {
+	@apply border-t-4;
+}
+.x-message--underlined-bottom::before {
+	@apply border-b-4;
+}
+.x-message--underlined-left::before {
+	@apply border-l-4;
+}
+.x-message--underlined-right::before {
+	@apply border-r-4;
+}
+
+.x-message--primary {
+	@apply text-primary;
+}
+.x-message--secondary {
+	@apply text-secondary;
+}
+.x-message--accent {
+	@apply text-accent;
+}
+.x-message--positive {
+	@apply text-positive;
+}
+.x-message--negative {
+	@apply text-negative;
+}
+.x-message--info {
+	@apply text-info;
+}
+.x-message--warning {
+	@apply text-warning;
+}
+
+.x-message--filled.x-message--primary {
+	@apply x-bg-primary;
+}
+.x-message--filled.x-message--secondary {
+	@apply x-bg-secondary;
+}
+.x-message--filled.x-message--accent {
+	@apply x-bg-accent;
+}
+.x-message--filled.x-message--positive {
+	@apply x-bg-positive;
+}
+.x-message--filled.x-message--negative {
+	@apply x-bg-negative;
+}
+.x-message--filled.x-message--info {
+	@apply x-bg-info;
+}
+.x-message--filled.x-message--warning {
+	@apply x-bg-warning;
+}
+.x-message--filled::before {
+	@apply border-color;
+}

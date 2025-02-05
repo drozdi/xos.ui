@@ -1,0 +1,259 @@
+@import "@style";
+
+.x-input {
+	@apply relative flex border-color rounded flex-wrap;
+	--input-section-width: 2rem;
+	--imput-padding: 0.75rem;
+	--input-padding-start: var(--imput-padding);
+	--input-padding-end: var(--imput-padding);
+}
+.x-input,
+.x-input * {
+	@apply transition-all ease-in-out duration-200;
+}
+.x-input-before,
+.x-input-after {
+	@apply flex justify-center items-center content-center;
+}
+.x-input-before {
+	@apply mr-2;
+}
+.x-input-after {
+	@apply ml-2;
+}
+
+.x-input-container {
+	@apply flex-1 relative border-inherit rounded-[inherit];
+}
+.x-input-section {
+	@apply absolute top-0 bottom-0 z-10 flex justify-center items-center content-center;
+	width: var(--input-section-width);
+	&:is(*:first-child) {
+		top: 0;
+	}
+	&:is(*:last-child) {
+		right: 0;
+	}
+}
+
+.x-input-native {
+	@apply block w-full relative bg-transparent pt-6 pb-2 outline-none border-none placeholder:opacity-0 focus:placeholder:opacity-100 focus:outline-none;
+	padding-inline-start: var(--input-padding-start);
+	padding-inline-end: var(--input-padding-end);
+}
+.x-input-container:has(.x-input-section:is(*:first-child)) {
+	--input-padding-start: var(--input-section-width);
+}
+.x-input-container:has(.x-input-section:is(*:last-child)) {
+	--input-padding-end: var(--input-section-width);
+}
+
+.x-input-label {
+	@apply pointer-events-none opacity-70 truncate absolute top-1/2 max-w-[calc(100%-2rem)] -translate-y-1/2;
+	left: var(--input-padding-start);
+}
+
+.x-input--stack-label .x-input-native,
+.x-input-container:not(:has(.x-input-label)) .x-input-native {
+	@apply placeholder:opacity-100;
+}
+
+.x-input-container:not(:has(.x-input-label)) .x-input-native {
+	@apply py-4 placeholder:opacity-100;
+}
+
+.x-input-container:focus-within .x-input-label {
+	@apply opacity-100;
+}
+
+.x-input--stack-label .x-input-native ~ .x-input-label,
+.x-input-native:focus ~ .x-input-label,
+.x-input-native:not(:placeholder-shown) ~ .x-input-label {
+	@apply text-[0.8em] top-4;
+}
+
+.x-input-underlay,
+.x-input-underlined,
+.x-input-outline {
+	@apply hidden absolute bottom-0 left-0 w-full rounded-[inherit] border-inherit contain-layout box-border;
+}
+
+.x-input-underlay {
+	@apply h-full bg-dimmed;
+}
+.x-input-underlined {
+	@apply border-b;
+}
+
+.x-input-outline {
+	@apply h-full items-stretch pointer-events-none;
+}
+.x-input-outline > * {
+	@apply border-y border-inherit;
+}
+.x-input-outline > *:first-child {
+	@apply border-l rounded-l-[inherit];
+}
+.x-input-outline > *:last-child {
+	@apply border-r rounded-r-[inherit];
+}
+.x-input-outline > *:first-child {
+	@apply flex-initial min-w-2;
+}
+.x-input-outline > *:not(:first-child, :last-child) {
+	@apply flex-none max-w-[calc(100%-0.5rem)];
+}
+.x-input-outline > *:last-child {
+	@apply flex-[1];
+}
+.x-input-outline .x-input-label {
+	@apply invisible text-[0.8em] mx-1 relative;
+}
+
+.x-input--dense {
+	.x-input-native {
+		@apply pt-3 pb-1;
+	}
+	.x-input-native:focus ~ .x-input-label,
+	.x-input-native:not(:placeholder-shown) ~ .x-input-label {
+		@apply text-[0.8em] top-2;
+	}
+	&:not(:has(*.x-input-label)) .x-input-native {
+		@apply py-2;
+	}
+}
+.x-input--dense.x-input--stack-label .x-input-native ~ .x-input-label {
+	@apply text-[0.8em] top-2;
+}
+
+.x-input--outline .x-input-outline {
+	@apply flex;
+}
+.x-input--outline.x-input--dense {
+	.x-input-native {
+		@apply py-2;
+	}
+
+	&.x-input--stack-label .x-input-native ~ .x-input-label,
+	.x-input-native:focus ~ .x-input-label,
+	.x-input-native:not(:placeholder-shown) ~ .x-input-label {
+		@apply top-0;
+		left: var(--imput-padding);
+	}
+
+	&.x-input--stack-label,
+	&:focus-within,
+	&:has(input:not(:placeholder-shown)),
+	&:has(select) {
+		.x-input-outline > .x-input-outline-notch {
+			@apply border-t-transparent;
+		}
+	}
+}
+
+.x-input--filled .x-input-underlay {
+	@apply block;
+}
+.x-input--underlined .x-input-underlined {
+	@apply block;
+}
+.x-input--underlined:focus-within .x-input-underlined {
+	@apply border-b-3;
+}
+.x-input--square {
+	@apply rounded-none;
+}
+.x-input--disabled {
+	@apply opacity-50 cursor-not-allowed;
+}
+.x-input--disabled .x-input-native {
+	@apply pointer-events-none;
+}
+
+.x-input-container:focus-within {
+	@apply border-blue-600;
+}
+
+.x-input--primary,
+.x-input--secondary,
+.x-input--accent,
+.x-input--positive,
+.x-input--negative,
+.x-input--info,
+.x-input--warning {
+	.x-input-underlay {
+		background-color: color-mix(in srgb, currentColor 30%, transparent);
+	}
+	.x-input-outline,
+	.x-input-underlined {
+		@apply border-current opacity-60;
+	}
+	&:focus-within .x-input-outline,
+	&:focus-within .x-input-underlined {
+		@apply opacity-100;
+	}
+}
+
+.x-input--primary .x-input-outline,
+.x-input--primary .x-input-underlay,
+.x-input--primary .x-input-underlined {
+	@apply text-primary;
+}
+
+.x-input--secondary .x-input-outline,
+.x-input--secondary .x-input-underlay,
+.x-input--secondary .x-input-underlined {
+	@apply text-secondary;
+}
+.x-input--accent .x-input-outline,
+.x-input--accent .x-input-underlay,
+.x-input--accent .x-input-underlined {
+	@apply text-accent;
+}
+
+.x-input--positive .x-input-outline,
+.x-input--positive .x-input-underlay,
+.x-input--positive .x-input-underlined {
+	@apply text-positive;
+}
+
+.x-input--negative .x-input-outline,
+.x-input--negative .x-input-underlay,
+.x-input--negative .x-input-underlined {
+	@apply text-negative;
+}
+
+.x-input--info .x-input-outline,
+.x-input--info .x-input-underlay,
+.x-input--info .x-input-underlined {
+	@apply text-info;
+}
+
+.x-input--warning .x-input-outline,
+.x-input--warning .x-input-underlay,
+.x-input--warning .x-input-underlined {
+	@apply text-warning;
+}
+
+.x-input-messages {
+	@apply flex-auto w-full min-h-3 relative text-xs/none px-3 py-1 overflow-hidden;
+}
+.x-input-message {
+	@apply transition-all relative -top-full -translate-y-full;
+}
+.x-input-message--hint {
+}
+.x-input-message--error {
+	@apply text-negative absolute w-[calc(100%-1.5rem)];
+}
+.x-input-messages--error .x-input-message--hint {
+}
+.x-input-messages--error .x-input-message--error {
+	@apply top-1 translate-y-0;
+}
+.x-input:focus-within
+	.x-input-messages:not(.x-input-messages--error)
+	.x-input-message--hint,
+.x-input-messages--hint .x-input-message--hint {
+	@apply top-0 translate-y-0;
+}

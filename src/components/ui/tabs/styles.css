@@ -1,0 +1,84 @@
+@import "@style";
+
+.x-tabs {
+	@apply flex flex-col;
+}
+
+.x-tabs-list {
+	@apply flex flex-wrap;
+}
+
+.x-tabs-tab {
+	@apply flex relative items-center justify-center select-none cursor-pointer flex-initial py-2 px-3 box-border text-sm/none border-b-2 border-color;
+}
+.x-tabs-tab::before {
+	@apply bg-current opacity-0 absolute top-0 left-0 h-full w-full -z-10;
+	content: " ";
+}
+.x-tabs-tab:not(:disabled, .x-tabs-tab--disabled):hover::before {
+	@apply opacity-15;
+}
+.x-tabs-tab:not(:disabled, .x-tabs-tab--disabled):focus {
+	@apply outline outline-1 outline-primary outline-offset-1;
+}
+
+.x-tabs-tab__label {
+	@apply flex-1 text-center text-nowrap;
+}
+.x-tabs-tab__section {
+	@apply flex items-center justify-center;
+	& > svg {
+		@apply block;
+	}
+	&:is(*:first-child) {
+		@apply mr-3;
+	}
+	&:is(*:last-child) {
+		@apply ml-3;
+	}
+}
+
+.x-tabs-tab--active {
+	@apply border-primary;
+}
+.x-tabs-tab:disabled,
+.x-tabs-tab--disabled {
+	@apply cursor-not-allowed opacity-50;
+}
+
+.x-tabs-panel {
+	@apply grow-0 pt-2 hidden;
+}
+.x-tabs-panel--active {
+	@apply block;
+}
+
+.x-tabs-list--no-wrap {
+	@apply flex-nowrap;
+}
+.x-tabs-list--grow .x-tabs-tab {
+	@apply grow;
+}
+
+.x-tabs--vertical {
+	@apply flex flex-row;
+}
+.x-tabs--vertical .x-tabs-list {
+	@apply flex-col;
+}
+.x-tabs--vertical .x-tabs-tab {
+	@apply border-b-0 border-r-2;
+}
+.x-tabs--vertical .x-tabs-panel {
+	@apply pt-0 pl-2;
+}
+
+.x-tabs--pills .x-tabs-list {
+	@apply gap-2;
+}
+.x-tabs--pills .x-tabs-tab {
+	@apply rounded border-0;
+}
+.x-tabs--pills .x-tabs-tab--active {
+	@apply x-bg-primary;
+}
