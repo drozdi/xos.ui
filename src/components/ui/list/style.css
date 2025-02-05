@@ -3,8 +3,8 @@
 	@apply flex flex-col;
 }
 .x-list--bordered {
-	@apply border border-black/20;
+	@apply border border-color;
 }
-.x-list--separator {
-	@apply divide-y divide-color;
+.x-list--separator .x-item + .x-item {
+	@apply border-t border-color;
 }

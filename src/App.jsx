@@ -16,7 +16,7 @@ function App() {
 			<XLayout container overlay toggle view="lhr lpr lff">
 				{{
 					left: (props) => {
-						//return 'left';
+						//return "left";
 						return (
 							<XList separator>
 								<XItem to="/">

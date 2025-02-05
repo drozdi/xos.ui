@@ -6,16 +6,18 @@ import {
 	Fragment,
 	useContext,
 	useMemo,
-} from 'react';
-import { isFunction } from '../../utils/is';
+} from "react";
+import { isFunction } from "../../utils/is";
 
 const RenderContext = createContext({
-	render: ({ as }) => (as === 'navLink' ? 'a' : as),
+	render: ({ as }) => (as === "navLink" ? "a" : as),
 });
 
 export function RenderProvider({ children, ...contextValues }) {
 	return (
-		<RenderContext.Provider value={contextValues}>{children}</RenderContext.Provider>
+		<RenderContext.Provider value={contextValues}>
+			{children}
+		</RenderContext.Provider>
 	);
 }
 
@@ -34,8 +36,6 @@ function applyContextToProps(props) {
 	return { ...contextValues, ...props, as: render(props) };
 }
 
-function _cc(fn, ...args) {}
-
 export function render(tag, props, state) {
 	let { as: Component = tag, children, ...rest } = applyContextToProps(props);
 
@@ -49,18 +49,22 @@ export function render(tag, props, state) {
 
 	const memoizedRest = useMemo(() => {
 		const result = { ...rest };
-		['className', 'style'].forEach((key) => {
+		["className", "style"].forEach((key) => {
 			if (key in rest && rest[key] && isFunction(rest[key])) {
 				if (Component.render) {
-					result[key] = (arg) => rest[key]({ ...arg, ...state }, rest);
+					result[key] = (arg) =>
+						rest[key]({ ...arg, ...state }, rest);
 				} else {
 					result[key] = rest[key](state, rest);
 				}
 			}
 		});
 
-		if (result['aria-labelledby'] && result['aria-labelledby'] === result.id) {
-			result['aria-labelledby'] = undefined;
+		if (
+			result["aria-labelledby"] &&
+			result["aria-labelledby"] === result.id
+		) {
+			result["aria-labelledby"] = undefined;
 		}
 
 		return result;

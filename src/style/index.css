@@ -60,7 +60,8 @@
 	--body-bg: #002650;
 	--body-color: #ffffffb3;
 
-	--link-color: #00aeff;
+	/*--link-color: #00aeff;*/
+	--link-color: #ffffffb3;
 	--link-hover-color: #ffffff;
 
 	--border-color: #ffffff33;
@@ -96,7 +97,7 @@
 		color: var(--link-color);
 		text-decoration: none;
 	}
-	a[href]:hover {
+	a[href]:not([disabled]):hover {
 		color: var(--link-hover-color);
 		text-decoration: underline;
 	}

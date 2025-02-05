@@ -10,7 +10,7 @@ const clickableTag = ["a", "label", "navLink"];
 const disRoleTag = ["label"];
 const disDisabledTag = ["div", "span", "a", "label"];
 
-export const XItem = forwardRefWithAs(function XItemFn(
+export const XItemExpansion = forwardRefWithAs(function XItemExpansionFn(
 	{
 		className,
 		children,
@@ -105,7 +105,7 @@ export const XItem = forwardRefWithAs(function XItemFn(
 	);
 });
 
-XItem.propTypes = {
+XItemExpansion.propTypes = {
 	children: PropTypes.node,
 	className: PropTypes.string,
 	dense: PropTypes.bool,
