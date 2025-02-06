@@ -13,8 +13,8 @@ export const Box = forwardRefWithAs(function Box(
 				"x-box--col": col,
 				"x-box--nowrap": nowrap,
 				[`x-box--${size}`]: size,
-				[`x-box--align-${align}`]: align,
-				[`x-box--justify-${justify}`]: justify,
+				[`align-${align}`]: align,
+				[`justify-${justify}`]: justify,
 			},
 			className
 		),
@@ -22,10 +22,21 @@ export const Box = forwardRefWithAs(function Box(
 	});
 });
 
-Box.Section = forwardRefWithAs(function Section({ className, ...props }, ref) {
+Box.Section = forwardRefWithAs(function Section(
+	{ className, top, side, nowrap, ...props },
+	ref
+) {
 	return render("span", {
 		...props,
-		className: classNames("x-box-section", className),
+		className: classNames(
+			"x-box-section",
+			{
+				"x-box-section--side": side,
+				"justify-start": top,
+				"text-nowrap": nowrap,
+			},
+			className
+		),
 		ref,
 	});
 });

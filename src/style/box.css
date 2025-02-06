@@ -1,70 +1,35 @@
-.x-box {
-	@apply flex relative px-3 py-2;
+.x-box,
+.x-box-section {
+	@apply flex flex-wrap relative;
 }
-.x-box--col {
+
+.x-box--col,
+.x-box-section {
 	@apply flex-col;
+}
+
+.x-box {
+	@apply px-3 py-2;
 }
 .x-box--dense {
 	@apply px-2 py-1;
-}
-.x-box--col {
-	@apply flex-col;
 }
 .x-box--nowrap {
 	@apply flex-nowrap;
 }
 
-.x-box--align-start {
-	align-items: flex-start;
-}
-.x-box--align-center {
-	align-items: center;
-}
-.x-box--align-end {
-	align-items: flex-end;
-}
-.x-box--align-stretch {
-	align-items: stretch;
-}
-.x-box--align-baseline {
-	align-items: baseline;
-}
-
-.x-box--justify-start {
-	justify-content: flex-start;
-}
-.x-box--justify-center {
-	justify-content: center;
-}
-.x-box--justify-end {
-	justify-content: flex-end;
-}
-.x-box--justify-between {
-	justify-content: space-between;
-}
-.x-box--justify-around {
-	justify-content: flex-around;
-}
-
-.x-box > *:not(.x-box-section) {
+.x-box-section:not(.x-box-section--side) {
 	@apply flex-1;
 }
 .x-box-section {
-	@apply flex flex-col items-center justify-center;
-	& > svg {
+	@apply flex flex-col items-start justify-center;
+	&--side > svg {
 		@apply block;
 	}
-	&:is(*:first-child) {
-		@apply mr-3;
-	}
-	&:is(*:last-child) {
+	& + & {
 		@apply ml-3;
 	}
 }
-
-.x-box-section--top {
-	@apply justify-start;
-}
-.x-box-section--nowrap {
-	@apply text-nowrap;
+.x-box-section--side {
+	@apply items-center;
 }

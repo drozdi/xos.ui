@@ -1,4 +1,5 @@
 import { Box } from "../internal/box";
+import { Sections } from "../internal/sections";
 import { XLink } from "../ui";
 export function HomeExample() {
 	return (
@@ -13,12 +14,24 @@ export function HomeExample() {
 				leftSection="mdi-home"
 				rightSection="mdi-close"
 			/>
-
+			<hr className="my-4" />
 			<Box className="bg-dark">
-				<Box.Section className="bg-bgmb1">sdfsdf</Box.Section>
-				<div className="bg-bgmb5">asdasd</div>
-				<Box.Section className="bg-bgmb3">sdfsdf</Box.Section>
+				<Box.Section side className="bg-bgmb1">
+					sdfsdf
+				</Box.Section>
+				<Box.Section className="bg-bgmb5">asdasd</Box.Section>
+				<Box.Section side className="bg-bgmb3">
+					sdfsdf
+				</Box.Section>
 			</Box>
+			<hr className="my-4" />
+			<Sections
+				className="bg-bgmb4"
+				leftSection="mdi-close"
+				rightSection="mdi-close"
+			>
+				asdasd
+			</Sections>
 		</div>
 	);
 }
