@@ -1,12 +1,13 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { useLayoutEffect, useMemo, useState } from 'react';
-import { isArray } from '../../../utils/is';
-import { useId } from '../../hooks/useId';
-import { scopedKeydownHandler } from '../../internal/events/scoped-keydown-handler';
-import { XAccordionProvider } from './XAccordionContext';
-
-let iii = 0;
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { useLayoutEffect, useMemo, useState } from "react";
+import { isArray } from "../../../utils/is";
+import { useId } from "../../hooks/useId";
+import { scopedKeydownHandler } from "../../internal/events/scoped-keydown-handler";
+import { XAccordionProvider } from "./XAccordionContext";
+import { XAccordionHeader } from "./XAccordionHeader";
+import { XAccordionPanel } from "./XAccordionPanel";
+import { XAccordionTab } from "./XAccordionTab";
 
 export function XAccordion({
 	id,
@@ -14,16 +15,17 @@ export function XAccordion({
 	className,
 	multiple,
 	border,
-	field,
+	filled,
 	square,
 	separated,
 	onChange,
 	value: propsValue,
+	name,
 	...props
 }) {
 	const uid = useId(id);
 	const [current, setCurrent] = useState(
-		multiple ? [].concat(propsValue) : (propsValue ?? undefined),
+		multiple ? [].concat(propsValue) : propsValue ?? undefined
 	);
 
 	const handleChange = (event, value) => {
@@ -32,7 +34,7 @@ export function XAccordion({
 			value,
 			target: {
 				...event.target,
-				name: props.name,
+				name: name,
 				id: uid,
 				value,
 			},
@@ -80,11 +82,11 @@ export function XAccordion({
 				handleChange(event, newValue);
 			},
 			onKeyDown: scopedKeydownHandler({
-				parentSelector: '.x-accordion',
+				parentSelector: ".x-accordion",
 				siblingSelector: 'button, [role="button"]',
 				loop: true,
 				activateOnFocus: !multiple,
-				orientation: 'xy',
+				orientation: "xy",
 			}),
 		};
 	}, [uid, current, multiple]);
@@ -102,18 +104,20 @@ export function XAccordion({
 	}, [multiple]);
 
 	useLayoutEffect(() => {
-		setCurrent(() => (multiple ? [].concat(propsValue) : (propsValue ?? undefined)));
-	}, [propsValue]);
+		setCurrent(() =>
+			multiple ? [].concat(propsValue) : propsValue ?? undefined
+		);
+	}, [multiple, propsValue]);
 
 	return (
 		<div
 			{...props}
 			id={uid}
-			className={classNames('x-accordion', className, {
-				'x-accordion--border': border,
-				'x-accordion--field': field,
-				'x-accordion--square': square,
-				'x-accordion--separated': separated,
+			className={classNames("x-accordion", className, {
+				"x-accordion--border": border,
+				"x-accordion--filled": filled,
+				"x-accordion--square": square,
+				"x-accordion--separated": separated,
 			})}
 		>
 			<XAccordionProvider value={context}>{children}</XAccordionProvider>
@@ -121,14 +125,25 @@ export function XAccordion({
 	);
 }
 
+XAccordion.Tab = XAccordionTab;
+XAccordion.Header = XAccordionHeader;
+XAccordion.Panel = XAccordionPanel;
+
 XAccordion.propTypes = {
 	id: PropTypes.string,
 	children: PropTypes.node,
 	className: PropTypes.string,
-	value: PropTypes.oneOfType([PropTypes.number, PropTypes.array, PropTypes.string]),
+	name: PropTypes.string,
+	value: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.arrayOf(
+			PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+		),
+		PropTypes.string,
+	]),
 	multiple: PropTypes.bool,
 	border: PropTypes.bool,
-	field: PropTypes.bool,
+	filled: PropTypes.bool,
 	square: PropTypes.bool,
 	separated: PropTypes.bool,
 	onChange: PropTypes.func,
