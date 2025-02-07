@@ -1,24 +1,19 @@
 @import "@style";
 
 .x-link {
-	@apply w-full flex relative items-center px-3 py-2 select-none cursor-pointer;
+	@apply w-full flex gap-3 relative items-center px-3 py-2 select-none cursor-pointer;
 }
-.x-link-underlay {
-	@apply bg-current opacity-0 absolute top-0 left-0 h-full w-full -z-10;
+.x-link::before {
+	@apply bg-current opacity-0 absolute top-0 left-0 h-full w-full -z-10 transition-opacity ease-in-out duration-200;
+	content: " ";
 }
-.x-link:not(.x-link--disabled):hover .x-link-underlay {
+.x-link:not(.x-link--disabled):hover::before {
 	@apply opacity-15;
 }
 .x-link-section {
 	@apply flex items-center justify-center;
 	& > svg {
 		@apply block;
-	}
-	&:is(*:first-child) {
-		@apply mr-3;
-	}
-	&:is(*:last-child) {
-		@apply ml-3;
 	}
 }
 
@@ -46,6 +41,7 @@
 	@apply ps-5;
 }
 
+.x-link[disabled],
 .x-link--disabled {
 	@apply cursor-not-allowed opacity-50;
 }

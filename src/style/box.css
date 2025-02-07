@@ -14,7 +14,7 @@
 .x-box--dense {
 	@apply px-2 py-1 gap-2;
 }
-.x-box--nowrap {
+.x-box--no-wrap {
 	@apply flex-nowrap;
 }
 
@@ -22,7 +22,7 @@
 	@apply flex-1;
 }
 .x-box-section {
-	@apply flex flex-col items-start justify-center;
+	@apply items-start justify-center;
 	&--side > svg {
 		@apply block;
 	}

@@ -1,8 +1,21 @@
 import classNames from "classnames";
 import { forwardRefWithAs, render } from "./render";
 
+/**
+ * Компонент для создания гибкой структуры с возможностью размещения элементов в колонки.
+ *
+ * @param {Object} props - Параметры компонента.
+ * @param {string} [props.className] - Дополнительные классы CSS.
+ * @param {boolean} [props.col] - Расположение элементов в колонку.
+ * @param {boolean} [props.noWrap] - Запрет переноса текста.
+ * @param {string} [props.size] - Размер контейнера.
+ * @param {string} [props.align] - Выравнивание по вертикали.
+ * @param {string} [props.justify] - Выравнивание по горизонтали.
+ * @param {any} ref - Референс компонента.
+ * @returns {JSX.Element} Элемент div с заданной структурой и стилями.
+ */
 export const Box = forwardRefWithAs(function Box(
-	{ className, col, nowrap, size, align, justify, ...props },
+	{ className, col, noWrap, size, align, justify, ...props },
 	ref
 ) {
 	return render("div", {
@@ -11,7 +24,7 @@ export const Box = forwardRefWithAs(function Box(
 			"x-box",
 			{
 				"x-box--col": col,
-				"x-box--nowrap": nowrap,
+				"x-box--nowrap": noWrap,
 				[`x-box--${size}`]: size,
 				[`align-${align}`]: align,
 				[`justify-${justify}`]: justify,

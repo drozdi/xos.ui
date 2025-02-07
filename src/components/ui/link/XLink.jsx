@@ -1,11 +1,12 @@
-import classNames from 'classnames/bind';
-import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
-import { isString } from '../../../utils/is';
-import { forwardRefWithAs, render } from '../../internal/render';
-import { XCollapse } from '../collapse';
-import { XChevron, XIcon } from '../icon';
-import './style.css';
+import classNames from "classnames/bind";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import { isString } from "../../../utils/is";
+import { forwardRefWithAs, render } from "../../internal/render";
+import { Sections } from "../../internal/sections";
+import { XCollapse } from "../collapse";
+import { XChevron, XIcon } from "../icon";
+import "./style.css";
 export const XLink = forwardRefWithAs(function XLinkFn(
 	{
 		className,
@@ -22,7 +23,7 @@ export const XLink = forwardRefWithAs(function XLinkFn(
 		onKeyDown,
 		...props
 	},
-	ref,
+	ref
 ) {
 	const withChildren = !!children;
 	const [opened, setOpened] = useState(_opened);
@@ -41,7 +42,7 @@ export const XLink = forwardRefWithAs(function XLinkFn(
 
 	const handleKeyDown = (event) => {
 		onKeyDown?.(event);
-		if (event.code === 'Space' && withChildren) {
+		if (event.code === "Space" && withChildren) {
 			event.preventDefault();
 			setOpened((v) => !v);
 		}
@@ -51,23 +52,65 @@ export const XLink = forwardRefWithAs(function XLinkFn(
 
 	return (
 		<>
+			<Sections
+				as="a"
+				{...props}
+				aria-label={isString(label) ? label : undefined}
+				disabled={disabled}
+				aria-disabled={disabled}
+				className={function className11({ isActive }) {
+					return classNames(
+						"x-link",
+						{
+							"x-link--nowrap": noWrap,
+							"x-link--active": active || isActive,
+							"x-link--opened": opened,
+							"x-link--disabled": disabled,
+						},
+						className
+					);
+				}}
+				onClick={handleClick}
+				onKeyDown={handleKeyDown}
+				bodyClass="x-link-body"
+				leftSection={leftSection}
+				rightSection={
+					withChildren ? (
+						<XChevron className="x-link-chevron" />
+					) : (
+						rightSection
+					)
+				}
+				ref={ref}
+			>
+				<span className="x-link-label">{label}</span>
+				<span className="x-link-description">{description}</span>
+			</Sections>
+			<XCollapse active={opened}>
+				<div className="x-link-childrens">{children}</div>
+			</XCollapse>
+		</>
+	);
+
+	return (
+		<>
 			{render(
-				'a',
+				"a",
 				{
-					'aria-label': isString(label) ? label : undefined,
+					"aria-label": isString(label) ? label : undefined,
 					...props,
 					disabled,
-					'aria-disabled': disabled,
+					"aria-disabled": disabled,
 					className: ({ isActive }) =>
 						classNames(
-							'x-link',
+							"x-link",
 							{
-								'x-link--nowrap': noWrap,
-								'x-link--active': active || isActive,
-								'x-link--opened': opened,
-								'x-link--disabled': disabled,
+								"x-link--nowrap": noWrap,
+								"x-link--active": active || isActive,
+								"x-link--opened": opened,
+								"x-link--disabled": disabled,
 							},
-							className,
+							className
 						),
 					onClick: handleClick,
 					onKeyDown: handleKeyDown,
@@ -82,11 +125,13 @@ export const XLink = forwardRefWithAs(function XLinkFn(
 									)}
 								</span>
 							)}
+
 							<div className="x-link-body">
 								<span className="x-link-label">{label}</span>
-								<span className="x-link-description">{description}</span>
+								<span className="x-link-description">
+									{description}
+								</span>
 							</div>
-							<div className="x-link-underlay"></div>
 
 							{(withChildren || rightSection) && (
 								<span className="x-link-section">
@@ -107,7 +152,7 @@ export const XLink = forwardRefWithAs(function XLinkFn(
 					active,
 					opened,
 					disabled,
-				},
+				}
 			)}
 			<XCollapse active={opened}>
 				<div className="x-link-childrens">{children}</div>

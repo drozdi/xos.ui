@@ -55,7 +55,7 @@ export function render(tag, props, state) {
 					result[key] = (arg) =>
 						rest[key]({ ...arg, ...state }, rest);
 				} else {
-					result[key] = rest[key](state, rest);
+					result[key] = rest[key]?.(state || {}, rest);
 				}
 			}
 		});
