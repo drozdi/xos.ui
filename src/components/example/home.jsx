@@ -25,13 +25,7 @@ export function HomeExample() {
 				</Box.Section>
 			</Box>
 			<hr className="my-4" />
-			<Sections
-				className="bg-bgmb4"
-				leftSection="mdi-close"
-				rightSection="mdi-close"
-			>
-				asdasd
-			</Sections>
+			<Sections className="bg-bgmb4">asdasd</Sections>
 		</div>
 	);
 }

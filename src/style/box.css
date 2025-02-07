@@ -9,10 +9,10 @@
 }
 
 .x-box {
-	@apply px-3 py-2;
+	@apply px-3 py-2 gap-3;
 }
 .x-box--dense {
-	@apply px-2 py-1;
+	@apply px-2 py-1 gap-2;
 }
 .x-box--nowrap {
 	@apply flex-nowrap;
@@ -25,9 +25,6 @@
 	@apply flex flex-col items-start justify-center;
 	&--side > svg {
 		@apply block;
-	}
-	& + & {
-		@apply ml-3;
 	}
 }
 .x-box-section--side {
