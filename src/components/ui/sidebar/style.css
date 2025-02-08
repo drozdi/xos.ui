@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 .xSidebar {
 	@apply min-w-14 w-64 flex flex-col justify-between max-h-full h-full absolute top-0 bottom-0 

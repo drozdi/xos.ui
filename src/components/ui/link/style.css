@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 .x-link {
 	@apply w-full flex gap-3 relative items-center px-3 py-2 select-none cursor-pointer;
@@ -10,15 +10,8 @@
 .x-link:not(.x-link--disabled):hover::before {
 	@apply opacity-15;
 }
-.x-link-section {
-	@apply flex items-center justify-center;
-	& > svg {
-		@apply block;
-	}
-}
-
 .x-link-body {
-	@apply flex-1 overflow-hidden text-ellipsis;
+	@apply overflow-hidden text-ellipsis;
 	.x-link--nowrap & {
 		@apply text-nowrap;
 	}

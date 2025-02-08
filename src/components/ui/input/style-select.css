@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 select.x-input-native {
 	@apply appearance-none bg-surface cursor-pointer;

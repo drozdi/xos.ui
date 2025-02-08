@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@reference "tailwindcss";
 
 .x-collapse {
 	@apply grid transition-all grid-rows-[0fr] ease-in-out duration-200	relative;

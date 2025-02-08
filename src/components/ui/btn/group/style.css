@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 .x-btn-group {
 	@apply flex;

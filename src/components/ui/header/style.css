@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@reference "tailwindcss";
 
 .xHeader {
 	@apply grid grid-cols-[minmax(min-content,auto)_minmax(auto,1fr)_minmax(min-content,auto)] items-center;

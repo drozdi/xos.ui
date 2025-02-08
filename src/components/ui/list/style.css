@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 .x-list {
 	@apply flex flex-col;
 }

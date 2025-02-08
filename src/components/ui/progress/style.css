@@ -33,11 +33,11 @@
 	.x-progress-bar__value {
 		background: linear-gradient(
 			45deg,
-			rgb(var(--x-color-primary)),
-			rgb(var(--x-color-accent)),
-			rgb(var(--x-color-info)),
-			rgb(var(--x-color-positive)),
-			rgb(var(--x-color-secondary))
+			rgb(var(--color-primary)),
+			rgb(var(--color-accent)),
+			rgb(var(--color-info)),
+			rgb(var(--color-positive)),
+			rgb(var(--color-secondary))
 		);
 	}
 	.x-progress-bar__track {
@@ -63,7 +63,7 @@
 	bottom: 0px;
 	right: 0px;
 	background-size: 2.5rem 2.5rem;
-	content: ' ';
+	content: " ";
 	background-image: linear-gradient(
 		45deg,
 		rgba(255, 255, 255, 0.15) 25%,
@@ -93,18 +93,18 @@
 	left: 0px;
 	bottom: 0px;
 	background-color: inherit;
-	content: '';
+	content: "";
 }
 
 .text-gradient.x-progress-bar--indeterminate .x-progress-bar__value::before,
 .text-gradient.x-progress-bar--indeterminate .x-progress-bar__value::after {
 	background: linear-gradient(
 		45deg,
-		rgb(var(--x-color-primary)),
-		rgb(var(--x-color-accent)),
-		rgb(var(--x-color-info)),
-		rgb(var(--x-color-positive)),
-		rgb(var(--x-color-secondary))
+		rgb(var(--color-primary)),
+		rgb(var(--color-accent)),
+		rgb(var(--color-info)),
+		rgb(var(--color-positive)),
+		rgb(var(--color-secondary))
 	);
 }
 
@@ -126,23 +126,28 @@
 	right: 0px;
 }
 
-.x-progress-bar--reverse.x-progress-bar--animation .x-progress-bar__value::after {
+.x-progress-bar--reverse.x-progress-bar--animation
+	.x-progress-bar__value::after {
 	animation: 1s linear infinite x-linear-progress-stripes-reverse;
 }
 
-.x-progress-bar--reverse.x-progress-bar--indeterminate .x-progress-bar__value::before,
-.x-progress-bar--reverse.x-progress-bar--indeterminate .x-progress-bar__value::after {
+.x-progress-bar--reverse.x-progress-bar--indeterminate
+	.x-progress-bar__value::before,
+.x-progress-bar--reverse.x-progress-bar--indeterminate
+	.x-progress-bar__value::after {
 	left: auto;
 	right: 0px;
-	content: '';
+	content: "";
 }
 
-.x-progress-bar--reverse.x-progress-bar--indeterminate .x-progress-bar__value::before {
+.x-progress-bar--reverse.x-progress-bar--indeterminate
+	.x-progress-bar__value::before {
 	animation: 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite
 		x-linear-progress-indeterminate-reverse;
 }
 
-.x-progress-bar--reverse.x-progress-bar--indeterminate .x-progress-bar__value::after {
+.x-progress-bar--reverse.x-progress-bar--indeterminate
+	.x-progress-bar__value::after {
 	animation: 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite
 		x-linear-progress-indeterminate-short-reverse;
 	animation-delay: 1.15s;
@@ -247,9 +252,7 @@
 
 	.x-progress-circular__overlay {
 		stroke: currentColor;
-		transition:
-			all 0.2s ease-in-out,
-			stroke-width 0s;
+		transition: all 0.2s ease-in-out, stroke-width 0s;
 		z-index: 2;
 	}
 }
@@ -268,8 +271,7 @@
 	}
 
 	.x-progress-circular__overlay {
-		animation:
-			2s ease-in-out infinite x-progress-circular-dash,
+		animation: 2s ease-in-out infinite x-progress-circular-dash,
 			2s linear infinite x-progress-circular-rotate;
 		stroke-dasharray: 25, 200;
 		stroke-dashoffset: 0;
@@ -284,8 +286,7 @@
 	}
 
 	.x-progress-circular__overlay {
-		animation:
-			2s ease-in-out infinite x-progress-circular-dash-reverse,
+		animation: 2s ease-in-out infinite x-progress-circular-dash-reverse,
 			2s linear infinite x-progress-circular-rotate-reverse;
 		transform: rotate(-90deg);
 	}

@@ -1,20 +1,11 @@
 import PropTypes from "prop-types";
-import { useMemo } from "react";
-import { XChevron, XIcon } from "../icon";
+import { XChevron } from "../icon";
 import "./style.css";
 
-import { isString } from "../../../utils/is";
-
 import classNames from "classnames";
+import { Sections } from "../../internal/sections";
 import { useXAccordionTabContext } from "./XAccordionTabContext";
-export function XAccordionHeader({
-	className,
-	children,
-	leftSection: propsLeftSection,
-	rightSection: propsRightSection,
-	onClick,
-	...props
-}) {
+export function XAccordionHeader({ className, children, onClick, ...props }) {
 	const {
 		value,
 		active,
@@ -38,27 +29,10 @@ export function XAccordionHeader({
 		onKeyDown(event);
 	};
 
-	const leftSection = useMemo(
-		() =>
-			isString(propsLeftSection) ? (
-				<XIcon>{propsLeftSection}</XIcon>
-			) : (
-				propsLeftSection
-			),
-		[propsLeftSection]
-	);
-	const rightSection = useMemo(
-		() =>
-			isString(propsRightSection) ? (
-				<XIcon>{propsRightSection}</XIcon>
-			) : (
-				propsRightSection
-			),
-		[propsRightSection]
-	);
-
 	return (
-		<button
+		<Sections
+			as="button"
+			rightSection={<XChevron className="x-accordion-chevron" />}
 			{...props}
 			id={getHeaderId(value)}
 			className={classNames("x-accordion-header", className)}
@@ -70,18 +44,8 @@ export function XAccordionHeader({
 			onClick={handleClick}
 			onKeyDown={handleKeyDown}
 		>
-			{propsLeftSection && (
-				<span className="x-accordion-section">{leftSection}</span>
-			)}
-			<h3 className="x-accordion-header-body">{children}</h3>
-			<span className="x-accordion-section">
-				{rightSection ? (
-					rightSection
-				) : (
-					<XChevron className="x-accordion-chevron" />
-				)}
-			</span>
-		</button>
+			{children}
+		</Sections>
 	);
 }
 

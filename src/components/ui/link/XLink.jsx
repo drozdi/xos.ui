@@ -58,8 +58,8 @@ export const XLink = forwardRefWithAs(function XLinkFn(
 				aria-label={isString(label) ? label : undefined}
 				disabled={disabled}
 				aria-disabled={disabled}
-				className={function className11({ isActive }) {
-					return classNames(
+				className={({ isActive }) =>
+					classNames(
 						"x-link",
 						{
 							"x-link--nowrap": noWrap,
@@ -68,8 +68,8 @@ export const XLink = forwardRefWithAs(function XLinkFn(
 							"x-link--disabled": disabled,
 						},
 						className
-					);
-				}}
+					)
+				}
 				onClick={handleClick}
 				onKeyDown={handleKeyDown}
 				bodyClass="x-link-body"

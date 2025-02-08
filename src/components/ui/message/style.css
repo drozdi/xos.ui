@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 .x-message {
 	@apply flex relative justify-start rounded cursor-default p-3 shadow-2 shadow-black/50;

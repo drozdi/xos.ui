@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 .x-input {
 	@apply relative flex border-color rounded flex-wrap;

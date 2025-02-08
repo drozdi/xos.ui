@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 .x-messages {
 	@apply flex flex-col gap-2;

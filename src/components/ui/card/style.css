@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 .x-card {
 	@apply relative align-top rounded-lg shadow-xl;

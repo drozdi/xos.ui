@@ -1,4 +1,4 @@
-@import "@style";
+@reference "@style";
 
 .x-tabs {
 	@apply flex flex-col;
