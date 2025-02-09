@@ -1,15 +1,15 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { forwardRefWithAs } from '../../../internal/render';
-import './style.css';
-import { XBtnGroupProvider } from './XBtnGroupContext';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { forwardRefWithAs } from "../../../internal/render";
+import "./style.css";
+import { XBtnGroupProvider } from "./XBtnGroupContext";
 
-import { isArray } from '../../../../utils/is';
+import { isArray } from "../../../../utils/is";
 
-import { scopedKeydownHandler } from '../../../internal/events/scoped-keydown-handler';
+import { scopedKeydownHandler } from "../../../internal/events/scoped-keydown-handler";
 
-import { useForkRef } from '../../../hooks/useForkRef';
+import { useForkRef } from "../../../hooks/useForkRef";
 
 export const XBtnGroup = forwardRefWithAs(function XBtnGroupFn(
 	{
@@ -30,13 +30,13 @@ export const XBtnGroup = forwardRefWithAs(function XBtnGroupFn(
 		disabled,
 		...props
 	},
-	ref,
+	ref
 ) {
 	const elementRef = useRef();
 	const handleRef = useForkRef(elementRef, ref);
 
 	const [current, setCurrent] = useState(
-		multiple ? [].concat(propsValue) : (propsValue ?? undefined),
+		multiple ? [].concat(propsValue) : propsValue ?? undefined
 	);
 
 	const eventValue = (event, value) => ({
@@ -101,7 +101,7 @@ export const XBtnGroup = forwardRefWithAs(function XBtnGroupFn(
 					siblingSelector: '[role="button"], button',
 					loop: true,
 					activateOnFocus: false,
-					orientation: 'xy',
+					orientation: "xy",
 				}),
 			},
 			switchable,
@@ -125,7 +125,7 @@ export const XBtnGroup = forwardRefWithAs(function XBtnGroupFn(
 				return current === value;
 			},
 		}),
-		[current, switchable, selectable, multiple, disabled, props, elementRef],
+		[current, switchable, selectable, multiple, disabled, props, elementRef]
 	);
 
 	useLayoutEffect(() => {
@@ -140,19 +140,27 @@ export const XBtnGroup = forwardRefWithAs(function XBtnGroupFn(
 		handleChange({}, newValue);
 	}, [multiple]);
 	useLayoutEffect(() => {
-		setCurrent(() => (multiple ? [].concat(propsValue) : (propsValue ?? undefined)));
+		setCurrent(() =>
+			multiple ? [].concat(propsValue) : propsValue ?? undefined
+		);
 	}, [propsValue]);
 
 	return (
 		<div
-			className={classNames('x-btn-group', className, {
-				'x-btn-group--vertical': vertical,
-				'x-btn-group--separator': separator,
-				'x-btn-group--grow': grow,
-				'x-btn-group--pills': pills,
-				'x-btn-group--round': props.round,
-				[`justify-` + align]: !vertical && align,
-				[`items-` + align]: vertical && align,
+			className={classNames("x-btn-group", className, {
+				"x-btn-group--vertical": vertical,
+				"x-btn-group--separator": !pills && !props.round && separator,
+				"x-btn-group--grow": grow,
+				"x-btn-group--pills": pills,
+				"x-btn-group--round": props.round,
+				"justify-start": !vertical && align === "start",
+				"justify-center": !vertical && align === "center",
+				"justify-between": !vertical && align === "between",
+				"justify-end": !vertical && align === "end",
+				"items-start": vertical && align === "start",
+				"items-center": vertical && align === "center",
+				"items-between": vertical && align === "between",
+				"items-end": vertical && align === "end",
 			})}
 			role="group"
 			ref={handleRef}
@@ -175,5 +183,5 @@ XBtnGroup.propTypes = {
 	onChange: PropTypes.func,
 	value: PropTypes.any,
 	name: PropTypes.string,
-	align: PropTypes.oneOf(['start', 'center', 'between', 'end']),
+	align: PropTypes.oneOf(["start", "center", "between", "end"]),
 };
