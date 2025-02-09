@@ -18,6 +18,16 @@
 	@apply flex-nowrap;
 }
 
+.x-box--xs {
+	@apply rounded px-1 py-1 gap-1 text-xs;
+}
+.x-box--sm {
+	@apply rounded px-2 py-1 gap-2 text-sm;
+}
+.x-box--lg {
+	@apply rounded px-4 py-3 gap-4 text-lg;
+}
+
 .x-box-section:not(.x-box-section--side) {
 	@apply flex-1;
 }

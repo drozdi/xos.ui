@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { useMemo } from "react";
 import { isFunction, isString } from "../../utils/is";
 import { XIcon } from "../ui/icon";
 import { forwardRefWithAs, render } from "./render";
@@ -23,11 +24,16 @@ const sectionContent = (section) => {
  * @returns {JSX.Element} Преобразованная секция
  */
 const processSection = (section) => {
-	if (!section) {
-		return null;
-	}
-	const content = isString(section) ? <XIcon>{section}</XIcon> : section;
-	return <span className="x-box-section x-box-section--side">{content}</span>;
+	return useMemo(() => {
+		if (!section) {
+			return null;
+		}
+		return (
+			<span className="x-box-section x-box-section--side">
+				{isString(section) ? <XIcon>{section}</XIcon> : section}
+			</span>
+		);
+	}, [section]);
 };
 
 /**
@@ -70,18 +76,20 @@ export const Sections = forwardRefWithAs(function Box(
 		children: (
 			<>
 				{processSection(leftSection)}
-				<span
-					className={classNames(
-						"x-box-section",
-						{
-							[`align-${align}`]: align,
-							[`justify-${justify}`]: justify,
-						},
-						bodyClass
-					)}
-				>
-					{children}
-				</span>
+				{children && (
+					<span
+						className={classNames(
+							"x-box-section",
+							{
+								[`align-${align}`]: align,
+								[`justify-${justify}`]: justify,
+							},
+							bodyClass
+						)}
+					>
+						{children}
+					</span>
+				)}
 				{processSection(rightSection)}
 			</>
 		),

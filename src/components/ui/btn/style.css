@@ -1,7 +1,7 @@
 @reference "@style";
 
 .x-btn {
-	@apply relative flex items-center justify-center select-none cursor-pointer rounded px-6 py-2 uppercase box-border overflow-hidden focus:outline-none focus-visible:outline-none shadow !shadow-black/50;
+	@apply relative flex items-center justify-center select-none cursor-pointer rounded px-3 uppercase box-border overflow-hidden focus:outline-none focus-visible:outline-none shadow !shadow-black/50;
 	&:not(:disabled, .x-btn--disabled, .x-btn--loading) {
 		&:hover {
 			@apply shadow-xl;
@@ -49,7 +49,7 @@
 }
 .x-btn--loading {
 	.x-btn-content {
-		@apply translate-y-[calc(-100%-0.5rem)];
+		@apply translate-y-[calc(-100%-2*var(--spacing))];
 	}
 	.x-btn-loader {
 		@apply top-0;
@@ -144,51 +144,13 @@
 	}
 }
 
-.x-btn--xs {
-	@apply rounded px-2 py-1 text-xs;
+.x-btn--xs,
+.x-btn--sm,
+.x-btn--icon,
+.x-btn--round {
+	@apply px-0;
 }
-.x-btn--xs:not(.x-btn--icon) .x-btn-section {
-	&:is(*:first-child) {
-		@apply mr-2;
-	}
-	&:is(*:last-child) {
-		@apply ml-2;
-	}
-}
-.x-btn--sm {
-	@apply rounded px-4 py-1 text-sm;
-}
-.x-btn--sm:not(.x-btn--icon) .x-btn-section {
-	&:is(*:first-child) {
-		@apply mr-2;
-	}
-	&:is(*:last-child) {
-		@apply ml-2;
-	}
-}
-.x-btn--lg {
-	@apply rounded px-7 py-3 text-lg;
-}
-.x-btn--lg:not(.x-btn--icon) .x-btn-section {
-	&:is(*:first-child) {
-		@apply mr-4;
-	}
-	&:is(*:last-child) {
-		@apply ml-4;
-	}
-}
-.x-btn--icon {
-	@apply px-2;
-}
-.x-btn--icon.x-btn--xs {
-	@apply px-1;
-}
-.x-btn--icon.x-btn--sm {
-	@apply px-1;
-}
-.x-btn--icon.x-btn--lg {
-	@apply px-3;
-}
+
 .x-btn--block {
 	@apply w-full;
 }
@@ -199,7 +161,7 @@
 	@apply rounded-none;
 }
 .x-btn--round {
-	@apply p-0 rounded-[50%] min-w-8 min-h-8;
+	@apply rounded-[50%] min-w-8 min-h-8;
 }
 
 .x-btn--primary,

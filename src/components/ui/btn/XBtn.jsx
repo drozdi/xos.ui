@@ -1,15 +1,16 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { memo, useMemo } from 'react';
-import { useBtn } from '../../hooks/useBtn';
-import { XIcon } from '../icon';
-import { XBtnGroup, useXBtnGroupContext } from './group';
-import './style.css';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { memo, useMemo } from "react";
+import { useBtn } from "../../hooks/useBtn";
+import { XIcon } from "../icon";
+import { XBtnGroup, useXBtnGroupContext } from "./group";
+import "./style.css";
 
-import { isFunction, isString } from '../../../utils/is';
-import { useDisabled } from '../../internal/disabled';
-import { forwardRefWithAs, render } from '../../internal/render';
-import { XSpinner } from '../spinner';
+import { isFunction } from "../../../utils/is";
+import { useDisabled } from "../../internal/disabled";
+import { forwardRefWithAs, render } from "../../internal/render";
+import { Sections } from "../../internal/sections";
+import { XSpinner } from "../spinner";
 
 const XBtnRoot = forwardRefWithAs(function XBtnFn(params, ref) {
 	const providedDisabled = useDisabled();
@@ -40,8 +41,8 @@ const XBtnRoot = forwardRefWithAs(function XBtnFn(params, ref) {
 		loading,
 		link,
 		active: propsActive,
-		leftSection: propsLeftSection,
-		rightSection: propsRightSection,
+		leftSection,
+		rightSection,
 		...rest
 	} = props;
 
@@ -52,71 +53,53 @@ const XBtnRoot = forwardRefWithAs(function XBtnFn(params, ref) {
 		attrs,
 	} = useBtn(props, ref);
 
-	const leftSection = useMemo(
-		() =>
-			isString(propsLeftSection) ? (
-				<XIcon>{propsLeftSection}</XIcon>
-			) : (
-				propsLeftSection
-			),
-		[propsLeftSection],
-	);
-	const rightSection = useMemo(
-		() =>
-			isString(propsRightSection) ? (
-				<XIcon>{propsRightSection}</XIcon>
-			) : (
-				propsRightSection
-			),
-		[propsRightSection],
-	);
 	const isIcon = useMemo(
 		() =>
-			(!!propsLeftSection != !!propsRightSection && !children) ||
-			(children?.type === XIcon && !propsLeftSection && !propsRightSection),
-		[children, propsLeftSection, propsRightSection],
+			(!!leftSection != !!rightSection && !children) ||
+			(children?.type === XIcon && !leftSection && !rightSection),
+		[children, leftSection, rightSection]
 	);
 
 	return render(
-		'button',
+		"button",
 		{
 			...rest,
 			...attrs,
 			className: classNames(
-				'x-btn',
+				"x-btn",
 				{
-					'x-btn--flat': flat,
-					'x-btn--text': text,
-					'x-btn--tonal': tonal,
-					'x-btn--plain': plain,
-					'x-btn--outline': outline,
-					'x-btn--block': block,
-					'x-btn--square': square,
-					'x-btn--round': round,
-					'x-btn--rounded': rounded,
-					'x-btn--dimmed': dimmed,
-					'x-btn--link': link,
-					'x-btn--icon': isIcon,
-					'x-btn--active': propsActive,
-					'x-btn--loading': loading,
+					"x-btn--flat": flat,
+					"x-btn--text": text,
+					"x-btn--tonal": tonal,
+					"x-btn--plain": plain,
+					"x-btn--outline": outline,
+					"x-btn--block": block,
+					"x-btn--square": square,
+					"x-btn--round": round,
+					"x-btn--rounded": rounded,
+					"x-btn--dimmed": dimmed,
+					"x-btn--link": link,
+					"x-btn--icon": isIcon,
+					"x-btn--active": propsActive,
+					"x-btn--loading": loading,
 					[`x-btn--${color}`]: color,
 					[`x-btn--${size}`]: size,
 				},
-				className,
+				className
 			),
 			children: isFunction(children) ? (
 				children
 			) : (
 				<>
-					<span className="x-btn-content">
-						{propsLeftSection && (
-							<span className="x-btn-section">{leftSection}</span>
-						)}
-						{children && <span className="x-btn-label">{children}</span>}
-						{propsRightSection && (
-							<span className="x-btn-section">{rightSection}</span>
-						)}
-					</span>
+					<Sections
+						leftSection={leftSection}
+						rightSection={rightSection}
+						className="x-btn-content"
+						bodyClass="x-btn-label"
+						size={size}
+					>
+						{children}
+					</Sections>
 					<span className="x-btn-loader">
 						<XSpinner size="1.5em" thickness="5" />
 					</span>
@@ -126,7 +109,7 @@ const XBtnRoot = forwardRefWithAs(function XBtnFn(params, ref) {
 		{
 			disabled,
 			active,
-		},
+		}
 	);
 });
 
