@@ -23,21 +23,8 @@
 }
 
 .x-tabs-tab__label {
-	@apply flex-1 text-center text-nowrap;
+	@apply text-center text-nowrap;
 }
-.x-tabs-tab__section {
-	@apply flex items-center justify-center;
-	& > svg {
-		@apply block;
-	}
-	&:is(*:first-child) {
-		@apply mr-3;
-	}
-	&:is(*:last-child) {
-		@apply ml-3;
-	}
-}
-
 .x-tabs-tab--active {
 	@apply border-primary;
 }
@@ -70,11 +57,11 @@
 	@apply border-b-0 border-r-2;
 }
 .x-tabs--vertical .x-tabs-panel {
-	@apply pt-0 pl-2;
+	@apply pt-0 ps-2;
 }
 
 .x-tabs--pills .x-tabs-list {
-	@apply gap-2;
+	@apply gap-3;
 }
 .x-tabs--pills .x-tabs-tab {
 	@apply rounded border-0;

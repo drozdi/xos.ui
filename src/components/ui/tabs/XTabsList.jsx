@@ -1,20 +1,23 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import './styles.css';
-import { useXTabsContext } from './XTabsContext';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import "./styles.css";
+import { useXTabsContext } from "./XTabsContext";
 export function XTabsList({ className, children, justify, grow, noWrap }) {
 	const ctx = useXTabsContext();
 	return (
 		<div
 			role="tablist"
 			className={classNames(
-				'x-tabs-list',
+				"x-tabs-list",
 				{
-					'x-tabs-list--no-wrap': noWrap,
-					'x-tabs-list--grow': grow,
-					[`justify-${justify}`]: justify,
+					"x-tabs-list--no-wrap": noWrap,
+					"x-tabs-list--grow": grow,
+					"justify-start": justify === "start",
+					"justify-center": justify === "center",
+					"justify-between": justify === "between",
+					"justify-end": justify === "end",
 				},
-				className,
+				className
 			)}
 		>
 			{children}
@@ -25,7 +28,7 @@ export function XTabsList({ className, children, justify, grow, noWrap }) {
 XTabsList.propTypes = {
 	className: PropTypes.string,
 	children: PropTypes.node,
-	justify: PropTypes.oneOf(['start', 'center', 'between', 'end']),
+	justify: PropTypes.oneOf(["start", "center", "between", "end"]),
 	grow: PropTypes.bool,
 	noWrap: PropTypes.bool,
 };

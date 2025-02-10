@@ -1,14 +1,11 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { isString } from '../../../utils/is';
-import { XIcon } from '../icon';
-import './styles.css';
-import { useXTabsContext } from './XTabsContext';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { Sections } from "../../internal/sections";
+import "./styles.css";
+import { useXTabsContext } from "./XTabsContext";
 export function XTabsTab({
 	className,
 	children,
-	rightSection,
-	leftSection,
 	value,
 	color,
 	disabled,
@@ -30,7 +27,8 @@ export function XTabsTab({
 	};
 
 	return (
-		<button
+		<Sections
+			as="button"
 			{...props}
 			role="tab"
 			id={ctx.getTabId(value)}
@@ -40,33 +38,20 @@ export function XTabsTab({
 			disabled={disabled}
 			tabIndex={disabled ? -1 : tabIndex}
 			className={classNames(
-				'x-tabs-tab',
+				"x-tabs-tab",
 				{
-					'x-tabs-tab--disabled': disabled,
-					'x-tabs-tab--active': active,
+					"x-tabs-tab--disabled": disabled,
+					"x-tabs-tab--active": active,
 					[`text-${color}`]: color,
 				},
-				className,
+				className
 			)}
+			bodyClass="x-tabs-tab__label"
 			onClick={handleClick}
 			onKeyDown={ctx.onKeyDown}
 		>
-			{leftSection && (
-				<span className="x-tabs-tab__section">
-					{isString(leftSection) ? <XIcon>{leftSection}</XIcon> : leftSection}
-				</span>
-			)}
-			<span className="x-tabs-tab__label">{children}</span>
-			{rightSection && (
-				<span className="x-tabs-tab__section">
-					{isString(rightSection) ? (
-						<XIcon>{rightSection}</XIcon>
-					) : (
-						rightSection
-					)}
-				</span>
-			)}
-		</button>
+			{children}
+		</Sections>
 	);
 }
 

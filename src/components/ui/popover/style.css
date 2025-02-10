@@ -1,0 +1,9 @@
+@reference "@style";
+
+.x-popover {
+	@apply relative inline-block;
+}
+
+.x-popover__dropdowx {
+	@apply absolute;
+}
