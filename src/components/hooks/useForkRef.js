@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import { isFunction } from '../../utils/is';
+import { useMemo } from "react";
+import { isFunction, isObject } from "../../utils/is";
 
 export function setRef(ref, value = null) {
 	if (isFunction(ref)) {
 		ref(value);
-	} else if (ref) {
+	} else if (isObject(ref) && "current" in ref) {
 		ref.current = value;
 	}
 }

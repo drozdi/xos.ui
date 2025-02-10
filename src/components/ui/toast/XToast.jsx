@@ -1,15 +1,16 @@
-import classNames from 'classnames';
-import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { XMessages } from '../messages';
-import './style.css';
-import { XToastProvider } from './XToastContext';
+import classNames from "classnames";
+import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
+import { Teleport } from "../../internal/teleport";
+import { XMessages } from "../messages";
+import "./style.css";
+import { XToastProvider } from "./XToastContext";
 
 export const XToast = memo(
 	forwardRef(
 		(
 			{
-				position = 'right-top',
+				position = "right-top",
 				underlined,
 				life,
 				closable,
@@ -17,7 +18,7 @@ export const XToast = memo(
 				outline,
 				square,
 			},
-			ref,
+			ref
 		) => {
 			const containerRef = useRef(null);
 			const mesgs = useRef(null);
@@ -25,15 +26,15 @@ export const XToast = memo(
 				if (!underlined) {
 					return undefined;
 				}
-				const p = position.split('-');
-				if (p[0] === 'left') {
-					return 'right';
-				} else if (p[0] === 'right') {
-					return 'left';
-				} else if (p[1] === 'top') {
-					return 'top';
-				} else if (p[1] === 'bottom') {
-					return 'bottom';
+				const p = position.split("-");
+				if (p[0] === "left") {
+					return "right";
+				} else if (p[0] === "right") {
+					return "left";
+				} else if (p[1] === "top") {
+					return "top";
+				} else if (p[1] === "bottom") {
+					return "bottom";
 				}
 				return undefined;
 			}, [position, underlined]);
@@ -52,14 +53,39 @@ export const XToast = memo(
 				clear,
 				getElement: () => containerRef.current,
 			}));
-			return createPortal(
-				<div
-					className={classNames('x-toast', {
+			return (
+				<Teleport
+					className={classNames("x-toast", {
 						[`x-toast--${position}`]: position,
 					})}
 					ref={containerRef}
 				>
-					<XToastProvider value={{ underlined: under, show, replace, clear }}>
+					<XToastProvider
+						value={{ underlined: under, show, replace, clear }}
+					>
+						<XMessages
+							life={Math.max(life ?? 0, 3000)}
+							closable={closable}
+							color={color}
+							outline={outline}
+							square={square}
+							underlined={underlined}
+							sticky={false}
+							ref={mesgs}
+						/>
+					</XToastProvider>
+				</Teleport>
+			);
+			return createPortal(
+				<div
+					className={classNames("x-toast", {
+						[`x-toast--${position}`]: position,
+					})}
+					ref={containerRef}
+				>
+					<XToastProvider
+						value={{ underlined: under, show, replace, clear }}
+					>
 						<XMessages
 							life={Math.max(life ?? 0, 3000)}
 							closable={closable}
@@ -72,8 +98,8 @@ export const XToast = memo(
 						/>
 					</XToastProvider>
 				</div>,
-				document.body,
+				document.body
 			);
-		},
-	),
+		}
+	)
 );
