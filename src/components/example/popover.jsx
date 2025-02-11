@@ -1,4 +1,4 @@
-import { XBtn, XPopover, XPopoverTarget } from "../ui";
+import { XBtn, XPopover, XPopoverDropDown, XPopoverTarget } from "../ui";
 export function PopoverExample() {
 	return (
 		<div className="max-w-4xl m-auto p-4 relative">
@@ -8,6 +8,11 @@ export function PopoverExample() {
 					<XPopoverTarget>
 						<XBtn>Target</XBtn>
 					</XPopoverTarget>
+					<XPopoverDropDown>
+						<div className="bg-bgmb3 p-12">
+							<div className="bg-bgmb5 p-12">dropdown</div>
+						</div>
+					</XPopoverDropDown>
 				</XPopover>
 			</div>
 		</div>

@@ -12,6 +12,7 @@ export const XPopoverTarget = forwardRef(function XPopoverTarget(
 	const elementRef = useRef(null);
 
 	useEffect(() => {
+		console.log(elementRef.current?.getBoundingClientRect());
 		ctx.placement = elementRef.current?.getBoundingClientRect();
 	}, [elementRef]);
 
@@ -24,7 +25,7 @@ export const XPopoverTarget = forwardRef(function XPopoverTarget(
 	return cloneElement(children, {
 		...props,
 		...accessibleProps,
-		className: classNames(props.className, children?.props?.className),
+		className: classNames(props?.className, children?.props?.className),
 		onClick: ctx?.onToggle,
 		ref: elementRef,
 	});

@@ -44,7 +44,7 @@
 	@apply relative;
 }
 .x-card__section:not(.x-card__section--horizontal) {
-	@apply p-4;
+	@apply p-3;
 }
 
 .x-card__section--horizontal {
