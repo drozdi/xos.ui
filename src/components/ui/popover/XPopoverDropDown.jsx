@@ -4,8 +4,13 @@ import "./style.css";
 
 export function XPopoverDropDown({ children }) {
 	const ctx = useXPopoverContext();
-	return <div>{children}</div>;
+	return (
+		<div className="x-popover__dropdown x-popover__dropdown--arrow x-popover__dropdown--bootom-start">
+			{children}
+		</div>
+	);
 }
+
 XPopoverDropDown.propTypes = {
 	children: PropTypes.node,
 };
