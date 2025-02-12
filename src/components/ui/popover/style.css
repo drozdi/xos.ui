@@ -79,7 +79,7 @@
 .x-popover__dropdown--right,
 .x-popover__dropdown--right-start,
 .x-popover__dropdown--right-end {
-	@apply top-auto bottom-auto left-auto right-auto;
+	@apply top-auto bottom-auto left-auto right-auto translate-x-0;
 	&.x-popover__dropdown--arrow {
 		margin-top: 0;
 		margin-bottom: 0;
@@ -92,42 +92,47 @@
 .x-popover__dropdown--left,
 .x-popover__dropdown--left-start,
 .x-popover__dropdown--left-end {
-	@apply top-1/2 right-0 -translate-y-1/2;
+	@apply right-full;
 	&.x-popover__dropdown--arrow {
 		margin-right: var(--popover-arrow-size);
 	}
 	&.x-popover__dropdown--arrow::before {
-		@apply right-0 rotate-135 translate-x-58/100 -translate-y-1/2;
-	}
-}
-
-.x-popover__dropdown--left {
-	&.x-popover__dropdown--arrow::before {
-		@apply top-1/2 rotate-135;
-	}
-}
-
-.x-popover__dropdown--left-start {
-	@apply top-0 right-0 translate-y-0;
-	&.x-popover__dropdown--arrow::before {
-		top: var(--popover-arrow-position);
-	}
-}
-.x-popover__dropdown--left-end {
-	@apply top-auto bottom-0 right-0 translate-y-0;
-	&.x-popover__dropdown--arrow::before {
-		bottom: var(--popover-arrow-position);
+		@apply right-0 rotate-135 translate-x-58/100;
 	}
 }
 
 .x-popover__dropdown--right,
 .x-popover__dropdown--right-start,
 .x-popover__dropdown--right-end {
-	@apply top-1/2 left-full -translate-y-1/2;
+	@apply left-full;
 	&.x-popover__dropdown--arrow {
 		margin-left: var(--popover-arrow-size);
 	}
 	&.x-popover__dropdown--arrow::before {
-		@apply left-0 rotate-135 translate-x-58/100 -translate-y-1/2;
+		@apply left-0 rotate-315 -translate-x-58/100;
+	}
+}
+
+.x-popover__dropdown--left,
+.x-popover__dropdown--right {
+	@apply top-1/2 -translate-y-1/2;
+	&.x-popover__dropdown--arrow::before {
+		@apply top-1/2 -translate-y-1/2;
+	}
+}
+
+.x-popover__dropdown--left-start,
+.x-popover__dropdown--right-start {
+	@apply top-0 translate-y-0;
+	&.x-popover__dropdown--arrow::before {
+		top: var(--popover-arrow-position);
+	}
+}
+
+.x-popover__dropdown--left-end,
+.x-popover__dropdown--right-end {
+	@apply bottom-0 translate-y-0;
+	&.x-popover__dropdown--arrow::before {
+		bottom: var(--popover-arrow-position);
 	}
 }
