@@ -119,3 +119,15 @@
 		bottom: var(--popover-arrow-position);
 	}
 }
+
+.x-popover__dropdown--right,
+.x-popover__dropdown--right-start,
+.x-popover__dropdown--right-end {
+	@apply top-1/2 left-full -translate-y-1/2;
+	&.x-popover__dropdown--arrow {
+		margin-left: var(--popover-arrow-size);
+	}
+	&.x-popover__dropdown--arrow::before {
+		@apply left-0 rotate-135 translate-x-58/100 -translate-y-1/2;
+	}
+}
