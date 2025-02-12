@@ -5,7 +5,7 @@ import "./style.css";
 export function XPopoverDropDown({ children }) {
 	const ctx = useXPopoverContext();
 	return (
-		<div className="x-popover__dropdown x-popover__dropdown--arrow x-popover__dropdown--bootom-start">
+		<div className="x-popover__dropdown x-popover__dropdown--arrow x-popover__dropdown--left">
 			{children}
 		</div>
 	);

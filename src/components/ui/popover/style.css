@@ -7,6 +7,7 @@
 .x-popover__dropdown {
 	@apply absolute bg-surface p-3 rounded border border-color shadow-md shadow-black/50 left-1/2 -translate-x-1/2;
 	--popover-arrow-size: calc(var(--spacing) * 2);
+	--popover-arrow-position: calc(var(--spacing) * 3);
 	& > * {
 		@apply z-20;
 	}
@@ -36,7 +37,9 @@
 }
 
 .x-popover__dropdown--top-start,
-.x-popover__dropdown--top-end {
+.x-popover__dropdown--top-end,
+.x-popover__dropdown--bootom-start,
+.x-popover__dropdown--bootom-end {
 	@apply translate-none;
 	&.x-popover__dropdown--arrow::before {
 		@apply left-auto;
@@ -47,14 +50,14 @@
 .x-popover__dropdown--bootom-start {
 	@apply left-0;
 	&.x-popover__dropdown--arrow::before {
-		@apply left-3;
+		left: var(--popover-arrow-position);
 	}
 }
 .x-popover__dropdown--top-end,
-x-popover__dropdown--bootom-end {
+.x-popover__dropdown--bootom-end {
 	@apply left-auto right-0;
 	&.x-popover__dropdown--arrow::before {
-		@apply right-3;
+		right: var(--popover-arrow-position);
 	}
 }
 
@@ -67,5 +70,52 @@ x-popover__dropdown--bootom-end {
 		&::before {
 			@apply bottom-auto top-0 rotate-45 -translate-y-52/100;
 		}
+	}
+}
+
+.x-popover__dropdown--left,
+.x-popover__dropdown--left-start,
+.x-popover__dropdown--left-end,
+.x-popover__dropdown--right,
+.x-popover__dropdown--right-start,
+.x-popover__dropdown--right-end {
+	@apply top-auto bottom-auto left-auto right-auto;
+	&.x-popover__dropdown--arrow {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	&.x-popover__dropdown--arrow::before {
+		@apply top-auto bottom-auto left-auto right-auto;
+	}
+}
+
+.x-popover__dropdown--left,
+.x-popover__dropdown--left-start,
+.x-popover__dropdown--left-end {
+	@apply top-1/2 right-0 -translate-y-1/2;
+	&.x-popover__dropdown--arrow {
+		margin-right: var(--popover-arrow-size);
+	}
+	&.x-popover__dropdown--arrow::before {
+		@apply right-0 rotate-135 translate-x-58/100 -translate-y-1/2;
+	}
+}
+
+.x-popover__dropdown--left {
+	&.x-popover__dropdown--arrow::before {
+		@apply top-1/2 rotate-135;
+	}
+}
+
+.x-popover__dropdown--left-start {
+	@apply top-0 right-0 translate-y-0;
+	&.x-popover__dropdown--arrow::before {
+		top: var(--popover-arrow-position);
+	}
+}
+.x-popover__dropdown--left-end {
+	@apply top-auto bottom-0 right-0 translate-y-0;
+	&.x-popover__dropdown--arrow::before {
+		bottom: var(--popover-arrow-position);
 	}
 }
