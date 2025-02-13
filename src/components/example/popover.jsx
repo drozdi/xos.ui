@@ -4,7 +4,7 @@ export function PopoverExample() {
 		<div className="max-w-4xl m-auto p-4 relative">
 			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XPopover</h2>
 			<div className="pt-48 ps-48">
-				<XPopover>
+				<XPopover arrow offset={0}>
 					<XPopoverTarget>
 						<XBtn>Target</XBtn>
 					</XPopoverTarget>

@@ -32,4 +32,6 @@ export const XPopoverTarget = forwardRef(function XPopoverTarget(
 });
 XPopoverTarget.propTypes = {
 	children: PropTypes.node,
+	type: PropTypes.string,
+	className: PropTypes.string,
 };

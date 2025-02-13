@@ -8,13 +8,21 @@
 	@apply absolute bg-surface p-3 rounded border border-color shadow-md shadow-black/50 left-1/2 -translate-x-1/2;
 	--popover-arrow-size: calc(var(--spacing) * 2);
 	--popover-arrow-position: calc(var(--spacing) * 3);
+	--popover-offset-val: 0rem;
+	--popover-offset: var(--popover-offset-val);
 	& > * {
 		@apply z-20;
 	}
 }
 
 .x-popover__dropdown--arrow {
-	margin-top: var(--popover-arrow-size);
+	--popover-offset: calc(
+		var(--popover-offset-val) + var(--popover-arrow-size)
+	);
+}
+
+.x-popover__dropdown {
+	margin-top: var(--popover-offset);
 }
 
 .x-popover__dropdown--arrow::before {
@@ -29,7 +37,7 @@
 .x-popover__dropdown--top-end {
 	@apply top-auto bottom-full;
 	&.x-popover__dropdown--arrow {
-		margin-bottom: var(--popover-arrow-size);
+		margin-bottom: var(--popover-offset);
 		&::before {
 			@apply top-auto bottom-0 rotate-225 translate-y-57/100;
 		}
@@ -66,7 +74,7 @@
 .x-popover__dropdown--bootom-end {
 	@apply bottom-auto top-full;
 	&.x-popover__dropdown--arrow {
-		margin-bottom: var(--popover-arrow-size);
+		margin-bottom: var(--popover-offset);
 		&::before {
 			@apply bottom-auto top-0 rotate-45 -translate-y-52/100;
 		}
@@ -94,7 +102,7 @@
 .x-popover__dropdown--left-end {
 	@apply right-full;
 	&.x-popover__dropdown--arrow {
-		margin-right: var(--popover-arrow-size);
+		margin-right: var(--popover-offset);
 	}
 	&.x-popover__dropdown--arrow::before {
 		@apply right-0 rotate-135 translate-x-58/100;
@@ -106,7 +114,7 @@
 .x-popover__dropdown--right-end {
 	@apply left-full;
 	&.x-popover__dropdown--arrow {
-		margin-left: var(--popover-arrow-size);
+		margin-left: var(--popover-offset);
 	}
 	&.x-popover__dropdown--arrow::before {
 		@apply left-0 rotate-315 -translate-x-58/100;
