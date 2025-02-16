@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useDisclosure } from "../../hooks/useDisclosure";
 import { useId } from "../../hooks/useId";
@@ -6,12 +7,8 @@ import "./style.css";
 
 export function XPopover({ id, arrow, position = "bottom", offset, children }) {
 	const uid = useId(id);
-	const [
-		opened,
-		/*{
-			toggle: onToggle, open: onOpen, close: onClose 
-		},*/
-	] = useDisclosure();
+	const [opened, { toggle: onToggle, open: onOpen, close: onClose }] =
+		useDisclosure();
 
 	return (
 		<XPopoverProvider
@@ -20,7 +17,8 @@ export function XPopover({ id, arrow, position = "bottom", offset, children }) {
 				opened,
 				getTargetId: () => `${uid}-target`,
 				getDropdownId: () => `${uid}-dropdown`,
-				onToggle: () => {},
+				//onToggle: () => {},
+				onToggle,
 				onOpen: () => {},
 				onClose: () => {},
 				arrow,
@@ -28,7 +26,13 @@ export function XPopover({ id, arrow, position = "bottom", offset, children }) {
 				offset,
 			}}
 		>
-			<div className="x-popover">{children}</div>
+			<div
+				className={classNames("x-popover", {
+					"x-popover--show": opened,
+				})}
+			>
+				{children}
+			</div>
 		</XPopoverProvider>
 	);
 }

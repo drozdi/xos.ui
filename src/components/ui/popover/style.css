@@ -5,13 +5,16 @@
 }
 
 .x-popover__dropdown {
-	@apply absolute bg-surface p-3 rounded border border-color shadow-md shadow-black/50 left-1/2 -translate-x-1/2;
+	@apply hidden absolute bg-surface p-3 rounded border border-color shadow-md shadow-black/50 left-1/2 -translate-x-1/2 z-50;
 	--popover-arrow-size: calc(var(--spacing) * 2);
 	--popover-arrow-position: calc(var(--spacing) * 3);
 	--popover-offset-val: 0rem;
 	--popover-offset: var(--popover-offset-val);
 	& > * {
 		@apply z-20;
+	}
+	.x-popover--show > & {
+		@apply block;
 	}
 }
 
