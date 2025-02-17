@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { XIcon, XInput } from '../ui';
-import { Form, useProps } from './utils';
+import { useState } from "react";
+import { XIcon, XInput } from "../ui";
+import { Form, useProps } from "./utils";
 export function InputExample() {
 	const [danses, setDanses] = useState({
 		default: false,
@@ -24,10 +24,10 @@ export function InputExample() {
 	});
 	const inputExample = useProps(
 		{
-			label: 'Lable',
-			labelColor: '',
-			placeholder: 'Placeholder',
-			color: '',
+			label: "Lable",
+			labelColor: "",
+			placeholder: "Placeholder",
+			color: "",
 			outline: false,
 			filled: true,
 			square: false,
@@ -36,22 +36,26 @@ export function InputExample() {
 			stackLabel: false,
 			disabled: false,
 			required: false,
-			leftSection: '',
-			rightSection: '',
-			hint: 'Hint',
-			errorMessage: '',
+			leftSection: "",
+			rightSection: "",
+			hint: "Hint",
+			errorMessage: "",
 			lazyRules: true,
 			hideHint: false,
 			hideMessage: false,
 			///???
-			before: <XIcon className="text-warning text-4xl">mdi-home-account</XIcon>,
+			before: (
+				<XIcon className="text-warning text-4xl">
+					mdi-home-account
+				</XIcon>
+			),
 			after: <XIcon className="text-primary text-2xl">mdi-close</XIcon>,
 			rules: [
-				(v) => (v && v.length > 2) || 'min 3 characters',
-				(v) => (v && v.length < 7) || 'max 6 characters',
+				(v) => (v && v.length > 2) || "min 3 characters",
+				(v) => (v && v.length < 7) || "max 6 characters",
 			], //*/
 		},
-		'XInput',
+		"XInput"
 	);
 	return (
 		<div className="max-w-4xl m-auto py-4">
@@ -68,7 +72,7 @@ export function InputExample() {
 						</tr>
 					</thead>
 					<tbody>
-						{'default primary secondary accent positive negative info warning'
+						{"default primary secondary accent positive negative info warning"
 							.split(/\s+/)
 							.map((color) => (
 								<tr
@@ -85,7 +89,8 @@ export function InputExample() {
 												onChange={({ target }) =>
 													setDanses((v) => ({
 														...v,
-														[target.name]: !v[target.name],
+														[target.name]:
+															!v[target.name],
 													}))
 												}
 											/>
@@ -101,7 +106,8 @@ export function InputExample() {
 												onChange={({ target }) =>
 													setDisables((v) => ({
 														...v,
-														[target.name]: !v[target.name],
+														[target.name]:
+															!v[target.name],
 													}))
 												}
 											/>
@@ -112,7 +118,9 @@ export function InputExample() {
 									</td>
 									<td>
 										<XInput
-											color={color !== 'default' ? color : ''}
+											color={
+												color !== "default" ? color : ""
+											}
 											dense={danses[color]}
 											disabled={disables[color]}
 											label="Label"
@@ -121,7 +129,9 @@ export function InputExample() {
 									</td>
 									<td>
 										<XInput
-											color={color !== 'default' ? color : ''}
+											color={
+												color !== "default" ? color : ""
+											}
 											dense={danses[color]}
 											disabled={disables[color]}
 											filled={true}
@@ -131,7 +141,9 @@ export function InputExample() {
 									</td>
 									<td>
 										<XInput
-											color={color !== 'default' ? color : ''}
+											color={
+												color !== "default" ? color : ""
+											}
 											dense={danses[color]}
 											disabled={disables[color]}
 											outline={true}
@@ -142,7 +154,9 @@ export function InputExample() {
 
 									<td>
 										<XInput
-											color={color !== 'default' ? color : ''}
+											color={
+												color !== "default" ? color : ""
+											}
 											dense={danses[color]}
 											disabled={disables[color]}
 											underlined={true}
@@ -169,48 +183,54 @@ export function InputExample() {
 							{Form(
 								{
 									color: {
-										type: 'select',
+										type: "select",
 										values: [
-											'primary',
-											'secondary',
-											'accent',
-											'positive',
-											'negative',
-											'info',
-											'warning',
+											"primary",
+											"secondary",
+											"accent",
+											"positive",
+											"negative",
+											"info",
+											"warning",
 										],
 									},
 									labelColor: {
-										type: 'select',
+										type: "select",
 										values: [
-											'primary',
-											'secondary',
-											'accent',
-											'positive',
-											'negative',
-											'info',
-											'warning',
+											"primary",
+											"secondary",
+											"accent",
+											"positive",
+											"negative",
+											"info",
+											"warning",
 										],
 									},
-									leftSection: { type: 'checkbox', val: 'mdi-account' },
-									rightSection: { type: 'checkbox', val: 'mdi-close' },
-									label: { type: 'text' },
-									placeholder: { type: 'text' },
-									hint: { type: 'text' },
-									errorMessage: { type: 'text' },
-									outline: { type: 'checkbox' },
-									filled: { type: 'checkbox' },
-									square: { type: 'checkbox' },
-									underlined: { type: 'checkbox' },
-									dense: { type: 'checkbox' },
-									stackLabel: { type: 'checkbox' },
-									required: { type: 'checkbox' },
-									disabled: { type: 'checkbox' },
-									hideMessage: { type: 'checkbox' },
-									lazyRules: { type: 'checkbox' },
-									hideHint: { type: 'checkbox' },
+									leftSection: {
+										type: "checkbox",
+										val: "mdi-account",
+									},
+									rightSection: {
+										type: "checkbox",
+										val: "mdi-close",
+									},
+									label: { type: "text" },
+									placeholder: { type: "text" },
+									hint: { type: "text" },
+									errorMessage: { type: "text" },
+									outline: { type: "checkbox" },
+									filled: { type: "checkbox" },
+									square: { type: "checkbox" },
+									underlined: { type: "checkbox" },
+									dense: { type: "checkbox" },
+									stackLabel: { type: "checkbox" },
+									required: { type: "checkbox" },
+									disabled: { type: "checkbox" },
+									hideMessage: { type: "checkbox" },
+									lazyRules: { type: "checkbox" },
+									hideHint: { type: "checkbox" },
 								},
-								inputExample,
+								inputExample
 							)}
 						</div>
 					</div>

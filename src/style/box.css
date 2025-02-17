@@ -1,3 +1,9 @@
+.x-box {
+	--imput-padding: calc(var(--spacing) * 2);
+	--input-padding-start: var(--imput-padding);
+	--input-padding-end: var(--imput-padding);
+}
+
 .x-box,
 .x-box-section {
 	@apply flex flex-wrap relative;

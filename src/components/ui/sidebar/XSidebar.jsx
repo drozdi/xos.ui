@@ -40,7 +40,7 @@ const XSidebarRoot = forwardRefWithAs(function XSidebarFn(
 
 		onResize,
 		onMini,
-		onToggle,
+		onToggle = () => true,
 	},
 	externalRef
 ) {
@@ -186,7 +186,7 @@ const XSidebarRoot = forwardRefWithAs(function XSidebarFn(
 	const onHandleToggle = useCallback(() => {
 		if (
 			false ===
-			onToggle({
+			onToggle?.({
 				width,
 				isOpen,
 				isMini,
@@ -200,7 +200,7 @@ const XSidebarRoot = forwardRefWithAs(function XSidebarFn(
 	const onHandleMiniToggle = useCallback(() => {
 		if (
 			false ===
-			onToggle({
+			onToggle?.({
 				width,
 				isOpen,
 				isMini,
