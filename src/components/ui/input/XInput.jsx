@@ -2,8 +2,8 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { forwardRef, memo, useMemo } from "react";
+import { isString } from "../../../utils/is";
 import { useInput } from "../../hooks/useInput";
-import { Sections } from "../../internal/sections";
 import { XInputBase } from "./XInputBase";
 import { XInputControl } from "./XInputControl";
 import { XInputError } from "./XInputError";
@@ -31,8 +31,8 @@ const XInputRoot = forwardRef(function XInput(props, ref) {
 		square,
 		underlined,
 		stackLabel,
-		before,
-		after,
+		before: propsBefore,
+		after: propsAfter,
 
 		color,
 		labelColor,
@@ -61,41 +61,16 @@ const XInputRoot = forwardRef(function XInput(props, ref) {
 
 	const modColor = isError ? "negative" : color;
 
-	return (
-		<Sections
-			className={classNames(
-				"x-input",
-				{
-					"x-input--dense": dense,
-					"x-input--square": square,
-					"x-input--filled": filled,
-					"x-input--outline": outline,
-					"x-input--underlined": underlined,
-
-					"x-input--stack-label": stackLabel,
-					"x-input--disabled": disabled,
-					[`x-input--${modColor}`]: !!modColor,
-				},
-				className
-			)}
-			leftSection={before}
-			rightSection={after}
-		>
-			<XInputBase
-				{...inputProps}
-				labelColor={labelColor || modColor}
-				ref={ref}
-			/>
-			<XInputMessages
-				hideMessage={hideMessage}
-				hideHint={hideHint}
-				error={isError}
-			>
-				{hint && <XInputHint>{hint}</XInputHint>}
-				{isError && <XInputError>{errorMes}</XInputError>}
-			</XInputMessages>
-		</Sections>
+	const before = useMemo(
+		() =>
+			isString(propsBefore) ? <XIcon>{propsBefore}</XIcon> : propsBefore,
+		[propsBefore]
 	);
+	const after = useMemo(
+		() => (isString(propsAfter) ? <XIcon>{propsAfter}</XIcon> : propsAfter),
+		[propsAfter]
+	);
+
 	return (
 		<XInputControl>
 			<div
