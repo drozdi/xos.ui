@@ -38,16 +38,12 @@ export const Box = forwardRefWithAs(function Box(
 	});
 });
 
-Box.processSection = (section) => {
+Box.Icon = (section) => {
 	return useMemo(() => {
 		if (!section) {
 			return null;
 		}
-		return (
-			<span className="x-box-section x-box-section--side">
-				{isString(section) ? <XIcon>{section}</XIcon> : section}
-			</span>
-		);
+		return isString(section) ? <XIcon>{section}</XIcon> : section;
 	}, [section]);
 };
 
