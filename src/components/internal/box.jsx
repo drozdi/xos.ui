@@ -1,4 +1,7 @@
 import classNames from "classnames";
+import { useMemo } from "react";
+import { isString } from "../../utils/is";
+import { XIcon } from "../ui/icon";
 import { forwardRefWithAs, render } from "./render";
 
 /**
@@ -34,6 +37,19 @@ export const Box = forwardRefWithAs(function Box(
 		ref,
 	});
 });
+
+Box.processSection = (section) => {
+	return useMemo(() => {
+		if (!section) {
+			return null;
+		}
+		return (
+			<span className="x-box-section x-box-section--side">
+				{isString(section) ? <XIcon>{section}</XIcon> : section}
+			</span>
+		);
+	}, [section]);
+};
 
 Box.Section = forwardRefWithAs(function Section(
 	{ className, top, side, nowrap, ...props },

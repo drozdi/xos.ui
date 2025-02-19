@@ -5,23 +5,10 @@ import { XIcon } from "../ui/icon";
 import { forwardRefWithAs, render } from "./render";
 
 /**
- * Функция для преобразования строки в компонент XIcon
- *
- * @param {string | JSX.Element} section - Секция
- * @returns {JSX.Element} Преобразованная секция
- */
-const sectionContent = (section) => {
-	if (isString(section)) {
-		return <XIcon>{section}</XIcon>;
-	}
-	return section;
-};
-
-/**
  * Функция для преобразования строки в компонент Section
  *
  * @param {string | JSX.Element} section - Секция
- * @returns {JSX.Element} Преобразованная секция
+ * @returns {null | JSX.Element} Преобразованная секция
  */
 const processSection = (section) => {
 	return useMemo(() => {
