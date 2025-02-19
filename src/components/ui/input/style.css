@@ -3,7 +3,7 @@
 .x-input {
 	@apply relative flex border-color rounded flex-wrap;
 	--input-section-width: 2rem;
-	--imput-padding: calc(var(--spacing) * 2);
+	--imput-padding: calc(var(--spacing) * 3);
 	--input-padding-start: var(--imput-padding);
 	--input-padding-end: var(--imput-padding);
 }
