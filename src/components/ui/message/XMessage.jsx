@@ -1,15 +1,16 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { forwardRef, memo, useCallback, useMemo } from 'react';
-import { isString } from '../../../utils/is';
-import { useId } from '../../hooks/useId';
-import { useTimeout } from '../../hooks/useTimeout';
-import { XBtn } from '../btn';
-import { XIcon } from '../icon';
-import { useXMessagesContext } from '../messages/XMessagesContext';
-import { XSpinner } from '../spinner';
-import { useXToastContext } from '../toast/XToastContext';
-import './style.css';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { forwardRef, memo, useCallback } from "react";
+import { isString } from "../../../utils/is";
+import { useId } from "../../hooks/useId";
+import { useTimeout } from "../../hooks/useTimeout";
+import { Box } from "../../internal/box";
+import { XBtn } from "../btn";
+import { XIcon } from "../icon";
+import { useXMessagesContext } from "../messages/XMessagesContext";
+import { XSpinner } from "../spinner";
+import { useXToastContext } from "../toast/XToastContext";
+import "./style.css";
 
 export const XMessage = memo(
 	forwardRef(function XMessageFn(
@@ -32,7 +33,7 @@ export const XMessage = memo(
 			life = 3000,
 			sticky,
 		},
-		ref,
+		ref
 	) {
 		const uid = useId(id);
 		const Icon = useMemo(() => {
@@ -59,26 +60,76 @@ export const XMessage = memo(
 				handleClose(null);
 			},
 			life,
-			!sticky,
+			!sticky
 		);
 		const under = toast?.underlined || underlined;
+
+		return (
+			<Box
+				id={uid}
+				role="alert"
+				aria-live={toast ? "assertive" : "polite"}
+				aria-atomic="true"
+				className={classNames(
+					"x-message",
+					{
+						[`x-message--${color}`]: color,
+						"x-message--square": square,
+						"x-message--outline": outline,
+						"x-message--filled": filled,
+						"x-message--flat": flat,
+						[`x-message--underlined-${under}`]: under,
+					},
+					className
+				)}
+				ref={ref}
+			>
+				<Box.Section
+					if={() => !!(loading || icon)}
+					side
+					className="text-2xl/none"
+				>
+					{loading ? <XSpinner thickness="5" /> : Icon}
+				</Box.Section>
+
+				<Box.Section>
+					<div className="x-message__label">{label}</div>
+					<div className="x-message__description">
+						{children ?? description}
+					</div>
+				</Box.Section>
+
+				{isClosable && (
+					<Box.Section side top>
+						<XBtn
+							leftSection="mdi-close"
+							size="sm"
+							flat
+							plain
+							onClick={handleClose}
+						/>
+					</Box.Section>
+				)}
+			</Box>
+		);
+
 		return (
 			<div
 				id={uid}
 				role="alert"
-				aria-live={toast ? 'assertive' : 'polite'}
+				aria-live={toast ? "assertive" : "polite"}
 				aria-atomic="true"
 				className={classNames(
-					'x-message',
+					"x-message",
 					{
 						[`x-message--${color}`]: color,
-						'x-message--square': square,
-						'x-message--outline': outline,
-						'x-message--filled': filled,
-						'x-message--flat': flat,
+						"x-message--square": square,
+						"x-message--outline": outline,
+						"x-message--filled": filled,
+						"x-message--flat": flat,
 						[`x-message--underlined-${under}`]: under,
 					},
-					className,
+					className
 				)}
 				ref={ref}
 			>
@@ -103,7 +154,7 @@ export const XMessage = memo(
 				)}
 			</div>
 		);
-	}),
+	})
 );
 XMessage.propTypes = {
 	id: PropTypes.string,
@@ -117,7 +168,7 @@ XMessage.propTypes = {
 	color: PropTypes.string,
 	outline: PropTypes.bool,
 	square: PropTypes.bool,
-	underlined: PropTypes.oneOf(['', 'top', 'bottom', 'left', 'right']),
+	underlined: PropTypes.oneOf(["", "top", "bottom", "left", "right"]),
 	filled: PropTypes.bool,
 	closable: PropTypes.bool,
 	loading: PropTypes.bool,

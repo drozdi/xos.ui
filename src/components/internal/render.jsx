@@ -37,9 +37,14 @@ function applyContextToProps(props) {
 }
 
 export function render(tag, props, state) {
-	let { as: Component = tag, children, ...rest } = applyContextToProps(props);
+	let {
+		as: Component = tag,
+		children,
+		if: _if,
+		...rest
+	} = applyContextToProps(props);
 
-	if (rest?.if?.(state) === false) {
+	if (_if?.(state) === false) {
 		return null;
 	}
 

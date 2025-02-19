@@ -1,7 +1,7 @@
 @reference "@style";
 
 .x-message {
-	@apply flex relative justify-start rounded cursor-default p-3 shadow-2 shadow-black/50;
+	@apply rounded cursor-default shadow-2 shadow-black/50;
 	background-color: color-mix(in srgb, currentColor 20%, transparent);
 }
 
@@ -10,9 +10,6 @@
 	content: "";
 }
 
-.x-message__body {
-	@apply flex-1;
-}
 .x-message__label {
 	@apply text-sm/normal;
 }
@@ -21,11 +18,7 @@
 }
 .x-message > .x-icon,
 .x-message > .x-spinner {
-	@apply mr-3 text-2xl/none;
-}
-
-.x-message__close {
-	@apply ml-3 flex justify-start items-start;
+	@apply text-2xl/none;
 }
 
 .x-message--square {

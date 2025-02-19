@@ -1,33 +1,33 @@
-import { useRef } from 'react';
-import { XBtn } from '../ui/btn';
-import { XMessage } from '../ui/message';
-import { XMessages } from '../ui/messages';
-import { XToast } from '../ui/toast';
-import { Form, useProps } from './utils';
+import { useRef } from "react";
+import { XBtn } from "../ui/btn";
+import { XMessage } from "../ui/message";
+import { XMessages } from "../ui/messages";
+import { XToast } from "../ui/toast";
+import { Form, useProps } from "./utils";
 export function MessageExample() {
 	const mesgs = useRef(null);
 	const mess = [
 		{
-			children: 'Test 1',
+			children: "Test 1",
 			life: 3000,
 			outline: false,
-			icon: 'mdi-home',
+			icon: "mdi-home",
 			sticky: true,
 			closable: true,
 		},
 		{
-			children: 'Test 2',
+			children: "Test 2",
 			life: 6000,
 			closable: true,
-			color: 'warning',
-			icon: 'mdi-home',
+			color: "warning",
+			icon: "mdi-home",
 		},
 		{
-			children: 'Test 3',
-			color: 'negative',
-			underlined: 'top',
+			children: "Test 3",
+			color: "negative",
+			underlined: "top",
 			outline: false,
-			icon: 'mdi-home',
+			icon: "mdi-home",
 		},
 	];
 	const onShowMessages = () => {
@@ -52,24 +52,29 @@ export function MessageExample() {
 
 	const messageExample = useProps(
 		{
-			underlined: '',
+			underlined: "",
 			closable: false,
-			color: '',
+			color: "",
 			outline: false,
 			square: false,
 			loading: false,
 			filled: false,
 			flat: false,
+			label: "We notify you that",
 		},
-		'XMessage',
-		'Test 1',
+		"XMessage",
+		`
+	You are now obligated to give a star to Mantine project on GitHub
+	<br />
+	You are now obligated to give a star to Mantine project on GitHub
+`
 	);
 
 	const messagesExample = useProps(
 		{
-			underlined: '',
+			underlined: "",
 			closable: false,
-			color: '',
+			color: "",
 			outline: false,
 			square: false,
 			life: 9000,
@@ -78,21 +83,21 @@ export function MessageExample() {
 			filled: false,
 			flat: false,
 		},
-		'XMessages',
+		"XMessages"
 	);
 
 	const toastExample = useProps(
 		{
 			closable: false,
-			color: '',
-			underlined: '',
+			color: "",
+			underlined: "",
 			outline: false,
 			square: false,
 			life: 9000,
 			row: false,
 			sticky: false,
 		},
-		'XToast',
+		"XToast"
 	);
 
 	return (
@@ -100,13 +105,15 @@ export function MessageExample() {
 			<h3>XMessage</h3>
 			<div className="flex flex-col gap-4">
 				<XMessage {...messageExample.props} label="We notify you that">
-					You are now obligated to give a star to Mantine project on GitHub
+					You are now obligated to give a star to Mantine project on
+					GitHub
 					<br />
-					You are now obligated to give a star to Mantine project on GitHub
+					You are now obligated to give a star to Mantine project on
+					GitHub
 				</XMessage>
 				<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-separator">
 					<div>
-						<pre className="bg-sky-500/50 text-white p-2 rounded-md mt-4 select-text">
+						<pre className="bg-sky-500/50 text-white p-2 rounded-md mt-4 select-text overflow-hidden">
 							{messageExample.code}
 						</pre>
 					</div>
@@ -114,29 +121,32 @@ export function MessageExample() {
 						{Form(
 							{
 								color: {
-									type: 'select',
+									type: "select",
 									values: [
-										'primary',
-										'secondary',
-										'accent',
-										'positive',
-										'negative',
-										'info',
-										'warning',
+										"primary",
+										"secondary",
+										"accent",
+										"positive",
+										"negative",
+										"info",
+										"warning",
 									],
 								},
 								underlined: {
-									type: 'select',
-									values: ['top', 'bottom', 'left', 'right'],
+									type: "select",
+									values: ["top", "bottom", "left", "right"],
 								},
-								loading: { type: 'checkbox' },
-								icon: { type: 'checkbox', val: 'mdi-map-marker' },
-								flat: { type: 'checkbox' },
-								filled: { type: 'checkbox' },
-								outline: { type: 'checkbox' },
-								square: { type: 'checkbox' },
+								loading: { type: "checkbox" },
+								icon: {
+									type: "checkbox",
+									val: "mdi-map-marker",
+								},
+								flat: { type: "checkbox" },
+								filled: { type: "checkbox" },
+								outline: { type: "checkbox" },
+								square: { type: "checkbox" },
 							},
-							messageExample,
+							messageExample
 						)}
 					</div>
 				</div>
@@ -160,31 +170,31 @@ export function MessageExample() {
 					{Form(
 						{
 							color: {
-								type: 'select',
+								type: "select",
 								values: [
-									'primary',
-									'secondary',
-									'accent',
-									'positive',
-									'negative',
-									'info',
-									'warning',
+									"primary",
+									"secondary",
+									"accent",
+									"positive",
+									"negative",
+									"info",
+									"warning",
 								],
 							},
 							underlined: {
-								type: 'select',
-								values: ['top', 'bottom', 'left', 'right'],
+								type: "select",
+								values: ["top", "bottom", "left", "right"],
 							},
-							outline: { type: 'checkbox' },
-							square: { type: 'checkbox' },
-							filled: { type: 'checkbox' },
-							flat: { type: 'checkbox' },
-							row: { type: 'checkbox' },
-							sticky: { type: 'checkbox' },
-							closable: { type: 'checkbox' },
-							life: { type: 'number' },
+							outline: { type: "checkbox" },
+							square: { type: "checkbox" },
+							filled: { type: "checkbox" },
+							flat: { type: "checkbox" },
+							row: { type: "checkbox" },
+							sticky: { type: "checkbox" },
+							closable: { type: "checkbox" },
+							life: { type: "number" },
 						},
-						messagesExample,
+						messagesExample
 					)}
 				</div>
 			</div>
@@ -206,38 +216,38 @@ export function MessageExample() {
 					{Form(
 						{
 							color: {
-								type: 'select',
+								type: "select",
 								values: [
-									'primary',
-									'secondary',
-									'accent',
-									'positive',
-									'negative',
-									'info',
-									'warning',
+									"primary",
+									"secondary",
+									"accent",
+									"positive",
+									"negative",
+									"info",
+									"warning",
 								],
 							},
 							position: {
-								type: 'select',
+								type: "select",
 								values: [
-									'left-top',
-									'left-center',
-									'left-bottom',
-									'center-top',
-									'center-center',
-									'center-bottom',
-									'right-top',
-									'right-center',
-									'right-bottom',
+									"left-top",
+									"left-center",
+									"left-bottom",
+									"center-top",
+									"center-center",
+									"center-bottom",
+									"right-top",
+									"right-center",
+									"right-bottom",
 								],
 							},
-							life: { type: 'number' },
-							underlined: { type: 'checkbox' },
-							closable: { type: 'checkbox' },
-							outline: { type: 'checkbox' },
-							square: { type: 'checkbox' },
+							life: { type: "number" },
+							underlined: { type: "checkbox" },
+							closable: { type: "checkbox" },
+							outline: { type: "checkbox" },
+							square: { type: "checkbox" },
 						},
-						toastExample,
+						toastExample
 					)}
 				</div>
 			</div>
