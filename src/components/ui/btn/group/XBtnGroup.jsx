@@ -153,14 +153,8 @@ export const XBtnGroup = forwardRefWithAs(function XBtnGroupFn(
 				"x-btn-group--grow": grow,
 				"x-btn-group--pills": pills,
 				"x-btn-group--round": props.round,
-				"justify-start": !vertical && align === "start",
-				"justify-center": !vertical && align === "center",
-				"justify-between": !vertical && align === "between",
-				"justify-end": !vertical && align === "end",
-				"items-start": vertical && align === "start",
-				"items-center": vertical && align === "center",
-				"items-between": vertical && align === "between",
-				"items-end": vertical && align === "end",
+				[`justify-${align}`]: !vertical && align,
+				[`items-${align}`]: vertical && align,
 			})}
 			role="group"
 			ref={handleRef}

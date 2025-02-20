@@ -1,21 +1,21 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import './style.css';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import "./style.css";
 export function XItemLabel({
 	children,
 	className,
-	overline = false,
-	caption = false,
-	header = false,
-	lines = false,
+	overline,
+	caption,
+	header,
+	lines,
 }) {
 	return (
 		<div
-			className={classNames('x-item__label', className, {
-				'x-item__label--overline': overline,
-				'x-item__label--caption': caption,
-				'x-item__label--header': header,
-				'x-item__label--lines': lines,
+			className={classNames("x-item__label", className, {
+				"x-item__label--overline": overline,
+				"x-item__label--caption": caption,
+				"x-item__label--header": header,
+				"x-item__label--lines": lines,
 			})}
 		>
 			{children}

@@ -102,7 +102,7 @@ export function MessageExample() {
 
 	return (
 		<div className="max-w-4xl m-auto p-4 relative">
-			<h3>XMessage</h3>
+			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XMessage</h2>
 			<div className="flex flex-col gap-4">
 				<XMessage {...messageExample.props} label="We notify you that">
 					You are now obligated to give a star to Mantine project on
@@ -152,7 +152,7 @@ export function MessageExample() {
 				</div>
 			</div>
 			<hr className="my-4" />
-			<h3>XMessages</h3>
+			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XMessages</h2>
 			<XMessages {...messagesExample.props} ref={mesgs} />
 			<br />
 			<XBtn.Group>
@@ -199,7 +199,7 @@ export function MessageExample() {
 				</div>
 			</div>
 			<hr className="my-4" />
-			<h3>XToast</h3>
+			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XToast</h2>
 			<XBtn.Group>
 				<XBtn onClick={onShowToast}>Show</XBtn>
 				<XBtn onClick={onReplaceToast}>Replace</XBtn>

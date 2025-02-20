@@ -1,22 +1,23 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import './style.css';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import "./style.css";
+
 export function XItemSection({
 	children,
 	className,
-	side = false,
-	top = false,
-	noWrap = false,
-	thumbnail = false,
+	side,
+	top,
+	noWrap,
+	thumbnail,
 }) {
 	return (
 		<div
-			className={classNames('x-item__section', className, {
-				'x-item__section--main': !side,
-				'x-item__section--side': side,
-				'x-item__section--top': top,
-				'x-item__section--nowrap': noWrap,
-				'x-item__section--thumbnail': thumbnail,
+			className={classNames("x-item__section", className, {
+				"x-item__section--main": !side,
+				"x-item__section--side": side,
+				"x-item__section--top": top,
+				"x-item__section--nowrap": noWrap,
+				"x-item__section--thumbnail": thumbnail,
 			})}
 		>
 			{children}

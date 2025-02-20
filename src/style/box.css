@@ -18,6 +18,7 @@
 .x-box {
 	@apply px-3 py-2 gap-3;
 }
+
 .x-box--dense {
 	@apply px-2 py-1 gap-2;
 }
@@ -33,6 +34,9 @@
 }
 .x-box--lg {
 	@apply px-4 py-3 gap-4 text-lg;
+}
+.x-box--square {
+	@apply rounded-none;
 }
 
 .x-box-section:not(.x-box-section--side) {

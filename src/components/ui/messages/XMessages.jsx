@@ -1,11 +1,11 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { forwardRef, memo, useImperativeHandle, useRef, useState } from 'react';
-import { isArray } from '../../../utils/is';
-import { useId } from '../../hooks/useId';
-import { XMessage } from '../message';
-import './style.css';
-import { XMessagesProvider } from './XMessagesContext';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
+import { isArray } from "../../../utils/is";
+import { useId } from "../../hooks/useId";
+import { Box } from "../../internal/box";
+import { XMessage } from "../message";
+import { XMessagesProvider } from "./XMessagesContext";
 
 let messageIdx = 0;
 
@@ -77,14 +77,24 @@ export const XMessages = memo(
 		}));
 
 		return (
+			<Box id={uid} col={!row} className={className} ref={elementRef}>
+				<XMessagesProvider value={context}>
+					{list.map((message) => (
+						<XMessage key={message._pId} {...message} />
+					))}
+				</XMessagesProvider>
+			</Box>
+		);
+
+		return (
 			<div
 				id={uid}
 				className={classNames(
-					'x-messages',
+					"x-messages",
 					{
-						'x-messages--row': row,
+						"x-messages--row": row,
 					},
-					className,
+					className
 				)}
 				ref={elementRef}
 			>
@@ -95,7 +105,7 @@ export const XMessages = memo(
 				</XMessagesProvider>
 			</div>
 		);
-	}),
+	})
 );
 
 XMessages.propTypes = {
@@ -107,7 +117,7 @@ XMessages.propTypes = {
 	color: PropTypes.string,
 	outline: PropTypes.bool,
 	square: PropTypes.bool,
-	underlined: PropTypes.oneOf(['', 'top', 'bottom', 'left', 'right']),
+	underlined: PropTypes.oneOf(["", "top", "bottom", "left", "right"]),
 	filled: PropTypes.bool,
 	closable: PropTypes.bool,
 	loading: PropTypes.bool,

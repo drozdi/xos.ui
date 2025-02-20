@@ -12,10 +12,7 @@ export function XTabsList({ className, children, justify, grow, noWrap }) {
 				{
 					"x-tabs-list--no-wrap": noWrap,
 					"x-tabs-list--grow": grow,
-					"justify-start": justify === "start",
-					"justify-center": justify === "center",
-					"justify-between": justify === "between",
-					"justify-end": justify === "end",
+					[`justify-${justify}`]: justify,
 				},
 				className
 			)}

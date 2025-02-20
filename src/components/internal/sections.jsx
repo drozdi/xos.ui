@@ -37,6 +37,7 @@ export const Sections = forwardRefWithAs(function Box(
 		col,
 		noWrap,
 		dense,
+		square,
 		size,
 		align,
 		justify,
@@ -55,6 +56,7 @@ export const Sections = forwardRefWithAs(function Box(
 				{
 					"x-box--col": col,
 					"x-box--dense": dense,
+					"x-box--square": square,
 					"x-box--no-wrap": noWrap,
 					[`x-box--${size}`]: size,
 				},

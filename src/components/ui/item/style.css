@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@reference "@style";
 
 .x-item {
 	@apply flex flex-nowrap relative min-h-12 px-3 py-2 text-inherit cursor-default;
@@ -13,7 +13,7 @@
 	@apply flex-col;
 }
 .x-item--active {
-	@apply text-blue-600;
+	@apply text-primary;
 }
 .x-item--clickable {
 	@apply cursor-pointer;
@@ -59,8 +59,11 @@
 .x-item__section--nowrap {
 	@apply text-nowrap;
 }
-.x-item__section--thumbnail img {
-	@apply max-h-14 max-w-24 h-auto w-auto;
+.x-item__section--thumbnail {
+	img,
+	svg {
+		@apply max-h-14 max-w-24 h-auto w-auto;
+	}
 }
 .x-item__section ~ .x-item__section--side {
 	@apply items-end pl-3 pr-0;

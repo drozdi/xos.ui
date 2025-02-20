@@ -31,6 +31,7 @@ export function XTabsTab({
 			as="button"
 			{...props}
 			role="tab"
+			square
 			id={ctx.getTabId(value)}
 			aria-selected={active}
 			aria-disabled={disabled}

@@ -10,13 +10,14 @@ import { forwardRefWithAs, render } from "./render";
  * @param {boolean} [props.col] - Расположение элементов в колонку.
  * @param {boolean} [props.noWrap] - Запрет переноса блоков.
  * @param {string} [props.size] - Размер контейнера.
+ * @param {boolean} [props.square] - Квадратные углы.
  * @param {string} [props.align] - Выравнивание по вертикали.
  * @param {string} [props.justify] - Выравнивание по горизонтали.
  * @param {any} ref - Референс компонента.
  * @returns {JSX.Element} Элемент div с заданной структурой и стилями.
  */
 export const Box = forwardRefWithAs(function Box(
-	{ className, col, noWrap, size, align, justify, ...props },
+	{ className, col, noWrap, size, square, align, justify, ...props },
 	ref
 ) {
 	return render("div", {
@@ -26,6 +27,7 @@ export const Box = forwardRefWithAs(function Box(
 			{
 				"x-box--col": col,
 				"x-box--nowrap": noWrap,
+				"x-box--square": square,
 				[`x-box--${size}`]: size,
 				[`items-${align}`]: align,
 				[`justify-${justify}`]: justify,

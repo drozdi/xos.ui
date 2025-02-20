@@ -6,7 +6,7 @@ import { useForkRef } from "../../hooks/useForkRef";
 import { forwardRefWithAs, render } from "../../internal/render";
 import { XLink } from "../link";
 import "./style.css";
-const clickableTag = ["a", "label", "navLink"];
+const clickableTag = ["a", "label", "button"];
 const disRoleTag = ["label"];
 const disDisabledTag = ["div", "span", "a", "label"];
 
@@ -56,7 +56,7 @@ export const XItem = forwardRefWithAs(function XItemFn(
 						"x-item--vertical": vertical,
 						[`text-${color}`]: color,
 					},
-					active && !disabled ? activeClass : ""
+					(active || isActive) && !disabled ? activeClass : ""
 				),
 			role: disRoleTag.includes(props.as)
 				? undefined
