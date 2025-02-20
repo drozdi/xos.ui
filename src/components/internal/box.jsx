@@ -1,7 +1,5 @@
 import classNames from "classnames";
 import { PropTypes } from "prop-types";
-import { isString } from "../../utils/is";
-import { XIcon } from "../ui/icon";
 import { forwardRefWithAs, render } from "./render";
 
 /**
@@ -29,7 +27,7 @@ export const Box = forwardRefWithAs(function Box(
 				"x-box--col": col,
 				"x-box--nowrap": noWrap,
 				[`x-box--${size}`]: size,
-				[`align-${align}`]: align,
+				[`items-${align}`]: align,
 				[`justify-${justify}`]: justify,
 			},
 			className
@@ -42,25 +40,15 @@ Box.propTypes = {
 	col: PropTypes.bool,
 	noWrap: PropTypes.bool,
 	size: PropTypes.oneOf(["xs", "sm", "xl"]),
-	align: PropTypes.oneOf([
-		"normal",
-		"center",
-		"start",
-		"end",
-		"between",
-		"around",
-		"evenly",
-		"baseline",
-		"stretch",
-	]),
+	align: PropTypes.oneOf(["start", "center", "end", "stretch", "baseline"]),
 	justify: PropTypes.oneOf([
-		"normal",
-		"center",
 		"start",
+		"center",
 		"end",
 		"between",
 		"around",
 		"evenly",
+		"normal",
 		"baseline",
 		"stretch",
 	]),
@@ -72,12 +60,12 @@ Box.propTypes = {
  * @param {string} [props.className] - Дополнительные классы CSS.
  * @param {boolean} [props.top] - Выравнивание по верху.
  * @param {boolean} [props.side] - Боковой элемент.
- * @param {boolean} [props.nowrap] - Запрет переноса текста.
+ * @param {boolean} [props.noWrap] - Запрет переноса текста.
  * @param {any} ref - Референс компонента.
  * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
- */
+ * */
 Box.Section = forwardRefWithAs(function Section(
-	{ className, top, side, nowrap, ...props },
+	{ className, top, side, noWrap, ...props },
 	ref
 ) {
 	return render("span", {
@@ -87,7 +75,7 @@ Box.Section = forwardRefWithAs(function Section(
 			{
 				"x-box-section--side": side,
 				"justify-start": top,
-				"text-nowrap": nowrap,
+				"text-nowrap": noWrap,
 			},
 			className
 		),
@@ -95,19 +83,40 @@ Box.Section = forwardRefWithAs(function Section(
 	});
 });
 
+Box.Section.propTypes = {
+	className: PropTypes.string,
+	top: PropTypes.bool,
+	side: PropTypes.bool,
+	noWrap: PropTypes.bool,
+};
+
 /**
  * Компонент для создания заголовков.
  * @param {Object} props - Параметры компонента.
  * @param {string} [props.className] - Дополнительные классы CSS.
+ * @param {number} [props.level] - Уровень заголовка.
+ * @param {boolean} [props.top] - Выравнивание по верху.
+ * @param {boolean} [props.nowrap] - Запрет переноса текста.
  * @param {any} ref - Референс компонента.
  * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
  * @example
  * <Box.Header>Header</Box.Header>
- */
-Box.Header = forwardRefWithAs(function Header(props, ref) {
-	return render("span", {
+ * */
+Box.Header = forwardRefWithAs(function Header(
+	{ className, level, top, noWrap, ...props },
+	ref
+) {
+	const tag = level ? `h${level}` : "span";
+	return render(tag, {
 		...props,
-		className: classNames("x-box-header", props.className),
+		className: classNames(
+			"x-box-header",
+			{
+				"justify-start": top,
+				"text-nowrap": noWrap,
+			},
+			className
+		),
 		ref,
 	});
 });
@@ -122,10 +131,10 @@ Box.Header = forwardRefWithAs(function Header(props, ref) {
  * <Box.Icon>home</Box.Icon>
  * </Box.Title>
  * */
-Box.Title = forwardRefWithAs(function Title(props, ref) {
+Box.Title = forwardRefWithAs(function Title({ className, ...props }, ref) {
 	return render("span", {
 		...props,
-		className: classNames("x-box-title", props.className),
+		className: classNames("x-box-title", className),
 		ref,
 	});
 });
@@ -138,88 +147,13 @@ Box.Title = forwardRefWithAs(function Title(props, ref) {
  * @example
  * <Box.Subtitle>home</Box.Subtitle>
  * */
-Box.Subtitle = forwardRefWithAs(function Subtitle(props, ref) {
+Box.Subtitle = forwardRefWithAs(function Subtitle(
+	{ className, ...props },
+	ref
+) {
 	return render("span", {
 		...props,
-		className: classNames("x-box-subtitle", props.className),
+		className: classNames("x-box-subtitle", className),
 		ref,
 	});
 });
-
-/**
- * Компонент для создания иконок.
- * @param {Object} props - Параметры компонента.
- * @param {string} [props.className] - Дополнительные классы CSS.
- * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
- * @example
- * <Box.Icon>home</Box.Icon>
- * */
-Box.Icon = forwardRefWithAs(function Icon(props, ref) {
-	return render("span", {
-		...props,
-		className: classNames("x-box-icon", props.className),
-		ref,
-	});
-});
-
-/**
- * Компонент для создания заголовков.
- * @param {Object} props - Параметры компонента.
- * @param {boolean} [props.top] - Выравнивание по верху.
- * @param {boolean} [props.side] - Боковой элемент.
- * @param {boolean} [props.nowrap] - Запрет переноса текста.
- * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
- * */
-Box.Header = forwardRefWithAs(function Header(props, ref) {
-	return render("span", {
-		...props,
-		className: classNames("x-box-header", props.className),
-		ref,
-	});
-});
-
-/**
- * Компонент для создания заголовков.
- * @param {Object} props - Параметры компонента.
- * @param {string} [props.className] - Дополнительные классы CSS.
- * @param {boolean} [props.top] - Выравнивание по верху.
- * @param {boolean} [props.side] - Боковой элемент.
- * @param {boolean} [props.nowrap] - Запрет переноса текста.
- * @param {any} ref - Референс компонента.
- * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
- * */
-Box.Title = forwardRefWithAs(function Title(props, ref) {
-	return render("span", {
-		...props,
-		className: classNames("x-box-title", props.className),
-		ref,
-	});
-});
-
-/**
- * Компонент для создания подзаголовков.
- * @param {Object} props - Параметры компонента.
- * @param {string} [props.className] - Дополнительные классы CSS.
- * @param {boolean} [props.top] - Выравнивание по верху.
- * @param {boolean} [props.side] - Боковой элемент.
- * @param {boolean} [props.nowrap] - Запрет переноса текста.
- * @param {any} ref - Референс компонента.
- * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
- * */
-Box.Subtitle = forwardRefWithAs(function Subtitle(props, ref) {
-	return render("span", {
-		...props,
-		className: classNames("x-box-subtitle", props.className),
-		ref,
-	});
-});
-
-Box.Icon = (icon) => {
-	if (!icon) {
-		return null;
-	} else if (isString(icon)) {
-		return <XIcon>{icon}</XIcon>;
-	} else {
-		return icon;
-	}
-};

@@ -92,7 +92,7 @@ export const XMessage = memo(
 					{loading ? <XSpinner thickness="5" /> : Icon}
 				</Box.Section>
 
-				<Box.Section>
+				<Box.Section className="x-message__body">
 					<div className="x-message__label">{label}</div>
 					<div className="x-message__description">
 						{children ?? description}
