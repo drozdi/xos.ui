@@ -1,11 +1,10 @@
-import classNames from "classnames";
 import PropTypes from "prop-types";
-import { useMemo, useRef } from "react";
-import { isFunction } from "../../../utils/is";
-import { useForkRef } from "../../hooks/useForkRef";
-import { forwardRefWithAs, render } from "../../internal/render";
-import { XLink } from "../link";
+import { forwardRefWithAs } from "../../internal/render";
+import { XChevron, XIcon } from "../icon";
 import "./style.css";
+import { XItem } from "./XItem";
+import { XItemLabel } from "./XItemLabel";
+import { XItemSection } from "./XItemSection";
 const clickableTag = ["a", "label", "navLink"];
 const disRoleTag = ["label"];
 const disDisabledTag = ["div", "span", "a", "label"];
@@ -24,84 +23,28 @@ export const XItemExpansion = forwardRefWithAs(function XItemExpansionFn(
 		onClick,
 		hoverable,
 		color,
+		icon,
+		label,
+		caption,
 		...props
 	},
 	ref
 ) {
-	const elementRef = useRef();
-	const handleRef = useForkRef(ref, elementRef);
-	const isActionable = useMemo(() => {
-		return (
-			props.as === XLink ||
-			clickableTag.includes(
-				elementRef.current?.nodeName.toLowerCase() ?? props.as
-			) ||
-			isFunction(onClick)
-		);
-	}, [props, onClick, elementRef]);
-	const isClickable = !disabled && isActionable;
-	const isHoverable = isClickable || hoverable;
-	const attrs = useMemo(() => {
-		const attrs = {
-			className: ({ isActive }) =>
-				classNames(
-					"x-item",
-					className,
-					{
-						"x-item--dense": dense,
-						"x-item--active": active || isActive,
-						"x-item--disabled": disabled,
-						"x-item--clickable": isClickable,
-						"x-item--hoverable": isHoverable,
-						"x-item--vertical": vertical,
-						[`text-${color}`]: color,
-					},
-					active && !disabled ? activeClass : ""
-				),
-			role: disRoleTag.includes(props.as)
-				? undefined
-				: role ?? "listitem",
-			disabled: disabled,
-		};
-		if (isActionable) {
-			attrs["aria-disabled"] = disabled;
-		}
-		if (isClickable) {
-			attrs.tabIndex = disabled ? -1 : tabIndex ?? -1;
-		}
-		if (disDisabledTag.includes(props.as)) {
-			delete attrs.disabled;
-		}
-		return attrs;
-	}, [
-		disabled,
-		tabIndex,
-		role,
-		dense,
-		active,
-		className,
-		activeClass,
-		isClickable,
-		isActionable,
-	]);
-	return render(
-		"div",
-		{
-			...props,
-			...attrs,
-			ref: handleRef,
-			onClick: (event) => {
-				if (disabled) {
-					event.preventDefault();
-				}
-				onClick?.(event);
-			},
-			children,
-		},
-		{
-			active,
-			disabled,
-		}
+	return (
+		<XItem role="button">
+			{icon && (
+				<XItemSection side>
+					<XIcon>{icon}</XIcon>
+				</XItemSection>
+			)}
+			<XItemSection>
+				{label && <XItemLabel>{label}</XItemLabel>}
+				{caption && <XItemLabel caption>{caption}</XItemLabel>}
+			</XItemSection>
+			<XItemSection side>
+				<XChevron />
+			</XItemSection>
+		</XItem>
 	);
 });
 
@@ -118,4 +61,7 @@ XItemExpansion.propTypes = {
 	tabIndex: PropTypes.number,
 	role: PropTypes.string,
 	onClick: PropTypes.func,
+	icon: PropTypes.node,
+	label: PropTypes.string,
+	caption: PropTypes.string,
 };

@@ -1,10 +1,26 @@
-import { XIcon, XItem, XItemLabel, XItemSection, XList } from "../ui";
+import {
+	XIcon,
+	XItem,
+	XItemExpansion,
+	XItemLabel,
+	XItemSection,
+	XList,
+} from "../ui";
 export function ListExample() {
 	return (
 		<div className="max-w-4xl m-auto py-4 relative">
 			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XList</h2>
 			<div className="w-64 absolute left-1/2 -translate-x-1/2 top-12 pt-8">
-				<XList dense bordered separator>
+				<XList bordered separator>
+					<XItemExpansion icon="mdi-home" label="XItemExpansion 1">
+						ldlkdfhblkfdbfdkl ndbkldfnbklfdnb mdfnbdf,bnf
+					</XItemExpansion>
+					<XItemExpansion label="XItemExpansion 2">
+						ldlkdfhblkfdbfdkl ndbkldfnbklfdnb mdfnbdf,bnf
+					</XItemExpansion>
+					<XItemExpansion label="XItemExpansion 3">
+						ldlkdfhblkfdbfdkl ndbkldfnbklfdnb mdfnbdf,bnf
+					</XItemExpansion>
 					<XItem as="label">
 						<XItemSection side>
 							<input type="checkbox" value={1} disabled />
@@ -30,7 +46,7 @@ export function ListExample() {
 						</XItemSection>
 					</XItem>
 					<XItem>
-						<XItemSection side>
+						<XItemSection avatar>
 							<XIcon>mdi-home</XIcon>
 						</XItemSection>
 						<XItemSection>

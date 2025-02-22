@@ -1,7 +1,7 @@
 @reference "@style";
 
 .x-item {
-	@apply flex flex-nowrap relative min-h-12 px-3 py-2 text-inherit cursor-default;
+	@apply flex flex-nowrap relative min-h-12 px-3 gap-3 py-2 text-inherit cursor-default;
 }
 .x-item,
 .x-item::before,
@@ -23,13 +23,16 @@
 	@apply cursor-not-allowed opacity-60;
 }
 
-.x-item---vertical .x-item__section + .x-item__section {
-	@apply mt-2;
+.x-item---vertical {
+	@apply gap-2;
 }
 
 .x-item--dense,
 .x-list--dense .x-item {
-	@apply min-h-8 px-2 py-1;
+	@apply min-h-8 px-2 gap-2 py-1;
+	&.x-item---vertical {
+		@apply gap-1;
+	}
 }
 
 .x-item--hoverable::before {
@@ -44,11 +47,8 @@
 	@apply opacity-15;
 }
 
-.x-item:not(.x-item--vertical) .x-item__section--main + .x-item__section--main {
-	@apply ml-2;
-}
 .x-item__section {
-	@apply flex flex-col justify-center pr-3 items-start w-auto min-w-0 max-w-full;
+	@apply flex flex-col justify-center items-start w-auto min-w-0 max-w-full;
 }
 .x-item__section--main {
 	@apply flex-1;
@@ -66,10 +66,13 @@
 	}
 }
 .x-item__section ~ .x-item__section--side {
-	@apply items-end pl-3 pr-0;
+	@apply items-end;
 }
 .x-item__section--side > .x-icon {
 	@apply text-2xl/none;
+}
+.x-item__section--avatar {
+	@apply min-w-12 items-center;
 }
 
 .x-item > .x-item__section--thumbnail:first-child {
@@ -81,6 +84,18 @@
 
 .x-item__section--main.x-item__section--thumbnail {
 	@apply ml-0 -mr-3;
+}
+.x-item--dense,
+.x-list--dense .x-item {
+	& > .x-item__section--thumbnail:first-child {
+		@apply -ml-2;
+	}
+	& > .x-item__section--thumbnail:last-of-type {
+		@apply -mr-2;
+	}
+	& > .x-item__section--main.x-item__section--thumbnail {
+		@apply -mr-2;
+	}
 }
 
 .x-item__label {
