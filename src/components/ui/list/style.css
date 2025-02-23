@@ -1,10 +1,25 @@
 @reference "@style";
 .x-list {
 	@apply flex flex-col;
+	--indent-padding: 0rem;
+}
+.x-list-items {
+	--parent-padding: var(--indent-padding, 0rem);
+}
+.x-list-items .x-list {
+	--indent-padding: calc(
+		var(--parent-padding, 0rem) + var(--spacing, 0.25rem) *
+			var(--padding-multiplier, 3)
+	);
 }
 .x-list--bordered {
 	@apply border border-color;
 }
-.x-list--separator .x-item + .x-item {
-	@apply border-t border-color;
+.x-list--separator {
+	.x-item:not(:first-child) {
+		@apply border-t border-color;
+	}
+	.x-item--opened + .x-list-items {
+		@apply border-t border-color;
+	}
 }

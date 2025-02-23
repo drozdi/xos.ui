@@ -11,9 +11,33 @@ export function ListExample() {
 		<div className="max-w-4xl m-auto py-4 relative">
 			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XList</h2>
 			<div className="w-64 absolute left-1/2 -translate-x-1/2 top-12 pt-8">
-				<XList bordered separator>
-					<XItemExpansion icon="mdi-home" label="XItemExpansion 1">
-						ldlkdfhblkfdbfdkl ndbkldfnbklfdnb mdfnbdf,bnf
+				<XList bordered>
+					<XItemExpansion label="XItemExpansion 1">
+						<XList>
+							<XItemExpansion label="XItemExpansion 1.1">
+								<XList>
+									<XItemExpansion label="XItemExpansion 1.1.1">
+										<XList>
+											<XItemExpansion label="XItemExpansion 1.1.1.1">
+												ldlkdfhblkfdbfdkl
+												ndbkldfnbklfdnb mdfnbdf,bnf
+											</XItemExpansion>
+											<XItemExpansion label="XItemExpansion 1.1.1.2">
+												ldlkdfhblkfdbfdkl
+												ndbkldfnbklfdnb mdfnbdf,bnf
+											</XItemExpansion>
+										</XList>
+									</XItemExpansion>
+									<XItemExpansion label="XItemExpansion 1.1.2">
+										ldlkdfhblkfdbfdkl ndbkldfnbklfdnb
+										mdfnbdf,bnf
+									</XItemExpansion>
+								</XList>
+							</XItemExpansion>
+							<XItemExpansion label="XItemExpansion 1.2">
+								ldlkdfhblkfdbfdkl ndbkldfnbklfdnb mdfnbdf,bnf
+							</XItemExpansion>
+						</XList>
 					</XItemExpansion>
 					<XItemExpansion label="XItemExpansion 2">
 						ldlkdfhblkfdbfdkl ndbkldfnbklfdnb mdfnbdf,bnf

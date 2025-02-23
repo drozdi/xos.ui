@@ -1,13 +1,13 @@
+import classNames from "classnames";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { forwardRefWithAs } from "../../internal/render";
+import { XCollapse } from "../collapse";
 import { XChevron, XIcon } from "../icon";
 import "./style.css";
 import { XItem } from "./XItem";
 import { XItemLabel } from "./XItemLabel";
 import { XItemSection } from "./XItemSection";
-const clickableTag = ["a", "label", "navLink"];
-const disRoleTag = ["label"];
-const disDisabledTag = ["div", "span", "a", "label"];
 
 export const XItemExpansion = forwardRefWithAs(function XItemExpansionFn(
 	{
@@ -26,25 +26,48 @@ export const XItemExpansion = forwardRefWithAs(function XItemExpansionFn(
 		icon,
 		label,
 		caption,
+		opened: _opened,
 		...props
 	},
 	ref
 ) {
+	const [opened, setOpened] = useState(_opened);
+
+	const handleClick = (event) => {
+		event.preventDefault();
+		if (disabled) {
+			return;
+		}
+		onClick?.(event);
+		setOpened((v) => !v);
+	};
+
 	return (
-		<XItem role="button">
-			{icon && (
-				<XItemSection side>
-					<XIcon>{icon}</XIcon>
+		<>
+			<XItem
+				className={classNames({
+					"x-item--opened": opened,
+				})}
+				role="button"
+				onClick={handleClick}
+			>
+				{icon && (
+					<XItemSection side>
+						<XIcon>{icon}</XIcon>
+					</XItemSection>
+				)}
+				<XItemSection>
+					{label && <XItemLabel>{label}</XItemLabel>}
+					{caption && <XItemLabel caption>{caption}</XItemLabel>}
 				</XItemSection>
-			)}
-			<XItemSection>
-				{label && <XItemLabel>{label}</XItemLabel>}
-				{caption && <XItemLabel caption>{caption}</XItemLabel>}
-			</XItemSection>
-			<XItemSection side>
-				<XChevron />
-			</XItemSection>
-		</XItem>
+				<XItemSection side>
+					<XChevron className="x-item__chevron" />
+				</XItemSection>
+			</XItem>
+			<XCollapse className="x-list-items" active={opened}>
+				{children}
+			</XCollapse>
+		</>
 	);
 });
 
