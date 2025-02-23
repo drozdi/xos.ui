@@ -1,22 +1,26 @@
 import classNames from "classnames";
-import React, { memo, useContext, useMemo } from "react";
-import { useSlots } from "../../hooks/useSlots";
-import { XLayoutContext } from "../layout/XLayoutContext";
+import { memo, useMemo } from "react";
+import { Sections } from "../../internal/sections";
+import { useXLayoutContext } from "../layout/XLayoutContext";
 import "./style.css";
 
-export const XHeader = memo(function XHeader({ children, className }) {
-	const { $layout } = useContext(XLayoutContext);
+export const XHeader = memo(function XHeaderFn({
+	children,
+	className,
+	...props
+}) {
+	const { $layout } = useXLayoutContext();
 	const isLayout = useMemo(() => !!$layout, [$layout]);
-	const { slot, slots } = useSlots(children);
+
 	return (
-		<header
-			className={classNames(className, "xHeader", {
+		<Sections
+			as="header"
+			{...props}
+			className={classNames(className, "x-header", {
 				"xLayout-header": isLayout,
 			})}
 		>
-			<div className="xHeader-prepend">{slot("prepend", null)}</div>
-			<div className="xHeader-content">{slot("", null)}</div>
-			<div className="xHeader-append">{slot("append", null)}</div>
-		</header>
+			{children}
+		</Sections>
 	);
 });

@@ -9,7 +9,7 @@ import { XBtn } from "../btn/XBtn";
 import { XFooter } from "../footer/XFooter";
 import { XHeader } from "../header/XHeader";
 import { XSidebar } from "../sidebar/XSidebar";
-import { XLayoutContext } from "./XLayoutContext";
+import { XLayoutProvider } from "./XLayoutContext";
 
 export function XLayout({
 	children,
@@ -104,37 +104,42 @@ export function XLayout({
 	};
 	const header = () => {
 		return (
-			<XHeader>
-				{belowBreakpoint && hasSlot("left") && (
-					<XBtn
-						slot="prepend"
-						color="primary"
-						className="float-start self-center"
-						icon="mdi-dock-left"
-						size="sm"
-						square={true}
-						onClick={(e) => {
-							e.stopPropagation();
-							e.preventDefault();
-							setLs((ls) => ({ ...ls, open: !ls.open }));
-						}}
-					/>
-				)}
-				{belowBreakpoint && hasSlot("right") && (
-					<XBtn
-						slot="append"
-						color="primary"
-						className="float-end self-center"
-						icon="mdi-dock-right"
-						size="sm"
-						square={true}
-						onClick={(e) => {
-							e.stopPropagation();
-							e.preventDefault();
-							setRs((rs) => ({ ...rs, open: !rs.open }));
-						}}
-					/>
-				)}
+			<XHeader
+				leftSection={
+					belowBreakpoint &&
+					hasSlot("left") && (
+						<XBtn
+							color="primary"
+							leftSection="mdi-dock-left"
+							size="sm"
+							square
+							onClick={(e) => {
+								e.stopPropagation();
+								e.preventDefault();
+								setLs((ls) => ({ ...ls, open: !ls.open }));
+							}}
+						>
+							{" "}
+						</XBtn>
+					)
+				}
+				rightSection={
+					belowBreakpoint &&
+					hasSlot("right") && (
+						<XBtn
+							color="primary"
+							icon="mdi-dock-right"
+							size="sm"
+							square
+							onClick={(e) => {
+								e.stopPropagation();
+								e.preventDefault();
+								setRs((rs) => ({ ...rs, open: !rs.open }));
+							}}
+						/>
+					)
+				}
+			>
 				{slot("header", null)}
 			</XHeader>
 		);
@@ -184,9 +189,9 @@ export function XLayout({
 
 	return (
 		<>
-			<XLayoutContext.Provider value={{ $layout, $update }}>
+			<XLayoutProvider value={{ $layout, $update }}>
 				{layout}
-			</XLayoutContext.Provider>
+			</XLayoutProvider>
 		</>
 	);
 }

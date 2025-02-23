@@ -1,13 +1,4 @@
-import { createContext, useContext } from "react";
+import { createSafeContext } from "../../internal/createSafeContext";
 
-export const XLayoutContext = createContext(null);
-
-export function useXLayoutContext () {
-  const context = useContext(XLayoutContext);
-
-  /*if (!context) {
-    throw new Error("XLayoutContext should be used within the XLayoutContext provider!");
-  }*/
-
-  return context;
-}
+export const [XLayoutProvider, useXLayoutContext] =
+	createSafeContext(/*"XLayoutContext should be used within the XLayoutContext provider!"*/);

@@ -1,0 +1,100 @@
+@reference "@style";
+.xWindow {
+	@apply absolute m-0 p-0 border border-separator bg-surface w-96 h-96 grid grid-rows-window transition-none;
+}
+.xWindow-title {
+	@apply mx-2 my-2 truncate;
+}
+.xWindow-bar {
+	@apply min-h-8 flex flex-row justify-between border-b border-separator;
+}
+.xWindow-content {
+	@apply relative;
+}
+
+.xWindow-res {
+	position: absolute;
+	z-index: 100;
+	display: none;
+	&--n,
+	&--s {
+		@apply h-2 left-0 right-0 cursor-n-resize;
+	}
+	&--e,
+	&--w {
+		@apply w-2 top-0 bottom-0 cursor-e-resize;
+	}
+	&--se,
+	&--sw,
+	&--ne,
+	&--nw {
+		@apply w-2 h-2;
+		z-index: 110;
+	}
+	&--nw {
+		@apply cursor-nw-resize;
+	}
+	&--ne {
+		@apply cursor-ne-resize;
+	}
+	&--se {
+		@apply cursor-se-resize;
+	}
+	&--sw {
+		@apply cursor-sw-resize;
+	}
+	&--n,
+	&--nw,
+	&--ne {
+		@apply -top-1;
+	}
+	&--e,
+	&--ne,
+	&--se {
+		@apply -right-1;
+	}
+	&--s,
+	&--se,
+	&--sw {
+		@apply -bottom-1;
+	}
+	&--w,
+	&--nw,
+	&--sw {
+		@apply -left-1;
+	}
+}
+
+.xWindow {
+	&--resizable > &-res {
+		@apply block;
+	}
+	&--draggable:not(&--fullscreen):not(&--collapsed) &-bar {
+		@apply cursor-move;
+	}
+	&--fullscreen {
+		@apply top-0 left-0 w-full h-full;
+	}
+}
+.xWindow {
+	--x-window-line-offset: 6rem;
+	/* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.07) inset;*/
+	&:before {
+		content: " ";
+		@apply block h-0 absolute top-0 border-9 border-b-0 border-transparent border-t-separator;
+		left: var(--x-window-line-offset);
+		right: var(--x-window-line-offset);
+	}
+	&:after {
+		content: " ";
+		@apply block h-0 absolute top-0 border-8 border-b-0 border-transparent border-t-info/50;
+		@apply block h-0 absolute top-0;
+		left: calc(var(--x-window-line-offset) + 1px);
+		right: calc(var(--x-window-line-offset) + 1px);
+	}
+}
+.xWindow--active {
+	&:after {
+		@apply border-t-primary;
+	}
+}

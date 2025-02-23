@@ -1,12 +1,4 @@
 @reference "tailwindcss";
 
-.xHeader {
-	@apply grid grid-cols-[minmax(min-content,auto)_minmax(auto,1fr)_minmax(min-content,auto)] items-center;
-}
-.xHeader-content {
-	@apply px-4;
-}
-.xHeader-append {
-}
-.xHeader-prepend {
+.x-header {
 }
