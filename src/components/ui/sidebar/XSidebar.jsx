@@ -300,7 +300,7 @@ const XSidebarRoot = forwardRefWithAs(function XSidebarFn(
 					</div>
 				</div>
 			</XSidebarContext.Provider>
-			{false && (
+			{true && (
 				<div className="fixed bg-black/50 text-white right-0 top-12 p-4 z-10">
 					breakpoint: {breakpoint} - {$layout.width}
 					<br />
