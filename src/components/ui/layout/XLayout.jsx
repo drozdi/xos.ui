@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
 import { useSlots } from "../../hooks/useSlots";
 import "./style.css";
@@ -46,7 +46,7 @@ export function XLayout({
 		open: true,
 		mini: true,
 	});
-	$s.active = true;
+	useEffect(() => ($s.active = true), []);
 	const $update = (part, prop, val) => {
 		if ($layout[part][prop] !== val) {
 			set$layout((v) => ({

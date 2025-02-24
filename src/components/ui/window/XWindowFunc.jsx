@@ -1,8 +1,16 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
+import {
+	forwardRef,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { DraggableCore } from "react-draggable";
 import { Resizable } from "react-resizable";
+import { useApp } from "../../app/hooks/useApp";
 import { Box } from "../../internal/box";
 import { XBtn } from "../btn/XBtn";
 import "./style.css";
@@ -73,8 +81,9 @@ export const XWindow = forwardRef(function XWindowFn(
 	},
 	ref
 ) {
+	const $s = useApp().$sm("WINDOW");
 	const nodeRef = useRef();
-	const [position, setPosition] = useState({
+	const [position, setPosition] = $s.useState("position", {
 		top: y,
 		left: x,
 		width: w,
@@ -104,6 +113,8 @@ export const XWindow = forwardRef(function XWindowFn(
 	const onCollapse = (event) => {
 		setCollapse((v) => !v);
 	};
+
+	useEffect(() => ($s.active = true), []);
 
 	const mixIcons = useMemo(
 		() => (

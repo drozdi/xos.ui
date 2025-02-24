@@ -18,6 +18,7 @@ export const XStorage = cached(function XStorage(type, key) {
 	} else if (key === "core") {
 		sm = settingManager["APP"].sub(key);
 	}
+
 	return {
 		type,
 		key,
@@ -73,6 +74,9 @@ export const XStorageContext = createContext({
 		fn(...args);
 	},
 	remove(key) {},
+	useState(name, initial) {
+		return useState(initial);
+	},
 });
 export function XStorageProvider({ children, type, key }) {
 	return (
