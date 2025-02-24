@@ -1,2 +1,2 @@
-export * from './XWindow';
-export * from './XWindowContext';
+export * from "./XWindowContext";
+export * from "./XWindowFunc";

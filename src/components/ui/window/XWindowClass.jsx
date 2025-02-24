@@ -359,6 +359,9 @@ export class XWindow extends Component {
 	render() {
 		const { draggable, resizable, title, className, children } = this.props;
 		const { position, isFullscreen, isCollapsed, active } = this.state;
+		const rrr = {
+			current: null,
+		};
 		return (
 			<DraggableCore
 				disabled={!draggable && isFullscreen}
@@ -367,6 +370,7 @@ export class XWindow extends Component {
 				onDragStop={this.onDragStop}
 				handle=".xWindow-bar"
 				cancel=".xWindow-res, .xWindow-drag-no"
+				nodeRef={rrr}
 			>
 				<Resizable
 					draggableOpts={{

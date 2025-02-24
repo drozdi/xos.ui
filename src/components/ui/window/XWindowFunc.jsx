@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { DraggableCore } from "react-draggable";
 import { Resizable } from "react-resizable";
 import { XBtn } from "../btn/XBtn";
@@ -66,6 +67,7 @@ export function XWindow({
 	resizable = true,
 	draggable = true,
 }) {
+	const nodeRef = useRef();
 	const [position, setPosition] = useState({
 		top: y,
 		left: x,
@@ -207,6 +209,7 @@ export function XWindow({
 			onDragStop={onDragStop}
 			handle=".xWindow-bar"
 			cancel=".xWindow-res, .xWindow-drag-no"
+			nodeRef={nodeRef}
 		>
 			<Resizable
 				draggableOpts={{
