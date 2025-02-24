@@ -58,8 +58,8 @@ const changeHandle = {
 
 export const XWindow = forwardRef(function XWindowFn(
 	{
-		children = "",
-		className = "",
+		children,
+		className,
 		x = 0,
 		y = 0,
 		w = 300,
@@ -110,12 +110,13 @@ export const XWindow = forwardRef(function XWindowFn(
 			<Box.Section
 				top
 				side
+				row
+				noPadding
 				as={XBtn.Group}
 				className="xWindow-drag-no"
 				color="dark"
 				size="sm"
 				flat
-				tonal
 				square
 			>
 				{(icons || "").split(/\s+/).map((type) => {
@@ -196,7 +197,6 @@ export const XWindow = forwardRef(function XWindowFn(
 		}));
 	}, []);
 	const onResizeStop = useCallback(() => {}, []);
-
 	return (
 		<DraggableCore
 			disabled={!draggable && isFullscreen}
@@ -233,11 +233,11 @@ export const XWindow = forwardRef(function XWindowFn(
 						"xWindow--collapse": isCollapse,
 					})}
 					style={style}
+					ref={nodeRef}
 				>
 					<Box
 						className="xWindow-bar"
 						justify="between"
-						size="sm"
 						onDoubleClick={onFullscreen}
 					>
 						{title && (

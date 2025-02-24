@@ -67,7 +67,7 @@ Box.propTypes = {
  * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
  * */
 Box.Section = forwardRefWithAs(function Section(
-	{ className, top, side, noWrap, ...props },
+	{ className, top, side, row, noPadding, noWrap, ...props },
 	ref
 ) {
 	return render("span", {
@@ -76,6 +76,8 @@ Box.Section = forwardRefWithAs(function Section(
 			"x-box-section",
 			{
 				"x-box-section--side": side,
+				"x-box-section--row": row,
+				"x-box-section--no-padding": noPadding,
 				"justify-start": top,
 				"text-nowrap": noWrap,
 			},

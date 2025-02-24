@@ -51,3 +51,20 @@
 .x-box-section--side {
 	@apply items-center;
 }
+
+.x-box-section--row {
+	@apply flex-row;
+}
+
+.x-box-section--no-padding:is(:last-child) {
+	@apply -mr-3;
+	.x-box--xs & {
+		@apply -mr-1;
+	}
+	.x-box--sm & {
+		@apply -mr-2;
+	}
+	.x-box--lg & {
+		@apply -mr-4;
+	}
+}

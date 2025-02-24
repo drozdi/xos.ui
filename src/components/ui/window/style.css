@@ -1,12 +1,12 @@
 @reference "@style";
 .xWindow {
-	@apply absolute m-0 p-0 border border-separator bg-surface w-96 h-96 grid grid-rows-(--grid-row-window) transition-none;
+	@apply absolute m-0 p-0 border border-color bg-surface w-96 h-96 grid grid-rows-(--grid-row-window) transition-none;
 }
 .xWindow-title {
 	@apply truncate;
 }
 .xWindow-bar {
-	@apply min-h-8 py-0 border-b border-separator;
+	@apply py-0 border-b border-color;
 }
 .xWindow-content {
 	@apply relative;
@@ -16,65 +16,64 @@
 	position: absolute;
 	z-index: 100;
 	display: none;
-	&--n,
-	&--s {
-		@apply h-2 left-0 right-0 cursor-n-resize;
-	}
-	&--e,
-	&--w {
-		@apply w-2 top-0 bottom-0 cursor-e-resize;
-	}
-	&--se,
-	&--sw,
-	&--ne,
-	&--nw {
-		@apply w-2 h-2;
-		z-index: 110;
-	}
-	&--nw {
-		@apply cursor-nw-resize;
-	}
-	&--ne {
-		@apply cursor-ne-resize;
-	}
-	&--se {
-		@apply cursor-se-resize;
-	}
-	&--sw {
-		@apply cursor-sw-resize;
-	}
-	&--n,
-	&--nw,
-	&--ne {
-		@apply -top-1;
-	}
-	&--e,
-	&--ne,
-	&--se {
-		@apply -right-1;
-	}
-	&--s,
-	&--se,
-	&--sw {
-		@apply -bottom-1;
-	}
-	&--w,
-	&--nw,
-	&--sw {
-		@apply -left-1;
-	}
+}
+.xWindow-res--n,
+.xWindow-res--s {
+	@apply h-2 left-0 right-0 cursor-n-resize;
+}
+.xWindow-res--e,
+.xWindow-res--w {
+	@apply w-2 top-0 bottom-0 cursor-e-resize;
+}
+.xWindow-res--se,
+.xWindow-res--sw,
+.xWindow-res--ne,
+.xWindow-res--nw {
+	@apply w-2 h-2;
+	z-index: 110;
+}
+.xWindow-res--nw {
+	@apply cursor-nw-resize;
+}
+.xWindow-res--ne {
+	@apply cursor-ne-resize;
+}
+.xWindow-res--se {
+	@apply cursor-se-resize;
+}
+.xWindow-res--sw {
+	@apply cursor-sw-resize;
+}
+.xWindow-res--n,
+.xWindow-res--nw,
+.xWindow-res--ne {
+	@apply -top-1;
+}
+.xWindow-res--e,
+.xWindow-res--ne,
+.xWindow-res--se {
+	@apply -right-1;
+}
+.xWindow-res--s,
+.xWindow-res--se,
+.xWindow-res--sw {
+	@apply -bottom-1;
+}
+.xWindow-res--w,
+.xWindow-res--nw,
+.xWindow-res--sw {
+	@apply -left-1;
 }
 
-.xWindow {
-	&--resizable > &-res {
-		@apply block;
-	}
-	&--draggable:not(&--fullscreen):not(&--collapsed) &-bar {
-		@apply cursor-move;
-	}
-	&--fullscreen {
-		@apply top-0 left-0 w-full h-full;
-	}
+.xWindow--resizable > .xWindow-res {
+	@apply block;
+}
+.xWindow--draggable:not(.xWindow--fullscreen, .xWindow--collapsed)
+	.xWindow-bar {
+	@apply cursor-move;
+}
+.xWindow--fullscreen {
+	@apply top-0 left-0 w-full h-full;
 }
 .xWindow {
 	--x-window-line-offset: 6rem;

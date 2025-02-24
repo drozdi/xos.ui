@@ -14,7 +14,50 @@ import { XLayout } from "./components/ui/layout";
 import "./style/index.css";
 
 function App() {
-	return <XWindow title="Title"></XWindow>;
+	return (
+		<AppProvider config={{ smKey: "app-1" }}>
+			<XWindow title="Title">
+				<XLayout container overlay toggle view="lhr lpr lff">
+					{{
+						left: (props) => {
+							//return "left";
+							return (
+								<XList separator>
+									{routers.map((item, index) => (
+										<XItem key={index} to={item.path}>
+											<XItemSection side>
+												<XIcon>{item.icon}</XIcon>
+											</XItemSection>
+											<XItemSection>
+												<XItemLabel lines>
+													{item.label}
+												</XItemLabel>
+											</XItemSection>
+										</XItem>
+									))}
+								</XList>
+							);
+						},
+						header: <ThemeProviderToggler></ThemeProviderToggler>,
+						//header: "header",
+						footer: "footer",
+						//right: 'right',
+						default: (props) => (
+							<Routes>
+								{routers.map((item, index) => (
+									<Route
+										key={index}
+										path={item.path}
+										element={item.element}
+									/>
+								))}
+							</Routes>
+						),
+					}}
+				</XLayout>
+			</XWindow>
+		</AppProvider>
+	);
 	return (
 		<AppProvider config={{ smKey: "app-1" }}>
 			<XLayout container overlay toggle view="lhr lpr lff">
