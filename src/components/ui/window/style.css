@@ -3,10 +3,10 @@
 	@apply absolute m-0 p-0 border border-separator bg-surface w-96 h-96 grid grid-rows-(--grid-row-window) transition-none;
 }
 .xWindow-title {
-	@apply mx-2 my-2 truncate;
+	@apply truncate;
 }
 .xWindow-bar {
-	@apply min-h-8 flex flex-row justify-between border-b border-separator;
+	@apply min-h-8 py-0 border-b border-separator;
 }
 .xWindow-content {
 	@apply relative;

@@ -14,7 +14,7 @@ import { XLayout } from "./components/ui/layout";
 import "./style/index.css";
 
 function App() {
-	return <XWindow></XWindow>;
+	return <XWindow title="Title"></XWindow>;
 	return (
 		<AppProvider config={{ smKey: "app-1" }}>
 			<XLayout container overlay toggle view="lhr lpr lff">

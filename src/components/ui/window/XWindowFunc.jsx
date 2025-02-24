@@ -1,7 +1,9 @@
 import classNames from "classnames";
-import { useCallback, useMemo, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { forwardRef, useCallback, useMemo, useRef, useState } from "react";
 import { DraggableCore } from "react-draggable";
 import { Resizable } from "react-resizable";
+import { Box } from "../../internal/box";
 import { XBtn } from "../btn/XBtn";
 import "./style.css";
 
@@ -53,20 +55,24 @@ const changeHandle = {
 		);
 	},
 };
-export function XWindow({
-	children = "",
-	className,
-	x = 0,
-	y = 0,
-	w = 300,
-	h = 300,
-	title,
-	icons = "reload collapse fullscreen close",
-	onReload = () => {},
-	onClose = () => {},
-	resizable = true,
-	draggable = true,
-}) {
+
+export const XWindow = forwardRef(function XWindowFn(
+	{
+		children = "",
+		className = "",
+		x = 0,
+		y = 0,
+		w = 300,
+		h = 300,
+		title,
+		icons = "reload collapse fullscreen close",
+		onReload = () => {},
+		onClose = () => {},
+		resizable = true,
+		draggable = true,
+	},
+	ref
+) {
 	const nodeRef = useRef();
 	const [position, setPosition] = useState({
 		top: y,
@@ -101,19 +107,24 @@ export function XWindow({
 
 	const mixIcons = useMemo(
 		() => (
-			<div className="xWindow-drag-no">
+			<Box.Section
+				top
+				side
+				as={XBtn.Group}
+				className="xWindow-drag-no"
+				color="dark"
+				size="sm"
+				flat
+				tonal
+				square
+			>
 				{(icons || "").split(/\s+/).map((type) => {
 					if (type === "close") {
 						return (
 							<XBtn
 								key={type}
 								className={"bg-red-700/60 hover:bg-red-700/40"}
-								color="dark"
-								size="sm"
-								icon="mdi-close"
-								flat={true}
-								tonal={true}
-								square={true}
+								leftSection="mdi-close"
 								title="Закрыть"
 							/>
 						);
@@ -121,12 +132,7 @@ export function XWindow({
 						return (
 							<XBtn
 								key={type}
-								color="dark"
-								size="sm"
-								icon="mdi-reload"
-								flat={true}
-								tonal={true}
-								square={true}
+								leftSection="mdi-reload"
 								title="Обновить"
 							/>
 						);
@@ -135,16 +141,11 @@ export function XWindow({
 							<XBtn
 								onClick={onFullscreen}
 								key={type}
-								color="dark"
-								size="sm"
-								icon={
+								leftSection={
 									isFullscreen
 										? "mdi-fullscreen-exit"
 										: "mdi-fullscreen"
 								}
-								flat={true}
-								tonal={true}
-								square={true}
 								title={
 									isFullscreen
 										? "Свернуть в окно"
@@ -157,19 +158,14 @@ export function XWindow({
 							<XBtn
 								onClick={onCollapse}
 								key={type}
-								color="dark"
-								size="sm"
-								icon="mdi-window-minimize"
-								flat={true}
-								tonal={true}
-								square={true}
+								leftSection="mdi-window-minimize"
 								title="Свернуть"
 							/>
 						);
 					}
 					return null;
 				})}
-			</div>
+			</Box.Section>
 		),
 		[icons, isFullscreen, onFullscreen]
 	);
@@ -238,13 +234,38 @@ export function XWindow({
 					})}
 					style={style}
 				>
-					<div className="xWindow-bar" onDoubleClick={onFullscreen}>
-						{title && <div className="xWindow-title">{title}</div>}
+					<Box
+						className="xWindow-bar"
+						justify="between"
+						size="sm"
+						onDoubleClick={onFullscreen}
+					>
+						{title && (
+							<Box.Section side className="xWindow-title">
+								{title}
+							</Box.Section>
+						)}
 						{mixIcons}
-					</div>
+					</Box>
+
 					<div className="xWindow-content">{children}</div>
 				</div>
 			</Resizable>
 		</DraggableCore>
 	); //*/
-}
+});
+
+XWindow.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+	x: PropTypes.number,
+	y: PropTypes.number,
+	w: PropTypes.number,
+	h: PropTypes.number,
+	title: PropTypes.string,
+	icons: PropTypes.string,
+	onReload: PropTypes.func,
+	onClose: PropTypes.func,
+	resizable: PropTypes.bool,
+	draggable: PropTypes.bool,
+};
