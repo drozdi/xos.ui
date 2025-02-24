@@ -1,23 +1,23 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { matchesSelectorToParentElements } from '../utils/domFns';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { matchesSelectorToParentElements } from "../utils/domFns";
 
-export const KEYS_LEFT = ['ArrowLeft', 'Left'];
-export const KEYS_RIGHT = ['ArrowRight', 'Right'];
-export const KEYS_UP = ['ArrowUp', 'Up'];
-export const KEYS_DOWN = ['ArrowDown', 'Down'];
+export const KEYS_LEFT = ["ArrowLeft", "Left"];
+export const KEYS_RIGHT = ["ArrowRight", "Right"];
+export const KEYS_UP = ["ArrowUp", "Up"];
+export const KEYS_DOWN = ["ArrowDown", "Down"];
 export const KEYS_AXIS_X = [...KEYS_LEFT, ...KEYS_RIGHT];
 export const KEYS_AXIS_Y = [...KEYS_UP, ...KEYS_DOWN];
 export const KEYS_POSITIVE = [...KEYS_RIGHT, ...KEYS_DOWN];
 
 export function useDraggable({
-	axis = 'xy',
+	axis = "xy",
 	disabled = false,
 	reverse = false,
 	initial = [0, 0],
 	min = [0, 0],
 	max = [null, null],
-	handle = '',
-	cancel = '',
+	handle = "",
+	cancel = "",
 	step = 10,
 	shiftStep = 50,
 	onStart = () => {},
@@ -39,12 +39,12 @@ export function useDraggable({
 			}
 			return [width, height];
 		},
-		[min, max],
+		[min, max]
 	);
 
 	const initialPosition = useMemo(
 		() => runConstraints(...initial),
-		[runConstraints, initial],
+		[runConstraints, initial]
 	);
 
 	const [position, setPosition] = useState(initialPosition);
@@ -53,8 +53,8 @@ export function useDraggable({
 	const dragging = useRef(false);
 	const positionRef = useRef(initialPosition);
 
-	const canX = useMemo(() => axis.includes('x'), [axis]);
-	const canY = useMemo(() => axis.includes('y'), [axis]);
+	const canX = useMemo(() => axis.includes("x"), [axis]);
+	const canY = useMemo(() => axis.includes("y"), [axis]);
 
 	const mousePosition = { x: 0, y: 0 };
 
@@ -71,7 +71,7 @@ export function useDraggable({
 
 			const newPosition = runConstraints(
 				position[0] + (reverse ? -deltaX : deltaX),
-				position[1] + (reverse ? -deltaY : deltaY),
+				position[1] + (reverse ? -deltaY : deltaY)
 			);
 
 			onMove(event, {
@@ -81,13 +81,13 @@ export function useDraggable({
 			setPosition(() => newPosition);
 			positionRef.current = newPosition;
 		},
-		[canX, canY, reverse, position, runConstraints, onMove],
+		[canX, canY, reverse, position, runConstraints, onMove]
 	);
 
 	const handleUp = useCallback(
 		(event) => {
-			document.removeEventListener('pointermove', handleMove);
-			document.removeEventListener('pointerup', handleUp);
+			document.removeEventListener("pointermove", handleMove);
+			document.removeEventListener("pointerup", handleUp);
 			onEnd(event, {
 				position: positionRef.current,
 			});
@@ -97,7 +97,7 @@ export function useDraggable({
 			setPosition(() => positionRef.current);
 			setEndPosition(() => positionRef.current);
 		},
-		[handleMove, onEnd],
+		[handleMove, onEnd]
 	);
 
 	const handleDown = useCallback(
@@ -105,9 +105,17 @@ export function useDraggable({
 			if (
 				disabled ||
 				(handle &&
-					!matchesSelectorToParentElements(event.target, handle, document)) ||
+					!matchesSelectorToParentElements(
+						event.target,
+						handle,
+						document
+					)) ||
 				(cancel &&
-					!matchesSelectorToParentElements(event.target, cancel, document))
+					!matchesSelectorToParentElements(
+						event.target,
+						cancel,
+						document
+					))
 			) {
 				return;
 			}
@@ -128,8 +136,8 @@ export function useDraggable({
 				position,
 			});
 
-			document.addEventListener('pointermove', handleMove);
-			document.addEventListener('pointerup', handleUp);
+			document.addEventListener("pointermove", handleMove);
+			document.addEventListener("pointerup", handleUp);
 		},
 		[
 			disabled,
@@ -142,7 +150,7 @@ export function useDraggable({
 			onStart,
 			handleMove,
 			handleUp,
-		],
+		]
 	);
 
 	const handleKeyDown = useCallback(
@@ -150,7 +158,7 @@ export function useDraggable({
 			if (disabled) {
 				return;
 			}
-			if (event.key === 'Enter') {
+			if (event.key === "Enter") {
 				setPosition(() => initialPosition);
 				positionRef.current = initialPosition;
 				return;
@@ -170,11 +178,13 @@ export function useDraggable({
 
 			const changeStep = event.shiftKey ? shiftStep : step;
 			const reversed = reverse ? -1 : 1;
-			const dir = KEYS_POSITIVE.includes(event.key) ? reversed : -1 * reversed;
+			const dir = KEYS_POSITIVE.includes(event.key)
+				? reversed
+				: -1 * reversed;
 
 			const newPosition = runConstraints(
 				position[0] + (canX ? changeStep * dir : 0),
-				position[1] + (canY ? changeStep * dir : 0),
+				position[1] + (canY ? changeStep * dir : 0)
 			);
 			setPosition(() => newPosition);
 			positionRef.current = newPosition;
@@ -197,19 +207,25 @@ export function useDraggable({
 			step,
 			shiftStep,
 			reverse,
-		],
+		]
 	);
 
 	const containerRef = useRef(null);
 	useEffect(() => {
 		if (containerRef.current) {
-			containerRef.current.addEventListener('pointerdown', handleDown);
-			containerRef.current.addEventListener('keydown', handleKeyDown);
+			containerRef.current.addEventListener("pointerdown", handleDown);
+			containerRef.current.addEventListener("keydown", handleKeyDown);
 		}
 		return () => {
 			if (containerRef.current) {
-				containerRef.current.removeEventListener('pointerdown', handleDown);
-				containerRef.current.removeEventListener('keydown', handleKeyDown);
+				containerRef.current.removeEventListener(
+					"pointerdown",
+					handleDown
+				);
+				containerRef.current.removeEventListener(
+					"keydown",
+					handleKeyDown
+				);
 			}
 		};
 	}, [containerRef, handleDown, handleKeyDown]);

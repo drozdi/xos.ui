@@ -19,7 +19,7 @@ import { XSidebarContext } from "./XSidebarContext";
 
 /**
  * XSidebar sidebar component
- * @component Sidebar component for the sidebar component of the XSidebar component. This component is used to render the sidebar component of the XSidebar component. This component is used to render the sidebar component of the XSidebar. This component is used to render the sidebar component.
+ * @component Sidebar component for the sidebar component of the XSidebar component. This component is used to render the sidebar component of the XSidebar component.
  * @example <XSidebar>...</XSidebar>
  * @param {Object} props
  * @param {React.ReactNode} props.children children to render inside the sidebar
@@ -123,7 +123,12 @@ export const XSidebar = memo(
 		);
 
 		const canResized = useMemo(
-			() => resizeable && !innerEvents && !isMini && !belowBreakpoint,
+			() =>
+				false &&
+				resizeable &&
+				!innerEvents &&
+				!isMini &&
+				!belowBreakpoint,
 			[resizeable, innerEvents, isMini, belowBreakpoint]
 		);
 
@@ -163,7 +168,6 @@ export const XSidebar = memo(
 		);
 
 		useEffect(() => {
-			console.log(innerRef.current);
 			if (innerRef.current) {
 				const style = window.getComputedStyle(innerRef.current);
 				const w = parseInt(style.width || 0, 10) || 0;
@@ -190,7 +194,7 @@ export const XSidebar = memo(
 			};
 		}, [miniMouse, miniToggle, belowBreakpoint]);
 
-		useEffect(() => onMini(isMini), [isMini]);
+		useEffect(() => onMini?.(isMini), [isMini]);
 
 		const onHandleDrag = useCallback(
 			(e, ui) => {
@@ -207,7 +211,7 @@ export const XSidebar = memo(
 					miniWidth
 				);
 				setWidth(width);
-				onResize(width);
+				onResize?.(width);
 			},
 			[innerRef.current, miniWidth]
 		);
@@ -316,7 +320,7 @@ export const XSidebar = memo(
 								<div className="xSidebar-toggle">
 									<XBtn
 										color="accent"
-										leftSection={
+										rightSection={
 											isOpen
 												? `mdi-menu-${type}`
 												: `mdi-menu-${

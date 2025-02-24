@@ -15,10 +15,10 @@
 }
 
 .xSidebar-toggle {
-	@apply absolute top-12 right-0 translate-x-1/2;
+	@apply absolute top-12 -right-2 translate-x-1/2;
 }
 .xSidebar--right .xSidebar-toggle {
-	@apply right-auto left-0 -translate-x-1/2;
+	@apply right-auto -left-2 -translate-x-1/2;
 }
 
 .xSidebar-res {

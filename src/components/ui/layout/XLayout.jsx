@@ -79,7 +79,7 @@ export function XLayout({
 			//resizeable: true,
 			onMini: (mini) => setLs({ ...ls, mini }),
 			onResize: (size) => setLs({ ...ls, size }),
-			//onToggle: (open) => setLs{...ls, open}),
+			//onToggle: (open) => setLs({ ...ls, open }),
 		});
 	};
 	const right = () => {
@@ -118,9 +118,7 @@ export function XLayout({
 								e.preventDefault();
 								setLs((ls) => ({ ...ls, open: !ls.open }));
 							}}
-						>
-							{" "}
-						</XBtn>
+						/>
 					)
 				}
 				rightSection={

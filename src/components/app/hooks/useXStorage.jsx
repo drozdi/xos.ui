@@ -1,6 +1,6 @@
-import { createContext, useEffect } from 'react';
-import settingManager from '../../../core/setting-manager';
-import { cached } from '../../../utils/cached';
+import { createContext, useEffect, useState } from "react";
+import settingManager from "../../../core/setting-manager";
+import { cached } from "../../../utils/cached";
 
 export const XStorage = cached(function XStorage(type, key) {
 	let smActive = false;
@@ -15,8 +15,8 @@ export const XStorage = cached(function XStorage(type, key) {
 	};
 	if (settingManager[type] && key) {
 		sm = settingManager[type].sub(key);
-	} else if (key === 'core') {
-		sm = settingManager['APP'].sub(key);
+	} else if (key === "core") {
+		sm = settingManager["APP"].sub(key);
 	}
 	return {
 		type,
@@ -50,11 +50,7 @@ export const XStorage = cached(function XStorage(type, key) {
 			smActive = old;
 		},
 		useState(name, initial) {
-			let state = this.get(name, initial);
-			const setState = (newState) => {
-				state = { ...state, ...newState };
-			};
-			//const [state, setState] = useState(this.get(name, initial));
+			const [state, setState] = useState(this.get(name, initial));
 			useEffect(() => {
 				this.set(name, state);
 			}, [state]);
@@ -100,8 +96,8 @@ export function useXStorage(type, key) {
 
 	if (settingManager[type] && key) {
 		sm = settingManager[type].sub(key);
-	} else if (key === 'core') {
-		sm = settingManager['APP'].sub(key);
+	} else if (key === "core") {
+		sm = settingManager["APP"].sub(key);
 	}
 	useEffect(() => {
 		smActive = true;

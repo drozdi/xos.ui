@@ -2,11 +2,19 @@ import { Route, Routes } from "react-router-dom";
 import { AppProvider } from "./components/app";
 import { routers } from "./components/example";
 import { ThemeProviderToggler } from "./components/hooks/useTheme";
-import { XIcon, XItem, XItemLabel, XItemSection, XList } from "./components/ui";
+import {
+	XIcon,
+	XItem,
+	XItemLabel,
+	XItemSection,
+	XList,
+	XWindow,
+} from "./components/ui";
 import { XLayout } from "./components/ui/layout";
 import "./style/index.css";
 
 function App() {
+	return <XWindow></XWindow>;
 	return (
 		<AppProvider config={{ smKey: "app-1" }}>
 			<XLayout container overlay toggle view="lhr lpr lff">

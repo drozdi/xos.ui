@@ -1,6 +1,6 @@
 @reference "@style";
 .xWindow {
-	@apply absolute m-0 p-0 border border-separator bg-surface w-96 h-96 grid grid-rows-window transition-none;
+	@apply absolute m-0 p-0 border border-separator bg-surface w-96 h-96 grid grid-rows-(--grid-row-window) transition-none;
 }
 .xWindow-title {
 	@apply mx-2 my-2 truncate;

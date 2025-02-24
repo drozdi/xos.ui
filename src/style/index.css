@@ -66,6 +66,8 @@
 		minmax(min-content, auto);
 	--grid-col-layout: minmax(min-content, auto) minmax(auto, 1fr)
 		minmax(min-content, auto);
+	--grid-row-window: minmax(min-content, auto) minmax(auto, 1fr)
+		minmax(min-content, auto);
 }
 
 .dark {
