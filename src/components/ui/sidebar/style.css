@@ -1,69 +1,69 @@
 @reference "@style";
 
-.xSidebar {
+.x-sidebar {
 	@apply min-w-14 w-64 flex flex-col justify-between max-h-full h-full absolute top-0 bottom-0 
 	bg-surface border-r border-solid border-color z-50;
 }
-.xSidebar-container {
+.x-sidebar-container {
 	@apply w-64 relative border-none max-h-full;
 }
-.xSidebar-content {
+.x-sidebar-content {
 	@apply max-w-full max-h-full overflow-y-auto overflow-x-hidden;
 }
-.xSidebar-toggle-mini {
+.x-sidebar-toggle-mini {
 	@apply w-full border-t border-color;
 }
 
-.xSidebar-toggle {
+.x-sidebar-toggle {
 	@apply absolute top-12 -right-2 translate-x-1/2;
 }
-.xSidebar--right .xSidebar-toggle {
+.x-sidebar--right .x-sidebar-toggle {
 	@apply right-auto -left-2 -translate-x-1/2;
 }
 
-.xSidebar-res {
+.x-sidebar-res {
 	@apply w-2 cursor-col-resize bg-transparent absolute top-0 bottom-0 z-10;
 }
-.xSidebar--animate {
+.x-sidebar--animate {
 	@apply transition-all duration-200 ease-in-out;
 }
-.xSidebar--left {
+.x-sidebar--left {
 	@apply left-0 border-r;
 }
-.xSidebar--left .xSidebar-res {
+.x-sidebar--left .x-sidebar-res {
 	@apply -right-1;
 }
-.xSidebar--right {
+.x-sidebar--right {
 	@apply right-0 border-l;
 }
-.xSidebar--right .xSidebar-res {
+.x-sidebar--right .x-sidebar-res {
 	@apply -left-1;
 }
-.xSidebar--mini {
+.x-sidebar--mini {
 	@apply w-14;
 }
 
-.xSidebar-container:has(.xSidebar--mini-overlay) {
+.x-sidebar-container:has(.x-sidebar--mini-overlay) {
 	@apply w-14;
 }
-.xSidebar-container:has(.xSidebar--overlay:not(.xSidebar--mini-overlay)) {
+.x-sidebar-container:has(.x-sidebar--overlay:not(.x-sidebar--mini-overlay)) {
 	@apply w-0;
 }
-.xSidebar-container:has(.xSidebar--mini) {
+.x-sidebar-container:has(.x-sidebar--mini) {
 	@apply w-14;
 }
-.xSidebar-container:has(.xSidebar--close) {
+.x-sidebar-container:has(.x-sidebar--close) {
 	@apply w-0;
 }
-.xSidebar--close {
+.x-sidebar--close {
 	@apply w-0 border-0;
 }
-.xSidebar-container:has(.xSidebar:not(.is-mounted)) {
+.x-sidebar-container:has(.x-sidebar:not(.is-mounted)) {
 	@apply overflow-hidden;
 }
-.xSidebar-container:has(.is-mounted) {
+.x-sidebar-container:has(.is-mounted) {
 	@apply !min-w-0;
 }
-.xSidebar.is-mounted {
+.x-sidebar.is-mounted {
 	@apply !min-w-0;
 }

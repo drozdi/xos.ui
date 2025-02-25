@@ -173,7 +173,7 @@ export const XSidebar = memo(
 
 		useEffect(() => {
 			const handleClose = ({ target }) => {
-				if (target.closest(".xSidebar") !== innerRef.current) {
+				if (target.closest(".x-sidebar") !== innerRef.current) {
 					setInnerMini(true);
 					setOpenBreakpoint(false);
 				}
@@ -252,41 +252,41 @@ export const XSidebar = memo(
 			<>
 				<XSidebarContext.Provider value={{ width, isMini, isOpen }}>
 					<div
-						className={classNames("xSidebar-container", {
-							"xLayout-sidebar": isLayout,
-							[`xLayout-sidebar--${type}`]: isLayout && type,
-							"xSidebar--animate": !canResized,
+						className={classNames("x-sidebar-container", {
+							"x-layout-sidebar": isLayout,
+							[`x-layout-sidebar--${type}`]: isLayout && type,
+							"x-sidebar--animate": !canResized,
 						})}
 						style={containerStyle}
 						onMouseEnter={onMouseEnter}
 						onMouseLeave={onMouseLeave}
 					>
 						<div
-							className={classNames("xSidebar", {
+							className={classNames("x-sidebar", {
 								"is-mounted": isMounted,
-								"xLayout-sidebar": isLayout,
-								[`xLayout-sidebar--${type}`]: isLayout && type,
-								[`xSidebar--${type}`]: type,
-								"xSidebar--toggle": miniToggle,
-								"xSidebar--mini": isMini,
-								"xSidebar--close": !isOpen,
-								"xSidebar--animate": !canResized,
-								"xSidebar--overlay": isOverlay,
-								"xSidebar--mini-overlay": isMiniOverlay,
+								"x-layout-sidebar": isLayout,
+								[`x-layout-sidebar--${type}`]: isLayout && type,
+								[`x-sidebar--${type}`]: type,
+								"x-sidebar--toggle": miniToggle,
+								"x-sidebar--mini": isMini,
+								"x-sidebar--close": !isOpen,
+								"x-sidebar--animate": !canResized,
+								"x-sidebar--overlay": isOverlay,
+								"x-sidebar--mini-overlay": isMiniOverlay,
 							})}
 							style={style}
 							ref={handleRef}
 						>
 							<div
 								className={classNames(
-									"xSidebar-content",
+									"x-sidebar-content",
 									className
 								)}
 							>
 								{children}
 							</div>
 							{miniToggle && !belowBreakpoint && (
-								<div className="xSidebar-toggle-mini">
+								<div className="x-sidebar-toggle-mini">
 									<XBtn
 										dimmed
 										plain
@@ -310,7 +310,7 @@ export const XSidebar = memo(
 								</div>
 							)}
 							{toggle && belowBreakpoint && (
-								<div className="xSidebar-toggle">
+								<div className="x-sidebar-toggle">
 									<XBtn
 										color="accent"
 										rightSection={
@@ -335,7 +335,7 @@ export const XSidebar = memo(
 									onDrag={onHandleDrag}
 									onStop={onHandleDragEnd}
 								>
-									<div className="xSidebar-res"></div>
+									<div className="x-sidebar-res"></div>
 								</DraggableCore>
 							)}
 						</div>

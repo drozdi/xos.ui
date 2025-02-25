@@ -1,7 +1,6 @@
 import classNames from "classnames";
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { Sections } from "../../internal/sections";
-import { useXLayoutContext } from "../layout/XLayoutContext";
 import "./style.css";
 
 export const XHeader = memo(function XHeaderFn({
@@ -9,17 +8,12 @@ export const XHeader = memo(function XHeaderFn({
 	className,
 	...props
 }) {
-	const { $layout } = useXLayoutContext();
-	const isLayout = useMemo(() => !!$layout, [$layout]);
-
 	return (
 		<Sections
 			as="header"
 			square
 			{...props}
-			className={classNames(className, "x-header", {
-				"xLayout-header": isLayout,
-			})}
+			className={classNames("x-header", className)}
 		>
 			{children}
 		</Sections>

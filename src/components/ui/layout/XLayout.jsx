@@ -97,11 +97,16 @@ export function XLayout({
 		});
 	};
 	const footer = () => {
-		return <XFooter>{slot("footer", null)}</XFooter>;
+		return (
+			<XFooter className="x-layout-footer">
+				{slot("footer", null)}
+			</XFooter>
+		);
 	};
 	const header = () => {
 		return (
 			<XHeader
+				className="x-layout-header"
 				leftSection={
 					belowBreakpoint &&
 					hasSlot("left") && (
@@ -161,10 +166,10 @@ export function XLayout({
 
 	const classes = useMemo(
 		() => ({
-			"xLayout--hl": isHl,
-			"xLayout--hr": isHr,
-			"xLayout--fl": isFl,
-			"xLayout--fr": isFr,
+			"x-layout--hl": isHl,
+			"x-layout--hr": isHr,
+			"x-layout--fl": isFl,
+			"x-layout--fr": isFr,
 		}),
 		[isHl, isHr, isFl, isFr]
 	);
@@ -174,7 +179,7 @@ export function XLayout({
 	}, []);
 
 	let layout = (
-		<div className={classNames("xLayout", classes, className)} ref={ref}>
+		<div className={classNames("x-layout", classes, className)} ref={ref}>
 			{hasSlot("left") && left()}
 			{hasSlot("right") && right()}
 			{hasSlot("header") && header()}
@@ -183,7 +188,7 @@ export function XLayout({
 		</div>
 	);
 	if (container) {
-		layout = <div className="xLayout-container">{layout}</div>;
+		layout = <div className="x-layout-container">{layout}</div>;
 	}
 
 	return (
@@ -199,8 +204,8 @@ export function XMain({ children, tag = "section" }) {
 	const TagProp = useMemo(() => tag, [tag]);
 	//const { $layout, $update } = useContext(XLayoutContext)
 	return (
-		<TagProp className="xLayout-main">
-			<div className="xLayout-content">{children}</div>
+		<TagProp className="x-layout-main">
+			<div className="x-layout-content">{children}</div>
 		</TagProp>
 	);
 }
