@@ -19,6 +19,12 @@ export const XStorage = cached(function XStorage(type, key) {
 		sm = settingManager["APP"].sub(key);
 	}
 
+	/*
+	useEffect(() => {
+		smActive = true;
+		return () => sm.remove();
+	}, [sm]);*/
+
 	return {
 		type,
 		key,
@@ -55,7 +61,7 @@ export const XStorage = cached(function XStorage(type, key) {
 			useEffect(() => {
 				this.set(name, state);
 			}, [state]);
-			return [state, setState]; //*/
+			return [state, setState];
 		},
 	};
 });
@@ -103,10 +109,6 @@ export function useXStorage(type, key) {
 	} else if (key === "core") {
 		sm = settingManager["APP"].sub(key);
 	}
-	useEffect(() => {
-		smActive = true;
-		return () => sm.remove();
-	}, []);
 
 	return {
 		active(active = true) {

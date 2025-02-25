@@ -15,7 +15,7 @@ import "./style/index.css";
 
 function App() {
 	return (
-		<AppProvider config={{ smKey: "app-1" }}>
+		<AppProvider smKey="app-1">
 			<XWindow title="Title">
 				<XLayout container overlay toggle view="lhr lpr lff">
 					{{

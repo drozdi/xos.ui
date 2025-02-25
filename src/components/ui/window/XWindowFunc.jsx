@@ -1,13 +1,6 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import {
-	forwardRef,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useRef } from "react";
 import { DraggableCore } from "react-draggable";
 import { Resizable } from "react-resizable";
 import { useApp } from "../../app/hooks/useApp";
@@ -89,8 +82,8 @@ export const XWindow = forwardRef(function XWindowFn(
 		width: w,
 		height: h,
 	});
-	const [isFullscreen, setFullscreen] = useState(false);
-	const [isCollapse, setCollapse] = useState(false);
+	const [isFullscreen, setFullscreen] = $s.useState("isFullscreen", false);
+	const [isCollapse, setCollapse] = $s.useState("isCollapse", false);
 
 	const canDo = useCallback((type) => icons.includes(type), [icons]);
 
