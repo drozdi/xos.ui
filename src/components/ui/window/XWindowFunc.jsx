@@ -106,7 +106,6 @@ export const XWindow = forwardRef(function XWindowFn(
 	const onCollapse = (event) => {
 		setCollapse((v) => !v);
 	};
-
 	useEffect(() => {
 		$s.active = true;
 		return () => $s.remove();

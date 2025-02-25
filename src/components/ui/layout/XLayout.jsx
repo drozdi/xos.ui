@@ -76,7 +76,7 @@ export function XLayout({
 			//resizeable: true,
 			onMini: (mini) => setLs({ ...ls, mini }),
 			onResize: (width) => setLs({ ...ls, width }),
-			//onToggle: (open) => setLs({ ...ls, open }),
+			//onToggle: (open) => setLs({ ...ls, open }),*/
 		});
 	};
 	const right = () => {
@@ -85,7 +85,7 @@ export function XLayout({
 			open: rs.open,
 			overlay: overlay,
 			breakpoint: breakpoint,
-			toggle: belowBreakpoint,
+			//toggle: belowBreakpoint,
 			mini: rs.mini,
 			miniOverlay: overlay || belowBreakpoint,
 			miniMouse: overlay && toggle,
@@ -172,6 +172,7 @@ export function XLayout({
 		$s.active = true;
 		return () => $s.remove();
 	}, []);
+
 	let layout = (
 		<div className={classNames("xLayout", classes, className)} ref={ref}>
 			{hasSlot("left") && left()}

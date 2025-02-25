@@ -123,7 +123,12 @@ export const XSidebar = memo(
 		);
 
 		const canResized = useMemo(
-			() => resizeable && !innerEvents && !isMini && !belowBreakpoint,
+			() =>
+				false &&
+				resizeable &&
+				!innerEvents &&
+				!isMini &&
+				!belowBreakpoint,
 			[resizeable, innerEvents, isMini, belowBreakpoint]
 		);
 
@@ -151,7 +156,7 @@ export const XSidebar = memo(
 						: width
 					: 0,
 			}),
-			[width, isOpen, isMini, miniWidth, w, belowBreakpoint]
+			[width, isOpen, isMini, belowBreakpoint, w]
 		);
 
 		useEffect(() => {
@@ -181,7 +186,7 @@ export const XSidebar = memo(
 			};
 		}, [miniMouse, miniToggle, belowBreakpoint]);
 
-		useEffect(() => onMini?.(isMini), [onMini, isMini]);
+		useEffect(() => onMini?.(isMini), [isMini]);
 
 		const onHandleDrag = useCallback(
 			(e, ui) => {
@@ -200,7 +205,7 @@ export const XSidebar = memo(
 				setWidth(width);
 				onResize?.(width);
 			},
-			[innerRef, onResize, miniWidth]
+			[innerRef.current, miniWidth]
 		);
 		const onMouseEnter = useCallback(
 			(e) => {
@@ -226,7 +231,7 @@ export const XSidebar = memo(
 				return;
 			}
 			setOpenBreakpoint((v) => !v);
-		}, [onToggle, width, isOpen, isMini]);
+		}, [width, isOpen, isMini]);
 
 		const onHandleMiniToggle = useCallback(() => {
 			if (
@@ -240,8 +245,7 @@ export const XSidebar = memo(
 				return;
 			}
 			setInnerMini((m) => !m);
-		}, [onToggle, width, isOpen, isMini]);
-
+		}, [width, isOpen, isMini]);
 		useEffect(() => setMounted(true), []);
 
 		return (
