@@ -71,7 +71,7 @@ export function XLayout({
 			open: ls.open,
 			overlay: overlay,
 			breakpoint: breakpoint,
-			toggle: belowBreakpoint,
+			//toggle: belowBreakpoint,
 			mini: ls.mini,
 			miniOverlay: overlay || belowBreakpoint,
 			miniMouse: overlay && toggle,

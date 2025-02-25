@@ -255,6 +255,7 @@ export const XSidebar = memo(
 			setInnerMini((m) => !m);
 		}, [onToggle]);
 		useEffect(() => setMounted(true), []);
+
 		return (
 			<>
 				<XSidebarContext.Provider value={{ width, isMini, isOpen }}>
@@ -349,7 +350,9 @@ export const XSidebar = memo(
 					</div>
 				</XSidebarContext.Provider>
 				{true && (
-					<div className="fixed bg-black/50 text-white right-0 top-12 p-4 z-10">
+					<div className="fixed transition-all duration-200 ease-in-out bg-black/50 text-white w-54 -right-50 has-checked:right-0 hover:right-0 top-12 p-4 z-50">
+						fre: <input type="checkbox" />
+						<br />
 						breakpoint: {breakpoint} - {$layout.width}
 						<br />
 						isOpen: {isOpen ? "true" : "false"}

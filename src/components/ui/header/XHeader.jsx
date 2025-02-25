@@ -15,6 +15,7 @@ export const XHeader = memo(function XHeaderFn({
 	return (
 		<Sections
 			as="header"
+			square
 			{...props}
 			className={classNames(className, "x-header", {
 				"xLayout-header": isLayout,
