@@ -107,7 +107,10 @@ export const XWindow = forwardRef(function XWindowFn(
 		setCollapse((v) => !v);
 	};
 
-	useEffect(() => ($s.active = true), []);
+	useEffect(() => {
+		$s.active = true;
+		return () => $s.remove();
+	}, []);
 
 	const mixIcons = useMemo(
 		() => (

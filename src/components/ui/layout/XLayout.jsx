@@ -27,8 +27,6 @@ export function XLayout({
 		}),
 		header: { size: 0, offset: 0, space: false },
 		footer: { size: 0, offset: 0, space: false },
-		left: { size: 300, offset: 0, space: false, open: true, mini: true },
-		right: { size: 300, offset: 0, space: false, open: true, mini: true },
 		width: 0,
 	});
 	const belowBreakpoint = useMemo(
@@ -37,16 +35,15 @@ export function XLayout({
 	);
 	const $s = useApp().$sm("LAYOUT");
 	const [ls, setLs] = $s.useState("left", {
-		size: 300,
+		width: 300,
 		open: true,
 		mini: true,
 	});
 	const [rs, setRs] = $s.useState("right", {
-		size: 300,
+		width: 300,
 		open: true,
 		mini: true,
 	});
-	useEffect(() => ($s.active = true), []);
 	const $update = (part, prop, val) => {
 		if ($layout[part][prop] !== val) {
 			set$layout((v) => ({
@@ -78,7 +75,7 @@ export function XLayout({
 			miniToggle: toggle && !belowBreakpoint,
 			//resizeable: true,
 			onMini: (mini) => setLs({ ...ls, mini }),
-			onResize: (size) => setLs({ ...ls, size }),
+			onResize: (width) => setLs({ ...ls, width }),
 			//onToggle: (open) => setLs({ ...ls, open }),
 		});
 	};
@@ -95,8 +92,8 @@ export function XLayout({
 			miniToggle: toggle && !belowBreakpoint,
 			//resizeable: true,
 			onMini: (mini) => setRs({ ...rs, mini }),
-			onResize: (size) => setRs({ ...rs, size }),
-			//onToggle: (open) => setRs({...rs, open}),
+			onResize: (width) => setRs({ ...rs, width }),
+			//onToggle: (open) => setRs({ ...rs, open }),
 		});
 	};
 	const footer = () => {
@@ -171,7 +168,10 @@ export function XLayout({
 		}),
 		[isHl, isHr, isFl, isFr]
 	);
-
+	useEffect(() => {
+		$s.active = true;
+		return () => $s.remove();
+	}, []);
 	let layout = (
 		<div className={classNames("xLayout", classes, className)} ref={ref}>
 			{hasSlot("left") && left()}
