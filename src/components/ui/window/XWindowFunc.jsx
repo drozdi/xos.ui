@@ -1,8 +1,17 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { forwardRef, useCallback, useEffect, useMemo, useRef } from "react";
+import {
+	forwardRef,
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useMemo,
+	useRef,
+} from "react";
 import { DraggableCore } from "react-draggable";
 import { Resizable } from "react-resizable";
+import { getComputedSize } from "../../../utils/domFns";
+import { minMax } from "../../../utils/fns";
 import { useApp } from "../../app/hooks/useApp";
 import { Box } from "../../internal/box";
 import { XBtn } from "../btn/XBtn";
@@ -59,6 +68,8 @@ const changeHandle = {
 
 export const XWindow = forwardRef(function XWindowFn(
 	{
+		parent = document.body,
+		aspectFactor,
 		children,
 		className,
 		x = 0,
@@ -203,6 +214,72 @@ export const XWindow = forwardRef(function XWindowFn(
 		}));
 	}, []);
 	const onResizeStop = useCallback(() => {}, []);
+	useImperativeHandle(ref, () => ({
+		get position() {
+			return position;
+		},
+		set position(value) {
+			setPosition((v) => ({
+				...v,
+				...(value || {}),
+			}));
+		},
+		get isFullscreen() {
+			return isFullscreen;
+		},
+		set isFullscreen(val) {
+			setFullscreen(val);
+		},
+		get isCollapse() {
+			return isCollapse;
+		},
+		set isCollapse(val) {
+			setCollapse(val);
+		},
+		get w() {
+			return position.width;
+		},
+		set w(val) {
+			if (!val) {
+				return;
+			}
+			const pos = { ...position };
+			if (isString(val) && val.substr(-1) === "%") {
+				val = Math.ceil(
+					(getComputedSize(parent)[0] * parseInt(val, 10)) / 100
+				);
+			}
+			pos.width = minMax(val, 0, 10000);
+			if (aspectFactor) {
+				pos.height = pos.width * aspectFactor;
+			}
+			setPosition(pos);
+		},
+		get h() {
+			return position.height;
+		},
+		set h(val) {
+			if (!val) {
+				return;
+			}
+			const pos = { ...position };
+			if (isString(val) && val.substr(-1) === "%") {
+				val = Math.ceil(
+					(getComputedSize(parent)[1] * parseInt(val, 10)) / 100
+				);
+			}
+			pos.height = minMax(val, 0, 10000);
+			if (aspectFactor) {
+				pos.width = pos.height / aspectFactor;
+			}
+			setPosition(pos);
+		},
+		/*show,
+		replace,
+		clear,
+		getElement: () => containerRef.current,*/
+	}));
+
 	return (
 		<DraggableCore
 			disabled={!draggable && isFullscreen}
@@ -262,6 +339,7 @@ export const XWindow = forwardRef(function XWindowFn(
 });
 
 XWindow.propTypes = {
+	parent: PropTypes.any,
 	children: PropTypes.node,
 	className: PropTypes.string,
 	x: PropTypes.number,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AppProvider } from "./components/app";
 import { routers } from "./components/example";
@@ -17,9 +17,11 @@ import "./style/index.css";
 function App() {
 	const [view, setView] = useState();
 	const [path, setPath] = useState();
+	const win = useRef();
+	useEffect(() => console.log(win), [win]);
 	return (
 		<AppProvider smKey="app-1">
-			<XWindow title="Title">
+			<XWindow title="Title" ref={win}>
 				<XLayout container overlay toggle view="lhr lpr lff">
 					{{
 						left: (props) => {

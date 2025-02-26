@@ -2,7 +2,6 @@ import {
 	cloneElement,
 	createContext,
 	createElement,
-	forwardRef,
 	Fragment,
 	useContext,
 } from "react";
@@ -26,7 +25,8 @@ export function useRenderContext() {
 }
 
 export function forwardRefWithAs(component) {
-	return Object.assign(forwardRef(component), {
+	//return Object.assign(forwardRef(component), {
+	return Object.assign(component, {
 		displayName: component.displayName ?? component.name,
 	});
 }
