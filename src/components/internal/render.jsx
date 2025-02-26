@@ -7,9 +7,10 @@ import {
 	useContext,
 } from "react";
 import { isFunction } from "../../utils/is";
+import { XLink } from "../ui/link";
 
 const RenderContext = createContext({
-	render: ({ as, to }) => (!!to ? "a" : as),
+	render: ({ as, to }) => (!!to ? XLink : as),
 });
 
 export function RenderProvider({ children, ...contextValues }) {

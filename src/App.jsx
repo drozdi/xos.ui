@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AppProvider } from "./components/app";
 import { routers } from "./components/example";
@@ -7,24 +8,32 @@ import {
 	XItem,
 	XItemLabel,
 	XItemSection,
+	XLayout,
 	XList,
 	XWindow,
 } from "./components/ui";
-import { XLayout } from "./components/ui/layout";
 import "./style/index.css";
 
 function App() {
+	const [view, setView] = useState();
+	const [path, setPath] = useState();
 	return (
 		<AppProvider smKey="app-1">
 			<XWindow title="Title">
 				<XLayout container overlay toggle view="lhr lpr lff">
 					{{
 						left: (props) => {
-							//return "left";
 							return (
 								<XList separator>
 									{routers.map((item, index) => (
-										<XItem key={index} to={item.path}>
+										<XItem
+											key={index}
+											onClick={() => {
+												setView(item.element);
+												setPath(item.path);
+											}}
+											active={item.path === path}
+										>
 											<XItemSection side>
 												<XIcon>{item.icon}</XIcon>
 											</XItemSection>
@@ -42,17 +51,7 @@ function App() {
 						//header: "header",
 						footer: "footer",
 						//right: 'right',
-						default: (props) => (
-							<Routes>
-								{routers.map((item, index) => (
-									<Route
-										key={index}
-										path={item.path}
-										element={item.element}
-									/>
-								))}
-							</Routes>
-						),
+						default: (props) => view,
 					}}
 				</XLayout>
 			</XWindow>

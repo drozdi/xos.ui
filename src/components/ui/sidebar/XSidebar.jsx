@@ -76,6 +76,7 @@ export const XSidebar = memo(
 		const innerRef = useRef();
 		const handleRef = useForkRef(innerRef, ref);
 		const { $layout, $update } = useXLayoutContext();
+
 		const isLayout = useMemo(() => !!$layout, [$layout]);
 
 		const [width, setWidth] = useState(w);
@@ -90,7 +91,7 @@ export const XSidebar = memo(
 			() =>
 				(breakpoint && isLayout && $layout?.width < breakpoint) ||
 				false,
-			[$layout, breakpoint, isLayout]
+			[$layout.width, breakpoint, isLayout]
 		);
 		const innerEvents = useMemo(
 			() => !belowBreakpoint && (miniMouse || miniToggle),
@@ -402,23 +403,3 @@ XSidebar.propTypes = {
 	onMini: PropTypes.func,
 	onToggle: PropTypes.func,
 };
-/*XSidebar.defaultProps = {
-	children: "",
-	className: "",
-	w: 256,
-	type: "left",
-	mini: false,
-	miniOverlay: false,
-	miniToggle: false,
-	miniMouse: false,
-	miniW: undefined,
-	open: false,
-	overlay: false,
-	toggle: false,
-
-	breakpoint: null,
-	resizeable: false,
-	onResize: () => {},
-	onMini: () => {},
-	onToggle: () => {},
-};//*/

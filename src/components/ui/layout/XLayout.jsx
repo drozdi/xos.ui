@@ -14,19 +14,17 @@ import { XLayoutProvider } from "./XLayoutContext";
 export function XLayout({
 	children,
 	className,
-	container = false,
+	container,
 	view = "hhh lpr fff",
 	breakpoint = 600,
-	overlay = false,
-	toggle = false,
+	overlay,
+	toggle,
 }) {
 	const [$layout, set$layout] = useState({
 		isContainer: container,
 		rows: view.split(" ").map((row) => {
 			return row.split("");
 		}),
-		header: { size: 0, offset: 0, space: false },
-		footer: { size: 0, offset: 0, space: false },
 		width: 0,
 	});
 	const belowBreakpoint = useMemo(
@@ -55,6 +53,7 @@ export function XLayout({
 			}));
 		}
 	};
+
 	const ref = useResizeObserver((target, entry) => {
 		if ($layout.width !== target.offsetWidth) {
 			set$layout((v) => ({ ...v, width: target.offsetWidth }));
@@ -97,16 +96,11 @@ export function XLayout({
 		});
 	};
 	const footer = () => {
-		return (
-			<XFooter className="x-layout-footer">
-				{slot("footer", null)}
-			</XFooter>
-		);
+		return <XFooter>{slot("footer", null)}</XFooter>;
 	};
 	const header = () => {
 		return (
 			<XHeader
-				className="x-layout-header"
 				leftSection={
 					belowBreakpoint &&
 					hasSlot("left") && (
@@ -193,7 +187,7 @@ export function XLayout({
 
 	return (
 		<>
-			<XLayoutProvider value={{ $layout, $update }}>
+			<XLayoutProvider value={{ $layout, $update, setLs, setRs }}>
 				{layout}
 			</XLayoutProvider>
 		</>
