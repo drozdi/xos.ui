@@ -5,6 +5,7 @@ import { useWM } from "./store";
 export const WindowManager = memo(
 	forwardRef(function WindowManagerFn({}, ref) {
 		const wmStack = useWM();
+		console.log(wmStack);
 		const stack = useMemo(() => Object.values(wmStack.stack), [wmStack]);
 		return (
 			<XBtn.Group size="lg" square separator>

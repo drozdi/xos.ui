@@ -96,8 +96,6 @@ export const XWindow = forwardRef(function XWindowFn(
 	const $sm = $app.sm("WINDOW");
 	const wmStack = useWM();
 
-	console.log(wmStack);
-
 	const [position, setPosition] = $sm.useState("position", {
 		top: y,
 		left: x,

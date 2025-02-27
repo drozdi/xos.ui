@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export const useWM = create((set, get) => ({
 	zIndex: 100,
-	current: null,
+	current: undefined,
 	stack: {},
 	stacks: {},
 	setZIndex: (zIndex) => set({ zIndex }),
@@ -10,7 +10,7 @@ export const useWM = create((set, get) => ({
 		set({ current: win.uid });
 	},
 	disable: () => {
-		set({ current: null });
+		set({ current: undefined });
 	},
 	isActive: (win) => {
 		return get().current === win.uid;
