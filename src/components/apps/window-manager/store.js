@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 export const useWM = create((set, get) => ({
 	zIndex: 100,
 	current: null,
@@ -6,7 +7,7 @@ export const useWM = create((set, get) => ({
 	stacks: {},
 	setZIndex: (zIndex) => set({ zIndex }),
 	active: (win) => {
-		get().current = win.uid;
+		set({ current: win.uid });
 	},
 	disable: () => {
 		set({ current: null });

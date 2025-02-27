@@ -1,2 +1,2 @@
-export * from "./stack";
+export * from "./store";
 export * from "./window-manager";
