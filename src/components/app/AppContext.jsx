@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 
 export const AppContext = createContext({
-	$sm() {
+	sm() {
 		return {
 			active: false,
 			set(key, val) {
@@ -21,5 +21,8 @@ export const AppContext = createContext({
 				return useState(initial);
 			},
 		};
+	},
+	$sm() {
+		return this.sm();
 	},
 });
