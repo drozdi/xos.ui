@@ -34,6 +34,7 @@ export const Sections = forwardRefWithAs(function Box(
 	{
 		className,
 		bodyClass,
+		noPadding,
 		col,
 		noWrap,
 		dense,
@@ -58,6 +59,7 @@ export const Sections = forwardRefWithAs(function Box(
 					"x-box--dense": dense,
 					"x-box--square": square,
 					"x-box--no-wrap": noWrap,
+					"x-box--no-padding": noPadding,
 					[`x-box--${size}`]: size,
 				},
 				isFunction(className) ? className?.(...args) : className

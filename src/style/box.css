@@ -1,7 +1,4 @@
 .x-box {
-	--imput-padding: calc(var(--spacing) * 2);
-	--input-padding-start: var(--imput-padding);
-	--input-padding-end: var(--imput-padding);
 	@apply rounded;
 }
 
@@ -54,6 +51,9 @@
 
 .x-box-section--row {
 	@apply flex-row;
+}
+.x-box--no-padding {
+	@apply !gap-0 !px-0 !py-0;
 }
 
 .x-box-section--no-padding:is(:last-child) {

@@ -13,7 +13,7 @@ import { Resizable } from "react-resizable";
 import { getComputedSize } from "../../../utils/domFns";
 import { minMax } from "../../../utils/fns";
 import { useApp } from "../../app/hooks/useApp";
-import { stack as wmStack } from "../../apps/window-manager";
+import { useWM } from "../../apps/window-manager";
 import { useId } from "../../hooks/useId";
 import { Box } from "../../internal/box";
 import { XBtn } from "../btn/XBtn";
@@ -94,6 +94,9 @@ export const XWindow = forwardRef(function XWindowFn(
 	const uid = useId();
 	const $app = useApp();
 	const $sm = $app.sm("WINDOW");
+	const wmStack = useWM();
+
+	console.log(wmStack);
 
 	const [position, setPosition] = $sm.useState("position", {
 		top: y,
@@ -399,6 +402,9 @@ export const XWindow = forwardRef(function XWindowFn(
 			get element() {
 				return nodeRef.current;
 			},
+			get title() {
+				return title;
+			},
 		}),
 		[]
 	);
@@ -411,6 +417,7 @@ export const XWindow = forwardRef(function XWindowFn(
 			parseInt(position.zIndex, 10) || 0
 		);
 		win.z = ++wmStack.zIndex;
+		wmStack.setZIndex(win.z);
 		wmStack.add(win);
 		return () => $sm.remove();
 	}, []);

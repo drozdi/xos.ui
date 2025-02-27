@@ -95,8 +95,9 @@ export function XLayout({
 			//onToggle: (open) => setRs({ ...rs, open }),
 		});
 	};
+
 	const footer = () => {
-		return <XFooter>{slot("footer", null)}</XFooter>;
+		return <XFooter noPadding>{slot("footer", null)}</XFooter>;
 	};
 	const header = () => {
 		return (
