@@ -1,17 +1,13 @@
 import "@mdi/font/css/materialdesignicons.min.css";
 import "@style";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, NavLink } from "react-router-dom";
 import App from "./App.jsx";
-import { ThemeProvider } from "./components/hooks/useTheme";
-import { RenderProvider } from "./components/internal/render";
+import { ThemeProvider } from "./shared/hooks/useTheme";
 
-createRoot(document.getElementById("root")).render(
+const app = createRoot(document.getElementById("root"));
+console.log(app);
+app.render(
 	<ThemeProvider>
-		<BrowserRouter>
-			<RenderProvider render={({ as, to }) => (!!to ? NavLink : as)}>
-				<App />
-			</RenderProvider>
-		</BrowserRouter>
+		<App />
 	</ThemeProvider>
 );

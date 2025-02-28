@@ -9,8 +9,8 @@ export default defineConfig({
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
 			"@style": path.resolve(__dirname, "./src/style/index.css"),
-			"@ui": path.resolve(__dirname, "./src/components/ui"),
-			"@hooks": path.resolve(__dirname, "./src/components/hooks"),
+			"@ui": path.resolve(__dirname, "./src/shared/ui"),
+			"@hooks": path.resolve(__dirname, "./src/shared/hooks"),
 		},
 	},
 	plugins: [react(), tailwindcss()],
