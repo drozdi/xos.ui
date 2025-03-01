@@ -16,13 +16,35 @@ export function XLayout({
 	overlay,
 	toggle,
 }) {
+	const [width, setWidth] = useState(0);
+	const ctx = useMemo(
+		() => ({
+			get container() {
+				return container;
+			},
+			get width() {
+				return width;
+			},
+			set width(width) {
+				setWidth(width);
+			},
+			breakpoint,
+			rows: view.split(" ").map((row) => {
+				return row.split("");
+			}),
+		}),
+		[container, width, breakpoint, view]
+	);
+
 	const [$layout, set$layout] = useState({
 		isContainer: container,
+		instances: {},
 		rows: view.split(" ").map((row) => {
 			return row.split("");
 		}),
 		width: 0,
 	});
+
 	const belowBreakpoint = useMemo(
 		() => (breakpoint && $layout.width < breakpoint) || false,
 		[$layout, breakpoint]
