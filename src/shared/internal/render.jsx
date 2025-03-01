@@ -1,16 +1,28 @@
+import PropTypes from "prop-types";
 import {
 	cloneElement,
 	createContext,
 	createElement,
+	forwardRef,
 	Fragment,
 	useContext,
+	useMemo,
 } from "react";
 import { isFunction } from "../../utils/is";
 
+/**
+ * Контекст с типами по умолчанию
+ * @type {React.Context}
+ */
 const RenderContext = createContext({
 	render: ({ as, to }) => (!!to ? "a" : as),
 });
 
+/**
+ * Провайдер с проверкой пропсов
+ * @param {*} props - Пропсы для провайдера
+ * @returns
+ */
 export function RenderProvider({ children, ...contextValues }) {
 	return (
 		<RenderContext.Provider value={contextValues}>
@@ -18,23 +30,55 @@ export function RenderProvider({ children, ...contextValues }) {
 		</RenderContext.Provider>
 	);
 }
+RenderProvider.propTypes = {
+	children: PropTypes.node.isRequired,
+	render: PropTypes.func, // Добавляем проверку типа для функции render
+};
 
+/**
+ * Хук для использования контекста рендеринга
+ * @returns {*} - Контекст рендеринга
+ */
 export function useRenderContext() {
 	return useContext(RenderContext);
 }
 
+/**
+ * Функция для обвертки ref и as
+ * @param {*} component - Компонент, который нужно обернуть
+ * @returns {*} - Обернутый компонент
+ */
 export function forwardRefWithAs(component) {
-	//return Object.assign(forwardRef(component), {
-	return Object.assign(component, {
+	const ForwardedComponent = Object.assign(forwardRef(component), {
 		displayName: component.displayName ?? component.name,
 	});
+
+	ForwardedComponent.propTypes = {
+		as: PropTypes.elementType, // Проверка типа для as
+		to: PropTypes.string, // Проверка типа для to
+	};
+
+	return ForwardedComponent;
 }
 
+/**
+ * Функция для применения контекста к пропсам
+ * @param props - Пропсы компонента
+ * @returns {*} - Пропсы с учетом контекста
+ * */
 function applyContextToProps(props) {
 	const { render = ({ as }) => as, ...contextValues } = useRenderContext();
 	return { ...contextValues, ...props, as: render(props), render: undefined };
 }
 
+/**
+ * Основная функция рендеринга с улучшениями
+ *
+ * @param {*} tag - Тег или компонент, который нужно отрендерить
+ * @param {*} props - Пропсы для компонента
+ * @param {*} state - Состояние компонента
+ * @returns {ReactElement} - Результат рендеринга
+ */
 export function render(tag, props, state) {
 	let {
 		as: Component = tag,
@@ -43,16 +87,18 @@ export function render(tag, props, state) {
 		...rest
 	} = applyContextToProps(props);
 
+	// Условный рендеринг
 	if (_if?.(state) === false) {
 		return null;
 	}
 
+	// Если компонент не указан, возвращаем null
 	if (!Component) {
 		return null;
 	}
 
-	/*const memoizedRest = useMemo(() => {
-		const result = { ...(rest || {}) };
+	const memoizedRest = useMemo(() => {
+		const result = { ...rest };
 		["className", "style"].forEach((key) => {
 			if (key in rest && rest[key] && isFunction(rest[key])) {
 				if (Component.render) {
@@ -71,30 +117,8 @@ export function render(tag, props, state) {
 			result["aria-labelledby"] = undefined;
 		}
 
-		console.log(result);
-
 		return result;
-	}, [Component, rest, state]);*/
-
-	const memoizedRest = { ...(rest || {}) };
-	["className", "style"].forEach((key) => {
-		if (key in rest && rest[key] && isFunction(rest[key])) {
-			if (Component.render) {
-				memoizedRest[key] = (arg) =>
-					rest[key]({ ...arg, ...state }, rest);
-			} else {
-				memoizedRest[key] = rest[key]?.(state || {}, rest);
-			}
-		}
-	});
-
-	if (
-		memoizedRest["aria-labelledby"] &&
-		memoizedRest["aria-labelledby"] === memoizedRest.id
-	) {
-		memoizedRest["aria-labelledby"] = undefined;
-	}
-	//*/
+	}, [Component, rest, state]);
 
 	let resolvedChildren = isFunction(children) ? children(state) : children;
 
@@ -120,3 +144,9 @@ export function render(tag, props, state) {
 
 	return createElement(Component, memoizedRest, resolvedChildren);
 }
+
+render.propTypes = {
+	tag: PropTypes.elementType.isRequired,
+	props: PropTypes.object.isRequired,
+	state: PropTypes.object,
+};

@@ -58,11 +58,15 @@ Box.propTypes = {
 
 /**
  * Компонент для создания разделов.
+ *
  * @param {Object} props - Параметры компонента.
  * @param {string} [props.className] - Дополнительные классы CSS.
  * @param {boolean} [props.top] - Выравнивание по верху.
+ * @param {boolean} [props.row] - Горизонтальный элемент.
  * @param {boolean} [props.side] - Боковой элемент.
  * @param {boolean} [props.noWrap] - Запрет переноса текста.
+ * @param {boolean} [props.noPadding] - Отключение отступов.
+ *
  * @param {any} ref - Референс компонента.
  * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
  * */
@@ -86,16 +90,18 @@ Box.Section = forwardRefWithAs(function Section(
 		ref,
 	});
 });
-
 Box.Section.propTypes = {
 	className: PropTypes.string,
 	top: PropTypes.bool,
 	side: PropTypes.bool,
+	row: PropTypes.bool,
+	noPadding: PropTypes.bool,
 	noWrap: PropTypes.bool,
 };
 
 /**
  * Компонент для создания заголовков.
+ *
  * @param {Object} props - Параметры компонента.
  * @param {string} [props.className] - Дополнительные классы CSS.
  * @param {number} [props.level] - Уровень заголовка.
@@ -124,9 +130,16 @@ Box.Header = forwardRefWithAs(function Header(
 		ref,
 	});
 });
+Box.Header.propTypes = {
+	className: PropTypes.string,
+	level: PropTypes.oneOf([1, 2, 3, 4, 5, 6]),
+	top: PropTypes.bool,
+	noWrap: PropTypes.bool,
+};
 
 /**
  * Компонент для создания заголовков.
+ *
  * @param {Object}
  * @param {string} [props.className] - Дополнительные классы CSS.
  * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
@@ -142,9 +155,13 @@ Box.Title = forwardRefWithAs(function Title({ className, ...props }, ref) {
 		ref,
 	});
 });
+Box.Title.propTypes = {
+	className: PropTypes.string,
+};
 
 /**
  * Компонент для создания подзаголовков.
+ *
  * @param {Object} props - Параметры компонента.
  * @param {string} [props.className] - Дополнительные классы CSS.
  * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
@@ -161,3 +178,6 @@ Box.Subtitle = forwardRefWithAs(function Subtitle(
 		ref,
 	});
 });
+Box.Subtitle.propTypes = {
+	className: PropTypes.string,
+};
