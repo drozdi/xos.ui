@@ -1,13 +1,13 @@
 //todo add styles label over border
-import PropTypes from 'prop-types';
-import { forwardRef, memo, useMemo } from 'react';
-import { isString } from '../../../utils/is';
-import { useId } from '../../hooks/useId';
-import { render } from '../../internal/render';
-import { XIcon } from '../icon';
-import './style.css';
-import { useXInputControlContext } from './XInputControlContext';
-import { XInputLabel } from './XInputLabel';
+import PropTypes from "prop-types";
+import { forwardRef, memo, useMemo } from "react";
+import { useId } from "../../hooks/useId";
+import { render } from "../../internal/render";
+import { isString } from "../../utils/is";
+import { XIcon } from "../icon";
+import "./style.css";
+import { useXInputControlContext } from "./XInputControlContext";
+import { XInputLabel } from "./XInputLabel";
 
 export const XInputBase = memo(
 	forwardRef(function XInputBaseFn(
@@ -20,7 +20,7 @@ export const XInputBase = memo(
 			rightSection: propsRightSection,
 			...other
 		},
-		ref,
+		ref
 	) {
 		const ctx = useXInputControlContext();
 		const uid = useId(ctx?.inputId || id);
@@ -31,7 +31,7 @@ export const XInputBase = memo(
 				) : (
 					propsLeftSection
 				),
-			[propsLeftSection],
+			[propsLeftSection]
 		);
 		const rightSection = useMemo(
 			() =>
@@ -40,7 +40,7 @@ export const XInputBase = memo(
 				) : (
 					propsRightSection
 				),
-			[propsRightSection],
+			[propsRightSection]
 		);
 
 		return (
@@ -61,15 +61,15 @@ export const XInputBase = memo(
 				<div className="x-input-underlined"></div>
 
 				{render(
-					'input',
+					"input",
 					{
 						...other,
 						id: uid,
 						required,
-						className: 'x-input-native',
+						className: "x-input-native",
 						ref,
 					},
-					{ required },
+					{ required }
 				)}
 
 				<XInputLabel
@@ -86,7 +86,7 @@ export const XInputBase = memo(
 				)}
 			</div>
 		);
-	}),
+	})
 );
 
 XInputBase.propTypes = {

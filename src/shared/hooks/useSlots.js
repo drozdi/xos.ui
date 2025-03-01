@@ -4,9 +4,9 @@ import {
 	createElement as h,
 	isValidElement,
 	useMemo,
-} from 'react';
+} from "react";
 
-import { isString } from '../../utils/is';
+import { isString } from "../utils/is";
 
 export function useSlots(children) {
 	const slots = useMemo(() => {
@@ -30,9 +30,9 @@ export function useSlots(children) {
 
 		for (const child of tmpChildren) {
 			if (isValidElement(child)) {
-				addCollect(child?.props?.slot || 'default', child);
+				addCollect(child?.props?.slot || "default", child);
 			} else if (isString(child)) {
-				addCollect('default', child);
+				addCollect("default", child);
 			} else {
 				for (const name in child) {
 					addCollect(name, child[name]);
@@ -43,17 +43,19 @@ export function useSlots(children) {
 		return collect;
 	}, [children]);
 
-	const slot = (name = '', defaultChildren = [], ...args) => {
-		name ||= 'default';
+	const slot = (name = "", defaultChildren = [], ...args) => {
+		name ||= "default";
 
 		const children =
 			slots[name] ??
-			(Array.isArray(defaultChildren) ? defaultChildren : [defaultChildren]);
+			(Array.isArray(defaultChildren)
+				? defaultChildren
+				: [defaultChildren]);
 
 		function genSlot(child, ...args) {
 			if (isValidElement(child)) {
 				return child;
-			} else if (typeof child === 'function') {
+			} else if (typeof child === "function") {
 				return child(...args);
 			} else {
 				return child;
@@ -66,7 +68,7 @@ export function useSlots(children) {
 				{},
 				children.map((child) => {
 					return genSlot(child, ...args);
-				}),
+				})
 			);
 		}
 		return genSlot(children[0], ...args);

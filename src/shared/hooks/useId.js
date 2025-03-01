@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { randomId } from '../../utils/id';
-import { isString } from '../../utils/is';
+import { useState } from "react";
+import { randomId } from "../utils/id";
+import { isString } from "../utils/is";
 
 export function useId(staticId) {
 	const [uuid, setUuid] = useState(randomId());

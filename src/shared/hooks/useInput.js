@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { debounce } from '../../utils/debounce';
-import { extractEventHandlers } from '../internal/events/extract-event-handlers';
-import { useForkRef } from './useForkRef';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { extractEventHandlers } from "../internal/events/extract-event-handlers";
+import { debounce } from "../utils/debounce";
+import { useForkRef } from "./useForkRef";
 const validation = (value, rules = []) => {
 	return rules.map((rule) => rule(value)).filter((v) => v !== true);
 };
@@ -16,9 +16,11 @@ export const useInput = (
 		lazyRules = false,
 		...other
 	},
-	externalRef,
+	externalRef
 ) => {
-	const [value, setValue] = useState(multiple ? [].concat(initialValue) : initialValue);
+	const [value, setValue] = useState(
+		multiple ? [].concat(initialValue) : initialValue
+	);
 	const [dirty, setDirty] = useState(false);
 	const [isValid, setIsValid] = useState(true);
 
@@ -28,7 +30,9 @@ export const useInput = (
 		...extractEventHandlers(other),
 	};
 
-	const [errors, setErrors] = useState(!lazyRules ? validation(value, rules) : []);
+	const [errors, setErrors] = useState(
+		!lazyRules ? validation(value, rules) : []
+	);
 
 	const error = useMemo(() => errors.length > 0, [errors]);
 
@@ -80,13 +84,13 @@ export const useInput = (
 		disabled,
 		inputRef,
 		attrs: {
-			'aria-invalid': error || undefined,
-			'aria-required': required || undefined,
-			'aria-errormessage': other['aria-errormessage'],
-			'aria-activedescendant': other['aria-activedescendant'],
-			'aria-autocomplete': other['aria-autocomplete'],
-			'aria-haspopup': other['aria-haspopup'],
-			'aria-controls': other['aria-controls'],
+			"aria-invalid": error || undefined,
+			"aria-required": required || undefined,
+			"aria-errormessage": other["aria-errormessage"],
+			"aria-activedescendant": other["aria-activedescendant"],
+			"aria-autocomplete": other["aria-autocomplete"],
+			"aria-haspopup": other["aria-haspopup"],
+			"aria-controls": other["aria-controls"],
 			//value,
 			required,
 			disabled,

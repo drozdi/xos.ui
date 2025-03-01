@@ -1,14 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useResizeObserver } from "../../hooks/useResizeObserver";
-import { useSlots } from "../../hooks/useSlots";
+import { useResizeObserver } from "../../shared/hooks/useResizeObserver";
+import { useSlots } from "../../shared/hooks/useSlots";
 import "./style.css";
 
 import classNames from "classnames";
-import { useApp } from "../../../features/app/hooks/useApp";
-import { XBtn } from "../btn/XBtn";
-import { XFooter } from "../footer/XFooter";
-import { XHeader } from "../header/XHeader";
-import { XSidebar } from "../sidebar/XSidebar";
+import { useApp } from "../app/hooks/useApp";
 import { XLayoutProvider } from "./XLayoutContext";
 
 export function XLayout({
@@ -61,7 +57,7 @@ export function XLayout({
 	});
 
 	const { slot, hasSlot, wrapSlot } = useSlots(children);
-	const left = () => {
+	/*const left = () => {
 		return wrapSlot(slot("left", null), XSidebar, {
 			type: "left",
 			open: ls.open,
@@ -75,7 +71,7 @@ export function XLayout({
 			//resizeable: true,
 			onMini: (mini) => setLs({ ...ls, mini }),
 			onResize: (width) => setLs({ ...ls, width }),
-			//onToggle: (open) => setLs({ ...ls, open }),*/
+			//onToggle: (open) => setLs({ ...ls, open }),
 		});
 	};
 	const right = () => {
@@ -141,7 +137,8 @@ export function XLayout({
 	};
 	const def = () => {
 		return <XMain>{slot("", null)}</XMain>;
-	};
+	};*/
+
 	const isHl = useMemo(
 		() => $layout.rows[0][0] === "l" || !hasSlot("header"),
 		[$layout.rows, hasSlot]
@@ -175,11 +172,7 @@ export function XLayout({
 
 	let layout = (
 		<div className={classNames("x-layout", classes, className)} ref={ref}>
-			{hasSlot("left") && left()}
-			{hasSlot("right") && right()}
-			{hasSlot("header") && header()}
-			{hasSlot("footer") && footer()}
-			{def()}
+			{children}
 		</div>
 	);
 	if (container) {

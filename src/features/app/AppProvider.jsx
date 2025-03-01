@@ -1,4 +1,4 @@
-import { EventBus } from "../../utils/EventBus";
+import { EventBus } from "../../shared/utils/EventBus";
 import { AppContext } from "./AppContext";
 import { XStorage } from "./hooks/useXStorage";
 export const AppProvider = ({ children, smKey, ...config }) => {

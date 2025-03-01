@@ -7,8 +7,8 @@ import {
 	useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { isObject, isString, isUndefined } from "../../utils/is";
 import { setRef } from "../hooks/useForkRef";
+import { isObject, isString, isUndefined } from "../utils/is";
 
 /**
  * Определяем, какой хук эффекта использовать (useLayoutEffect или useEffect)

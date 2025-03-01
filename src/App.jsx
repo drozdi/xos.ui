@@ -1,17 +1,10 @@
 import { useRef, useState } from "react";
 import { routers } from "./apps/example";
+import { XFooter, XHeader, XLayout, XMain, XWindow } from "./features";
 import { AppProvider } from "./features/app";
-import { XWindow } from "./features/window";
 import { WindowManager } from "./features/window-manager";
 import { ThemeProviderToggler } from "./shared/hooks/useTheme";
-import {
-	XIcon,
-	XItem,
-	XItemLabel,
-	XItemSection,
-	XLayout,
-	XList,
-} from "./shared/ui";
+import { XIcon, XItem, XItemLabel, XItemSection, XList } from "./shared/ui";
 import "./style/index.css";
 
 function App() {
@@ -21,6 +14,20 @@ function App() {
 	/*useEffect(() => {
 		console.log(win);
 	}, [win]);*/
+	return (
+		<AppProvider smKey="core">
+			<XLayout container overlay toggle view="lhr lpr lff">
+				<XHeader>
+					<ThemeProviderToggler></ThemeProviderToggler>
+				</XHeader>
+				<XMain></XMain>
+				<XFooter noPadding>
+					<WindowManager></WindowManager>
+				</XFooter>
+			</XLayout>
+		</AppProvider>
+	);
+
 	return (
 		<AppProvider smKey="core">
 			<XLayout container overlay toggle view="lhr lpr lff">

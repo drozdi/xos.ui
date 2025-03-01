@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { memo } from "react";
-import { Sections } from "../../internal/sections";
+import { Sections } from "../../shared/internal/sections";
 import { useXLayoutContext } from "../layout/XLayoutContext";
 import "./style.css";
 

@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useLayoutEffect, useMemo, useState } from "react";
-import { isArray } from "../../../utils/is";
 import { useId } from "../../hooks/useId";
 import { scopedKeydownHandler } from "../../internal/events/scoped-keydown-handler";
+import { isArray } from "../../utils/is";
 import { XAccordionProvider } from "./XAccordionContext";
 import { XAccordionHeader } from "./XAccordionHeader";
 import { XAccordionPanel } from "./XAccordionPanel";

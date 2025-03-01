@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
-import { isNumber } from "../../../utils/is";
+import { isNumber } from "../../utils/is";
 import { useXPopoverContext } from "./XPopoverContext";
 import "./style.css";
 

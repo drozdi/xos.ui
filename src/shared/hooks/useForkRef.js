@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { isFunction, isObject } from "../../utils/is";
+import { isFunction, isObject } from "../utils/is";
 
 export function setRef(ref, value = null) {
 	if (isFunction(ref)) {

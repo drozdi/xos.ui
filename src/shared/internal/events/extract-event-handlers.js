@@ -1,4 +1,4 @@
-import { isFunction } from '../../../utils/is';
+import { isFunction } from "../../utils/is";
 export function extractEventHandlers(object = {}, excludeKeys = []) {
 	if (object === undefined) {
 		return {};
@@ -11,7 +11,7 @@ export function extractEventHandlers(object = {}, excludeKeys = []) {
 			(prop) =>
 				prop.match(/^on[A-Z]/) &&
 				isFunction(object[prop]) &&
-				!excludeKeys.includes(prop),
+				!excludeKeys.includes(prop)
 		)
 		.forEach((prop) => {
 			result[prop] = object[prop];

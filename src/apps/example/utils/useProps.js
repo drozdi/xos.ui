@@ -1,7 +1,7 @@
-import { isValidElement, useMemo, useState } from 'react';
-import { isBoolean } from '../../../utils/is';
+import { isValidElement, useMemo, useState } from "react";
+import { isBoolean } from "../../../shared/utils/is";
 
-export function useProps(initial = {}, tag = '', body = '') {
+export function useProps(initial = {}, tag = "", body = "") {
 	const [props, setProps] = useState(initial);
 	const onSelect = (prop, value) => {
 		setProps((v) => ({ ...v, [prop]: value }));
@@ -28,7 +28,7 @@ export function useProps(initial = {}, tag = '', body = '') {
 		if (body) {
 			str += `>${body}</${tag}>`;
 		} else {
-			str += ' />';
+			str += " />";
 		}
 
 		return str;

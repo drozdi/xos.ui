@@ -1,8 +1,8 @@
-import { Config } from './config';
-import { Setting } from './setting';
-let sortHKey = 'USER APP WIN'.split(/\s+/);
+import { Config } from "./config";
+import { Setting } from "./setting";
+let sortHKey = "USER APP WIN".split(/\s+/);
 
-export let SettingManager = function (HKEYS) {
+export const SettingManager = function (HKEYS) {
 	if (HKEYS instanceof SettingManager) {
 		return HKEYS;
 	}
@@ -15,8 +15,8 @@ export let SettingManager = function (HKEYS) {
 };
 SettingManager.prototype = {
 	join: function (setting, name) {
-		name = (name || setting._key || '').toUpperCase();
-		if (name === 'HKEY_CONFIG' && setting instanceof Config) {
+		name = (name || setting._key || "").toUpperCase();
+		if (name === "HKEY_CONFIG" && setting instanceof Config) {
 			Object.defineProperty(this, name, {
 				value: setting,
 				writable: true,
@@ -33,7 +33,11 @@ SettingManager.prototype = {
 	newSetting: function (name, options, keyName) {
 		name = name.toUpperCase();
 		Object.defineProperty(this, name, {
-			value: Setting(this.HKEY_CONFIG || null, options || {}, keyName || name),
+			value: Setting(
+				this.HKEY_CONFIG || null,
+				options || {},
+				keyName || name
+			),
 			writable: true,
 			enumerable: true,
 		});
@@ -43,9 +47,13 @@ SettingManager.prototype = {
 			KEYS = sortHKey.slice();
 		KEYS.concat(Object.keys(this));
 		KEYS = KEYS.filter(function (key, index, arr) {
-			return index === arr.lastIndexOf(key) && key !== 'HKEY_CONFIG' && this[key];
+			return (
+				index === arr.lastIndexOf(key) &&
+				key !== "HKEY_CONFIG" &&
+				this[key]
+			);
 		}, this);
-		KEYS.push('HKEY_CONFIG');
+		KEYS.push("HKEY_CONFIG");
 		KEYS.forEach(function (name) {
 			if (null !== val) {
 				return;

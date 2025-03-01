@@ -1,11 +1,11 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from "react";
 import {
 	SCREEN_LG,
 	SCREEN_MD,
 	SCREEN_SM,
 	SCREEN_XL,
 	SCREEN_XXL,
-} from '../const/breakpoints';
+} from "../const/breakpoints";
 
 export const useWindowResizeWidth = () => {
 	const [width, setWidth] = useState(window.innerWidth);
@@ -14,9 +14,9 @@ export const useWindowResizeWidth = () => {
 		const onResize = (event) => {
 			setWidth(event.target.innerWidth);
 		};
-		window.addEventListener('resize', onResize);
+		window.addEventListener("resize", onResize);
 		return () => {
-			window.removeEventListener('resize', onResize);
+			window.removeEventListener("resize", onResize);
 		};
 	}, []);
 

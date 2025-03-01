@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from 'react';
-import { isArray } from '../../utils/is';
+import { useCallback, useMemo, useState } from "react";
+import { isArray } from "../utils/is";
 export function useSelectValue({
 	value: currentValue,
 	onChange,
@@ -38,7 +38,7 @@ export function useSelectValue({
 			}
 			setValue(newValue);
 		},
-		[value, switchable, selectable, multiple],
+		[value, switchable, selectable, multiple]
 	);
 
 	return useMemo(
@@ -47,6 +47,6 @@ export function useSelectValue({
 			change,
 			select,
 		}),
-		[value],
+		[value]
 	);
 }

@@ -5,7 +5,7 @@ import { forwardRefWithAs } from "../../../internal/render";
 import "./style.css";
 import { XBtnGroupProvider } from "./XBtnGroupContext";
 
-import { isArray } from "../../../../utils/is";
+import { isArray } from "../../../utils/is";
 
 import { scopedKeydownHandler } from "../../../internal/events/scoped-keydown-handler";
 

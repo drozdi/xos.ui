@@ -2,8 +2,8 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { forwardRef, memo, useMemo } from "react";
-import { isString } from "../../../utils/is";
 import { useInput } from "../../hooks/useInput";
+import { isString } from "../../utils/is";
 import { XInputBase } from "./XInputBase";
 import { XInputControl } from "./XInputControl";
 import { XInputError } from "./XInputError";

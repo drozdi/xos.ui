@@ -1,17 +1,17 @@
 //todo add styles label over border
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { forwardRef, memo, useMemo } from 'react';
-import { isString } from '../../../utils/is';
-import { useInput } from '../../hooks/useInput';
-import { XInputBase } from './XInputBase';
-import { XInputControl } from './XInputControl';
-import { XInputError } from './XInputError';
-import { XInputHint } from './XInputHint';
-import { XInputMessages } from './XInputMessages';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { forwardRef, memo, useMemo } from "react";
+import { useInput } from "../../hooks/useInput";
+import { isString } from "../../utils/is";
+import { XInputBase } from "./XInputBase";
+import { XInputControl } from "./XInputControl";
+import { XInputError } from "./XInputError";
+import { XInputHint } from "./XInputHint";
+import { XInputMessages } from "./XInputMessages";
 
-import './style-select.css';
-import './style.css';
+import "./style-select.css";
+import "./style.css";
 
 export const XInputSelect = memo(
 	forwardRef(function XInput(props, ref) {
@@ -22,8 +22,16 @@ export const XInputSelect = memo(
 		 * required
 		 * rules,
 		 */
-		const { value, dirty, error, errors, focus, inputRef, disabled, attrs } =
-			useInput(props, ref);
+		const {
+			value,
+			dirty,
+			error,
+			errors,
+			focus,
+			inputRef,
+			disabled,
+			attrs,
+		} = useInput(props, ref);
 
 		const {
 			children,
@@ -53,45 +61,51 @@ export const XInputSelect = memo(
 		} = props;
 
 		const isError = !!errorMessage || (dirty && error);
-		const errorMes = errorMessage || errors[0] || '';
+		const errorMes = errorMessage || errors[0] || "";
 
 		const inputProps = useMemo(() => {
-			other.rightSection ||= 'mdi-unfold-more-horizontal';
+			other.rightSection ||= "mdi-unfold-more-horizontal";
 			return {
 				...other,
 				...attrs,
-				placeholder: '',
+				placeholder: "",
 			};
 		}, [other, attrs]);
 		//console.log(attrs);
 
-		const modColor = isError ? 'negative' : color;
+		const modColor = isError ? "negative" : color;
 
 		const before = useMemo(
-			() => (isString(propsBefore) ? <XIcon>{propsBefore}</XIcon> : propsBefore),
-			[propsBefore],
+			() =>
+				isString(propsBefore) ? (
+					<XIcon>{propsBefore}</XIcon>
+				) : (
+					propsBefore
+				),
+			[propsBefore]
 		);
 		const after = useMemo(
-			() => (isString(propsAfter) ? <XIcon>{propsAfter}</XIcon> : propsAfter),
-			[propsAfter],
+			() =>
+				isString(propsAfter) ? <XIcon>{propsAfter}</XIcon> : propsAfter,
+			[propsAfter]
 		);
 
 		return (
 			<XInputControl>
 				<div
 					className={classNames(
-						'x-input',
+						"x-input",
 						{
-							'x-input--dense': dense,
-							'x-input--square': square,
-							'x-input--filled': filled,
-							'x-input--outline': outline,
-							'x-input--underlined': underlined,
+							"x-input--dense": dense,
+							"x-input--square": square,
+							"x-input--filled": filled,
+							"x-input--outline": outline,
+							"x-input--underlined": underlined,
 
-							'x-input--stack-label': stackLabel,
-							'x-input--disabled': disabled,
+							"x-input--stack-label": stackLabel,
+							"x-input--disabled": disabled,
 						},
-						className,
+						className
 					)}
 				>
 					{before && <div className="x-input-before">{before}</div>}
@@ -120,7 +134,7 @@ export const XInputSelect = memo(
 				</div>
 			</XInputControl>
 		);
-	}),
+	})
 );
 
 XInputSelect.propTypes = {

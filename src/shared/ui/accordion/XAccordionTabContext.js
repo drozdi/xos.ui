@@ -1,5 +1,4 @@
-import { createSafeContext } from '../../internal/createSafeContext';
+import { createSafeContext } from "../../internal/createSafeContext";
 
-export const [XAccordionTabProvider, useXAccordionTabContext] = createSafeContext(
-	'Accordion.Tab component was not found in the tree',
-);
+export const [XAccordionTabProvider, useXAccordionTabContext] =
+	createSafeContext("Accordion.Tab component was not found in the tree");

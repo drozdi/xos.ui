@@ -1,4 +1,4 @@
-import { isObject, isString } from '../utils/is';
+import { isObject, isString } from "../utils/is";
 
 export let Config = function Config(conf) {
 	if (conf instanceof Config) {
@@ -40,7 +40,7 @@ Config.prototype = {
 	},
 	get: function (name, def) {
 		let val = this.conf[this.key(name)] || def;
-		while ((isString(val) && '@' === val.substr(0, 1)) || isObject(val)) {
+		while ((isString(val) && "@" === val.substr(0, 1)) || isObject(val)) {
 			if (isObject(val) && (val.default || val.default !== undefined)) {
 				val = val.default;
 				continue;
@@ -66,23 +66,23 @@ Config.prototype = {
 			value.replace(
 				/%%|%([^%\s]+)%/g,
 				function (str, name) {
-					if (str === '%%') {
-						return '%%';
+					if (str === "%%") {
+						return "%%";
 					}
 					return this.get(name);
-				}.bind(this),
-			),
+				}.bind(this)
+			)
 		);
 	},
 	escapeValue: function (value) {
 		if (isString(value)) {
-			return value.replace(/%/g, '%%');
+			return value.replace(/%/g, "%%");
 		}
 		return value;
 	},
 	unescapeValue: function (value) {
 		if (isString(value)) {
-			return value.replace(/%%/g, '%');
+			return value.replace(/%%/g, "%");
 		}
 		return value;
 	},

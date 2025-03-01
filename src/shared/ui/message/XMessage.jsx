@@ -1,10 +1,10 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { forwardRef, memo, useCallback, useMemo } from "react";
-import { isString } from "../../../utils/is";
 import { useId } from "../../hooks/useId";
 import { useTimeout } from "../../hooks/useTimeout";
 import { Box } from "../../internal/box";
+import { isString } from "../../utils/is";
 import { XBtn } from "../btn";
 import { XIcon } from "../icon";
 import { useXMessagesContext } from "../messages/XMessagesContext";

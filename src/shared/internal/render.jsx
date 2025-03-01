@@ -8,7 +8,7 @@ import {
 	useContext,
 	useMemo,
 } from "react";
-import { isFunction } from "../../utils/is";
+import { isFunction } from "../utils/is";
 
 /**
  * Контекст с типами по умолчанию

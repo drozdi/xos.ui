@@ -10,9 +10,9 @@ import React, {
 } from "react";
 
 import { DraggableCore } from "react-draggable";
-import { useForkRef } from "../../hooks/useForkRef";
-import { forwardRefWithAs } from "../../internal/render";
-import { XBtn } from "../btn/XBtn";
+import { useForkRef } from "../../shared/hooks/useForkRef";
+import { forwardRefWithAs } from "../../shared/internal/render";
+import { XBtn } from "../../shared/ui/btn/XBtn";
 import { useXLayoutContext } from "../layout";
 import "./style.css";
 import { XSidebarContext } from "./XSidebarContext";

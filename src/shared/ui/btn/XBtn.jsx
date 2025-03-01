@@ -6,10 +6,10 @@ import { XIcon } from "../icon";
 import { XBtnGroup, useXBtnGroupContext } from "./group";
 import "./style.css";
 
-import { isFunction } from "../../../utils/is";
 import { useDisabled } from "../../internal/disabled";
 import { forwardRefWithAs, render } from "../../internal/render";
 import { Sections } from "../../internal/sections";
+import { isFunction } from "../../utils/is";
 import { XSpinner } from "../spinner";
 
 const XBtnRoot = forwardRefWithAs(function XBtnFn(params, ref) {

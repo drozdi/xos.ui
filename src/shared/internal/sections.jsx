@@ -1,7 +1,8 @@
 import classNames from "classnames";
+import PropTypes from "prop-types";
 import { useMemo } from "react";
-import { isFunction, isString } from "../../utils/is";
 import { XIcon } from "../ui/icon";
+import { isFunction, isString } from "../utils/is";
 import { forwardRefWithAs, render } from "./render";
 
 /**
@@ -76,7 +77,7 @@ export const Sections = forwardRefWithAs(function Box(
 				"x-box--no-padding": noPadding,
 				[`x-box--${size}`]: size,
 			},
-			isFunction(className) ? className() : className
+			isFunction(className) ? className({}) : className
 		);
 	}, [className, col, dense, square, noWrap, noPadding, size]);
 

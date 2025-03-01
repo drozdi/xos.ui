@@ -1,9 +1,9 @@
 import classNames from "classnames/bind";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { isString } from "../../../utils/is";
 import { forwardRefWithAs, render } from "../../internal/render";
 import { Sections } from "../../internal/sections";
+import { isString } from "../../utils/is";
 import { XCollapse } from "../collapse";
 import { XChevron, XIcon } from "../icon";
 import "./style.css";
@@ -55,6 +55,7 @@ export const XLink = forwardRefWithAs(function XLinkFn(
 			<Sections
 				as="a"
 				{...props}
+				square
 				aria-label={isString(label) ? label : undefined}
 				disabled={disabled}
 				aria-disabled={disabled}

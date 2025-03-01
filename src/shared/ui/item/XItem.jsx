@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useMemo, useRef } from "react";
-import { isFunction } from "../../../utils/is";
 import { useForkRef } from "../../hooks/useForkRef";
 import { forwardRefWithAs, render } from "../../internal/render";
+import { isFunction } from "../../utils/is";
 import { XLink } from "../link";
 import "./style.css";
 const clickableTag = ["a", "label", "button"];
