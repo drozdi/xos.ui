@@ -1,2 +1,1 @@
-export * from './XLayout';
-export * from './XLayoutContext';
+export * from "./Layout";

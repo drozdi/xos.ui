@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import { memo, useEffect, useMemo, useRef } from "react";
-import { useForkRef, useResizeObserver } from "../../shared/hooks";
-import { Box } from "../../shared/internal/box";
-import { forwardRefWithAs } from "../../shared/internal/render";
+import { useForkRef, useResizeObserver } from "../../hooks";
+import { Box } from "../../internal/box";
+import { forwardRefWithAs } from "../../internal/render";
 import "./style.css";
 import { XLayoutProvider, useXLayoutContext } from "./XLayoutContext";
 

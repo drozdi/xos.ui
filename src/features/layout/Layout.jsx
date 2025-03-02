@@ -1,13 +1,10 @@
 import { memo, useMemo, useState } from "react";
-import { ThemeProviderToggler } from "../shared/hooks/useTheme";
-import { useApp } from "./app";
-import { XFooter } from "./footer";
-import { XHeader } from "./header";
-import { XLayout, XMain } from "./layout";
-import { XSidebar } from "./sidebar";
-import { WindowManager } from "./window-manager";
+import { ThemeProviderToggler } from "../../shared/hooks/useTheme";
+import { XFooter, XHeader, XLayout, XMain, XSidebar } from "../../shared/ui";
+import { useApp } from "../app";
+import { WindowManager } from "../window-manager";
 
-export const WLayout = memo(function WLayoutFn({
+export const Layout = memo(function LayoutFn({
 	children,
 	container,
 	view = "hhh lpr fff",

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { routers } from "./apps/example";
-import { WLayout, XLayout, XWindow } from "./features";
+import { Layout, XWindow } from "./features";
 import { AppProvider } from "./features/app";
 import { WindowManager } from "./features/window-manager";
 import { ThemeProviderToggler } from "./shared/hooks/useTheme";
@@ -18,7 +18,7 @@ function App() {
 
 	return (
 		<AppProvider smKey="core">
-			<WLayout container overlay toggle view="lhr lpr lff"></WLayout>
+			<Layout container overlay toggle view="lhr lpr lff"></Layout>
 		</AppProvider>
 	);
 

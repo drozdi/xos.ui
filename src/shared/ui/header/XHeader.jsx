@@ -1,13 +1,13 @@
 import classNames from "classnames";
 import { memo, useEffect, useRef } from "react";
-import { useForkRef } from "../../shared/hooks";
-import { forwardRefWithAs } from "../../shared/internal/render";
-import { Sections } from "../../shared/internal/sections";
+import { useForkRef } from "../../hooks";
+import { forwardRefWithAs } from "../../internal/render";
+import { Sections } from "../../internal/sections";
 import { useXLayoutContext } from "../layout/XLayoutContext";
 import "./style.css";
 
-export const XFooter = memo(
-	forwardRefWithAs(function XFooterFn(
+export const XHeader = memo(
+	forwardRefWithAs(function XHeaderFn(
 		{ children, className, ...props },
 		ref
 	) {
@@ -18,23 +18,23 @@ export const XFooter = memo(
 
 		useEffect(() => {
 			if (innerRef.current) {
-				ctx.instances.footer = innerRef.current;
+				ctx.instances.header = innerRef.current;
 			}
 			return () => {
-				delete ctx.instances.footer;
+				delete ctx.instances.header;
 			};
 		}, [innerRef.current]);
 
 		const isLayout = !!ctx;
 		return (
 			<Sections
-				as="footer"
+				as="header"
 				square
 				{...props}
 				className={classNames(
-					"x-footer",
+					"x-header",
 					{
-						"x-layout-footer": isLayout,
+						"x-layout-header": isLayout,
 					},
 					className
 				)}
