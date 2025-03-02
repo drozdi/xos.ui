@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { forwardRef, memo, useCallback, useMemo } from "react";
-import { useId } from "../../hooks/useId";
+import { useId } from "../../hooks/use-id";
 import { useTimeout } from "../../hooks/useTimeout";
 import { Box } from "../../internal/box";
 import { isString } from "../../utils/is";

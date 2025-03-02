@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { routers } from "./apps/example";
-import { XFooter, XHeader, XLayout, XMain, XWindow } from "./features";
+import { WLayout, XLayout, XWindow } from "./features";
 import { AppProvider } from "./features/app";
 import { WindowManager } from "./features/window-manager";
 import { ThemeProviderToggler } from "./shared/hooks/useTheme";
@@ -11,20 +11,14 @@ function App() {
 	const [view, setView] = useState();
 	const [path, setPath] = useState();
 	const win = useRef();
+
 	/*useEffect(() => {
 		console.log(win);
 	}, [win]);*/
+
 	return (
 		<AppProvider smKey="core">
-			<XLayout container overlay toggle view="lhr lpr lff">
-				<XHeader>
-					<ThemeProviderToggler></ThemeProviderToggler>
-				</XHeader>
-				<XMain></XMain>
-				<XFooter noPadding>
-					<WindowManager></WindowManager>
-				</XFooter>
-			</XLayout>
+			<WLayout container overlay toggle view="lhr lpr lff"></WLayout>
 		</AppProvider>
 	);
 

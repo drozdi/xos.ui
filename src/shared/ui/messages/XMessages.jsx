@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
-import { useId } from "../../hooks/useId";
+import { useId } from "../../hooks/use-id";
 import { Box } from "../../internal/box";
 import { isArray } from "../../utils/is";
 import { XMessage } from "../message";

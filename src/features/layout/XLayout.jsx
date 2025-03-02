@@ -1,181 +1,68 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useResizeObserver } from "../../shared/hooks/useResizeObserver";
-import { useSlots } from "../../shared/hooks/useSlots";
-import "./style.css";
-
 import classNames from "classnames";
-import { useApp } from "../app/hooks/useApp";
-import { XLayoutProvider } from "./XLayoutContext";
+import { memo, useEffect, useMemo, useRef } from "react";
+import { useForkRef, useResizeObserver } from "../../shared/hooks";
+import { Box } from "../../shared/internal/box";
+import { forwardRefWithAs } from "../../shared/internal/render";
+import "./style.css";
+import { XLayoutProvider, useXLayoutContext } from "./XLayoutContext";
 
 export function XLayout({
 	children,
 	className,
 	container,
 	view = "hhh lpr fff",
-	breakpoint = 600,
-	overlay,
-	toggle,
+	onResize,
 }) {
-	const [width, setWidth] = useState(0);
-	const ctx = useMemo(
-		() => ({
+	const {
+		ref: containerRef,
+		width,
+		height,
+	} = useResizeObserver({
+		onResize,
+	});
+
+	const rows = useMemo(
+		() =>
+			view.split(" ").map((row) => {
+				return row.split("");
+			}),
+		[view]
+	);
+
+	const ctx = useMemo(() => {
+		const instances = {};
+		return {
 			get container() {
 				return container;
 			},
-			get width() {
-				return width;
+			get instances() {
+				return instances;
 			},
-			set width(width) {
-				setWidth(width);
+			set instances(val) {
+				instances = val;
 			},
-			breakpoint,
-			rows: view.split(" ").map((row) => {
-				return row.split("");
-			}),
-		}),
-		[container, width, breakpoint, view]
-	);
-
-	const [$layout, set$layout] = useState({
-		isContainer: container,
-		instances: {},
-		rows: view.split(" ").map((row) => {
-			return row.split("");
-		}),
-		width: 0,
-	});
-
-	const belowBreakpoint = useMemo(
-		() => (breakpoint && $layout.width < breakpoint) || false,
-		[$layout, breakpoint]
-	);
-	const $s = useApp().$sm("LAYOUT");
-	const [ls, setLs] = $s.useState("left", {
-		width: 300,
-		open: true,
-		mini: true,
-	});
-	const [rs, setRs] = $s.useState("right", {
-		width: 300,
-		open: true,
-		mini: true,
-	});
-	const $update = (part, prop, val) => {
-		if ($layout[part][prop] !== val) {
-			set$layout((v) => ({
-				...v,
-				[part]: {
-					...v[part],
-					[prop]: val,
-				},
-			}));
-		}
-	};
-
-	const ref = useResizeObserver((target, entry) => {
-		if ($layout.width !== target.offsetWidth) {
-			set$layout((v) => ({ ...v, width: target.offsetWidth }));
-		}
-	});
-
-	const { slot, hasSlot, wrapSlot } = useSlots(children);
-	/*const left = () => {
-		return wrapSlot(slot("left", null), XSidebar, {
-			type: "left",
-			open: ls.open,
-			overlay: overlay,
-			breakpoint: breakpoint,
-			//toggle: belowBreakpoint,
-			mini: ls.mini,
-			miniOverlay: overlay || belowBreakpoint,
-			miniMouse: overlay && toggle,
-			miniToggle: toggle && !belowBreakpoint,
-			//resizeable: true,
-			onMini: (mini) => setLs({ ...ls, mini }),
-			onResize: (width) => setLs({ ...ls, width }),
-			//onToggle: (open) => setLs({ ...ls, open }),
-		});
-	};
-	const right = () => {
-		return wrapSlot(slot("right", null), XSidebar, {
-			type: "right",
-			open: rs.open,
-			overlay: overlay,
-			breakpoint: breakpoint,
-			//toggle: belowBreakpoint,
-			mini: rs.mini,
-			miniOverlay: overlay || belowBreakpoint,
-			miniMouse: overlay && toggle,
-			miniToggle: toggle && !belowBreakpoint,
-			//resizeable: true,
-			onMini: (mini) => setRs({ ...rs, mini }),
-			onResize: (width) => setRs({ ...rs, width }),
-			//onToggle: (open) => setRs({ ...rs, open }),
-		});
-	};
-
-	const footer = () => {
-		return <XFooter noPadding>{slot("footer", null)}</XFooter>;
-	};
-	const header = () => {
-		return (
-			<XHeader
-				leftSection={
-					belowBreakpoint &&
-					hasSlot("left") && (
-						<XBtn
-							color="primary"
-							leftSection="mdi-dock-left"
-							size="sm"
-							square
-							onClick={(e) => {
-								e.stopPropagation();
-								e.preventDefault();
-								setLs((ls) => ({ ...ls, open: !ls.open }));
-							}}
-						/>
-					)
-				}
-				rightSection={
-					belowBreakpoint &&
-					hasSlot("right") && (
-						<XBtn
-							color="primary"
-							icon="mdi-dock-right"
-							size="sm"
-							square
-							onClick={(e) => {
-								e.stopPropagation();
-								e.preventDefault();
-								setRs((rs) => ({ ...rs, open: !rs.open }));
-							}}
-						/>
-					)
-				}
-			>
-				{slot("header", null)}
-			</XHeader>
-		);
-	};
-	const def = () => {
-		return <XMain>{slot("", null)}</XMain>;
-	};*/
+			rows,
+			width,
+			height,
+		};
+	}, [container, width, height, rows]);
+	console.log("layout", ctx);
 
 	const isHl = useMemo(
-		() => $layout.rows[0][0] === "l" || !hasSlot("header"),
-		[$layout.rows, hasSlot]
+		() => rows[0][0] === "l" || !ctx.instances.header,
+		[rows]
 	);
 	const isHr = useMemo(
-		() => $layout.rows[0][2] === "r" || !hasSlot("header"),
-		[$layout.rows, hasSlot]
+		() => rows[0][2] === "r" || !ctx.instances.header,
+		[rows]
 	);
 	const isFl = useMemo(
-		() => $layout.rows[2][0] === "l" || !hasSlot("footer"),
-		[$layout.rows, hasSlot]
+		() => rows[2][0] === "l" || !ctx.instances.footer,
+		[rows]
 	);
 	const isFr = useMemo(
-		() => $layout.rows[2][2] === "r" || !hasSlot("footer"),
-		[$layout.rows, hasSlot]
+		() => rows[2][2] === "r" || !ctx.instances.footer,
+		[rows]
 	);
 
 	const classes = useMemo(
@@ -187,35 +74,56 @@ export function XLayout({
 		}),
 		[isHl, isHr, isFl, isFr]
 	);
-	useEffect(() => {
-		$s.active = true;
-		return () => $s.remove();
-	}, []);
 
 	let layout = (
-		<div className={classNames("x-layout", classes, className)} ref={ref}>
+		<div className={classNames("x-layout", classes, className)}>
 			{children}
 		</div>
 	);
 	if (container) {
-		layout = <div className="x-layout-container">{layout}</div>;
+		layout = (
+			<div className="x-layout-container" ref={containerRef}>
+				{layout}
+			</div>
+		);
 	}
 
 	return (
 		<>
-			<XLayoutProvider value={{ $layout, $update, setLs, setRs }}>
-				{layout}
-			</XLayoutProvider>
+			<XLayoutProvider value={ctx}>{layout}</XLayoutProvider>
 		</>
 	);
 }
 
-export function XMain({ children, tag = "section" }) {
-	const TagProp = useMemo(() => tag, [tag]);
-	//const { $layout, $update } = useContext(XLayoutContext)
-	return (
-		<TagProp className="x-layout-main">
-			<div className="x-layout-content">{children}</div>
-		</TagProp>
-	);
-}
+export const XMain = memo(
+	forwardRefWithAs(function XMain({ children, className, ...props }, ref) {
+		const innerRef = useRef(null);
+		const handleRef = useForkRef(innerRef, ref);
+
+		const ctx = useXLayoutContext();
+
+		useEffect(() => {
+			if (innerRef.current) {
+				ctx.instances.main = innerRef.current;
+			}
+			return () => {
+				delete ctx.instances.main;
+			};
+		}, [innerRef.current]);
+
+		const isLayout = !!ctx;
+		return (
+			<Box
+				as="section"
+				square
+				{...props}
+				className={classNames("x-layout-main", className)}
+				ref={handleRef}
+			>
+				<Box.Section as="main" className="x-layout-body">
+					{children}
+				</Box.Section>
+			</Box>
+		);
+	})
+);

@@ -7,7 +7,7 @@ import {
 	useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { setRef } from "../hooks/useForkRef";
+import { setRef } from "../hooks/use-fork-ref";
 import { isObject, isString, isUndefined } from "../utils/is";
 
 /**

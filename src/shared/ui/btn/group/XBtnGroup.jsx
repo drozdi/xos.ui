@@ -9,7 +9,7 @@ import { isArray } from "../../../utils/is";
 
 import { scopedKeydownHandler } from "../../../internal/events/scoped-keydown-handler";
 
-import { useForkRef } from "../../../hooks/useForkRef";
+import { useForkRef } from "../../../hooks/use-fork-ref";
 
 export const XBtnGroup = forwardRefWithAs(function XBtnGroupFn(
 	{

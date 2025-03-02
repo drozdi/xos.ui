@@ -1,10 +1,10 @@
-import classNames from 'classnames';
-import PropTypes from 'prop-types';
-import { useMemo, useState } from 'react';
-import { useId } from '../../hooks/useId';
-import './style.css';
-import { useXAccordionContext } from './XAccordionContext';
-import { XAccordionTabProvider } from './XAccordionTabContext';
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import { useMemo, useState } from "react";
+import { useId } from "../../hooks/use-id";
+import "./style.css";
+import { useXAccordionContext } from "./XAccordionContext";
+import { XAccordionTabProvider } from "./XAccordionTabContext";
 
 export function XAccordionTab({
 	id,
@@ -43,15 +43,17 @@ export function XAccordionTab({
 			{...props}
 			id={uid}
 			className={classNames(
-				'x-accordion-tab',
+				"x-accordion-tab",
 				{
-					'x-accordion-tab--expanded': isActive ?? expanded,
-					'x-accordion-tab--disabled': disabled,
+					"x-accordion-tab--expanded": isActive ?? expanded,
+					"x-accordion-tab--disabled": disabled,
 				},
-				className,
+				className
 			)}
 		>
-			<XAccordionTabProvider value={context}>{children}</XAccordionTabProvider>
+			<XAccordionTabProvider value={context}>
+				{children}
+			</XAccordionTabProvider>
 		</div>
 	);
 }

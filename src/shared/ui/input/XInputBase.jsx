@@ -1,7 +1,7 @@
 //todo add styles label over border
 import PropTypes from "prop-types";
 import { forwardRef, memo, useMemo } from "react";
-import { useId } from "../../hooks/useId";
+import { useId } from "../../hooks/use-id";
 import { render } from "../../internal/render";
 import { isString } from "../../utils/is";
 import { XIcon } from "../icon";

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { extractEventHandlers } from "../internal/events/extract-event-handlers";
 import { debounce } from "../utils/debounce";
-import { useForkRef } from "./useForkRef";
+import { useForkRef } from "./use-fork-ref";
 const validation = (value, rules = []) => {
 	return rules.map((rule) => rule(value)).filter((v) => v !== true);
 };

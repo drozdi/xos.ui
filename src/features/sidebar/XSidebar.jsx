@@ -10,12 +10,25 @@ import React, {
 } from "react";
 
 import { DraggableCore } from "react-draggable";
-import { useForkRef } from "../../shared/hooks/useForkRef";
+import { useForkRef } from "../../shared/hooks/use-fork-ref";
 import { forwardRefWithAs } from "../../shared/internal/render";
 import { XBtn } from "../../shared/ui/btn/XBtn";
 import { useXLayoutContext } from "../layout";
 import "./style.css";
 import { XSidebarContext } from "./XSidebarContext";
+
+/**
+ *
+ * @param {*} breakpoint
+ * @param {*} ctxWidth
+ * @returns {boolean} true if the breakpoint is met
+ */
+const useBreakpoint = (breakpoint, ctxWidth) => {
+	return useMemo(
+		() => breakpoint && ctxWidth < breakpoint,
+		[breakpoint, ctxWidth]
+	);
+};
 
 /**
  * XSidebar sidebar component
@@ -70,14 +83,15 @@ export const XSidebar = memo(
 			onResize,
 			onMini,
 			onToggle = () => true,
+			...props
 		},
 		ref
 	) {
 		const innerRef = useRef();
 		const handleRef = useForkRef(innerRef, ref);
-		const { $layout, $update } = useXLayoutContext();
+		const ctx = useXLayoutContext();
 
-		const isLayout = useMemo(() => !!$layout, [$layout]);
+		const isLayout = !!ctx;
 
 		const [width, setWidth] = useState(w);
 		const [miniWidth, setMiniWidth] = useState(miniW);
@@ -87,12 +101,9 @@ export const XSidebar = memo(
 		const [innerMini, setInnerMini] = useState(mini);
 
 		const reverse = useMemo(() => type === "right", [type]);
-		const belowBreakpoint = useMemo(
-			() =>
-				(breakpoint && isLayout && $layout?.width < breakpoint) ||
-				false,
-			[$layout.width, breakpoint, isLayout]
-		);
+
+		const belowBreakpoint = useBreakpoint(breakpoint, ctx.width);
+
 		const innerEvents = useMemo(
 			() => !belowBreakpoint && (miniMouse || miniToggle),
 			[belowBreakpoint, miniMouse, miniToggle]
@@ -247,7 +258,15 @@ export const XSidebar = memo(
 			}
 			setInnerMini((m) => !m);
 		}, [width, isOpen, isMini]);
-		useEffect(() => setMounted(true), []);
+		useEffect(() => {
+			setMounted(true);
+			if (innerRef.current) {
+				ctx.instances[type] = innerRef.current;
+			}
+			return () => {
+				delete ctx.instances[type];
+			};
+		}, []);
 
 		return (
 			<>
@@ -342,11 +361,11 @@ export const XSidebar = memo(
 						</div>
 					</div>
 				</XSidebarContext.Provider>
-				{false && (
+				{true && (
 					<div className="fixed transition-all duration-200 ease-in-out bg-black/50 text-white w-54 -right-50 has-checked:right-0 hover:right-0 top-12 p-4 z-50">
 						fre: <input type="checkbox" />
 						<br />
-						breakpoint: {breakpoint} - {$layout.width}
+						breakpoint: {breakpoint} - {ctx.width}
 						<br />
 						isOpen: {isOpen ? "true" : "false"}
 						<br />
@@ -384,22 +403,24 @@ export const XSidebar = memo(
 XSidebar.propTypes = {
 	children: PropTypes.any,
 	className: PropTypes.string,
-	type: PropTypes.string,
-	mini: PropTypes.bool,
-	miniOverlay: PropTypes.bool,
-	miniToggle: PropTypes.bool,
-	miniMouse: PropTypes.bool,
-	miniW: PropTypes.number,
+	type: PropTypes.oneOf(["left", "right"]),
+
 	open: PropTypes.bool,
+	w: PropTypes.number,
 	overlay: PropTypes.bool,
 	toggle: PropTypes.bool,
+
 	breakpoint: PropTypes.number,
 
-	w: PropTypes.number,
+	mini: PropTypes.bool,
+	miniW: PropTypes.number,
+	miniMouse: PropTypes.bool,
+	miniToggle: PropTypes.bool,
+	miniOverlay: PropTypes.bool,
 
 	resizeable: PropTypes.bool,
 
-	onResize: PropTypes.func,
 	onMini: PropTypes.func,
 	onToggle: PropTypes.func,
+	onResize: PropTypes.func,
 };

@@ -10,7 +10,7 @@ import {
 } from "react";
 import { DraggableCore } from "react-draggable";
 import { Resizable } from "react-resizable";
-import { useId } from "../../shared/hooks/useId";
+import { useId } from "../../shared/hooks/use-id";
 import { Box } from "../../shared/internal/box";
 import { XBtn } from "../../shared/ui/btn/XBtn";
 import { getComputedSize } from "../../shared/utils/domFns";

@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import { memo, useEffect } from "react";
+import { memo, useEffect, useRef } from "react";
+import { useForkRef } from "../../shared/hooks";
 import { forwardRefWithAs } from "../../shared/internal/render";
 import { Sections } from "../../shared/internal/sections";
 import { useXLayoutContext } from "../layout/XLayoutContext";
@@ -10,12 +11,21 @@ export const XHeader = memo(
 		{ children, className, ...props },
 		ref
 	) {
-		const { $layout } = useXLayoutContext();
+		const innerRef = useRef(null);
+		const handleRef = useForkRef(innerRef, ref);
+
+		const ctx = useXLayoutContext();
 
 		useEffect(() => {
-			$layout.instances.header = true;
-		}, []);
-		const isLayout = !!useXLayoutContext();
+			if (innerRef.current) {
+				ctx.instances.header = innerRef.current;
+			}
+			return () => {
+				delete ctx.instances.header;
+			};
+		}, [innerRef.current]);
+
+		const isLayout = !!ctx;
 		return (
 			<Sections
 				as="header"
@@ -28,6 +38,7 @@ export const XHeader = memo(
 					},
 					className
 				)}
+				ref={handleRef}
 			>
 				{children}
 			</Sections>

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import { useId } from "../../hooks/use-id";
 import { useDisclosure } from "../../hooks/useDisclosure";
-import { useId } from "../../hooks/useId";
 import { XPopoverProvider } from "./XPopoverContext";
 import "./style.css";
 

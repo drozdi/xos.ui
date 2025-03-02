@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
-import { useId } from "../../hooks/useId";
+import { useId } from "../../hooks/use-id";
 import { scopedKeydownHandler } from "../../internal/events/scoped-keydown-handler";
 import "./styles.css";
 import { XTabsProvider } from "./XTabsContext";

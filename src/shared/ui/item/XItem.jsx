@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useMemo, useRef } from "react";
-import { useForkRef } from "../../hooks/useForkRef";
+import { useForkRef } from "../../hooks/use-fork-ref";
 import { forwardRefWithAs, render } from "../../internal/render";
 import { isFunction } from "../../utils/is";
 import { XLink } from "../link";

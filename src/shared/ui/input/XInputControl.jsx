@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useMemo } from "react";
-import { useId } from "../../hooks/useId";
+import { useId } from "../../hooks/use-id";
 import { XInputControlProvider } from "./XInputControlContext";
 import "./style.css";
 
