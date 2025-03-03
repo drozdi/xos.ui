@@ -2,25 +2,21 @@
 
 .x-sidebar,
 .x-sidebar-container {
-	@apply w-64 h-full max-h-full;
+	@apply w-64 h-full max-h-full relative;
 }
 
 .x-sidebar {
-	@apply min-w-14 flex flex-col justify-between absolute top-0 bottom-0 
-	bg-surface border-r border-solid border-color z-50;
-}
-.x-sidebar-container {
-	@apply relative border-none;
+	@apply min-w-14 flex flex-col justify-between bg-surface border-r border-solid border-color z-50;
 }
 .x-sidebar-content {
-	@apply max-w-full max-h-full overflow-y-auto overflow-x-hidden;
+	@apply max-w-full max-h-full overflow-y-auto overflow-x-hidden relative z-50;
 }
 .x-sidebar-toggle-mini {
 	@apply w-full border-t border-color;
 }
 
 .x-sidebar-toggle {
-	@apply absolute top-12 -right-2 translate-x-1/2;
+	@apply absolute top-12 -right-2 translate-x-1/2 -z-10;
 }
 .x-sidebar--right .x-sidebar-toggle {
 	@apply right-auto -left-2 -translate-x-1/2;

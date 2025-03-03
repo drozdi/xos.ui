@@ -3,24 +3,36 @@ import PropTypes from "prop-types";
 import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { DraggableCore } from "react-draggable";
-import { useObjectState } from "../../hooks";
-import { useForkRef } from "../../hooks/use-fork-ref";
+import { useBreakpoint, useForkRef, useObjectState } from "../../hooks";
 import { forwardRefWithAs } from "../../internal/render";
+import { Teleport } from "../../internal/teleport";
+import { isUndefined } from "../../utils/is";
 import { XBtn } from "../btn/XBtn";
+import { XIcon } from "../icon";
 import { useXLayoutContext } from "../layout";
 import "./style.css";
 import { XSidebarContext } from "./XSidebarContext";
 
 /**
- * @param {*} breakpoint
- * @param {*} ctxWidth
- * @returns {boolean} true if the breakpoint is met
+ *
+ * @param {*} param0
+ * @returns
  */
-const useBreakpoint = (breakpoint, ctxWidth) => {
-	return useMemo(
-		() => breakpoint && ctxWidth < breakpoint,
-		[breakpoint, ctxWidth]
+const useDragResize = ({ miniWidth, onResize }) => {
+	const [width, setWidth] = useState(miniWidth);
+
+	const onHandleDrag = useCallback(
+		(e, ui) => {
+			setWidth((prev) => Math.max(miniWidth, prev + ui.deltaX));
+		},
+		[miniWidth]
 	);
+
+	const onHandleDragEnd = useCallback(() => {
+		onResize?.(width);
+	}, [width, onResize]);
+
+	return { width, onHandleDrag, onHandleDragEnd };
 };
 
 /**
@@ -105,11 +117,19 @@ export const XSidebar = memo(
 		const { isEvents, isMouseEvent, isOpen, isOverlay } = useMemo(
 			() => ({
 				isEvents: !belowBreakpoint && (miniMouse || miniToggle),
-				isMouseEvent: belowBreakpoint && miniMouse && !miniToggle,
+				isMouseEvent: !belowBreakpoint && miniMouse && !miniToggle,
 				isOpen: belowBreakpoint ? isOpenBreakpoint : open,
 				isOverlay: overlay || (belowBreakpoint && miniOverlay),
 			}),
-			[belowBreakpoint, miniMouse, miniToggle, open, overlay, miniOverlay]
+			[
+				belowBreakpoint,
+				miniMouse,
+				miniToggle,
+				isOpenBreakpoint,
+				open,
+				overlay,
+				miniOverlay,
+			]
 		);
 
 		const { isMiniOverlay, isMini } = useMemo(
@@ -156,7 +176,7 @@ export const XSidebar = memo(
 
 		useEffect(() => {
 			if (innerRef.current) {
-				if (typeof window !== "undefined") {
+				if (!isUndefined(window)) {
 					const style = window.getComputedStyle(innerRef.current);
 					const w = parseInt(style.width || 0, 10) || 0;
 					const minWidth = parseInt(style.minWidth || 0, 10) || 0;
@@ -197,7 +217,7 @@ export const XSidebar = memo(
 			return () => {
 				document.removeEventListener("click", handleClose);
 			};
-		}, [miniMouse, miniToggle, belowBreakpoint]);
+		}, [miniMouse, miniToggle, belowBreakpoint, innerRef.current]);
 
 		useEffect(() => onMini?.(isMini), [isMini]);
 
@@ -223,20 +243,6 @@ export const XSidebar = memo(
 				onResize?.(width);
 			},
 			[innerRef.current, miniWidth]
-		);
-
-		const onMouseEnter = useCallback(
-			(e) => {
-				isMouseEvent && updateState({ innerMini: false });
-			},
-			[isMouseEvent]
-		);
-
-		const onMouseLeave = useCallback(
-			(e) => {
-				isMouseEvent && updateState({ innerMini: true });
-			},
-			[isMouseEvent]
 		);
 
 		const onHandleToggle = useCallback(() => {
@@ -291,8 +297,12 @@ export const XSidebar = memo(
 							"x-sidebar--animate": !canResized,
 						})}
 						style={containerStyle}
-						onMouseEnter={onMouseEnter}
-						onMouseLeave={onMouseLeave}
+						onMouseEnter={() =>
+							isMouseEvent && updateState({ innerMini: false })
+						}
+						onMouseLeave={() =>
+							isMouseEvent && updateState({ innerMini: true })
+						}
 					>
 						<div
 							className={classNames("x-sidebar", {
@@ -310,6 +320,29 @@ export const XSidebar = memo(
 							style={style}
 							ref={handleRef}
 						>
+							{toggle && belowBreakpoint && (
+								<div className="x-sidebar-toggle">
+									<XBtn
+										color="accent"
+										size="xs"
+										rightSection={
+											<XIcon className="text-2xl">
+												{isOpen
+													? `mdi-menu-${type}`
+													: `mdi-menu-${
+															isLeftSidebar
+																? "right"
+																: "left"
+													  }`}
+											</XIcon>
+										}
+										onClick={onHandleToggle}
+										title={
+											isOpen ? "Свернуть" : "Развернуть"
+										}
+									/>
+								</div>
+							)}
 							<div
 								className={classNames(
 									"x-sidebar-content",
@@ -342,27 +375,7 @@ export const XSidebar = memo(
 									/>
 								</div>
 							)}
-							{toggle && belowBreakpoint && (
-								<div className="x-sidebar-toggle">
-									<XBtn
-										color="accent"
-										rightSection={
-											isOpen
-												? `mdi-menu-${type}`
-												: `mdi-menu-${
-														isLeftSidebar
-															? "right"
-															: "left"
-												  }`
-										}
-										onClick={onHandleToggle}
-										className="text-2xl py-0"
-										title={
-											isOpen ? "Свернуть" : "Развернуть"
-										}
-									/>
-								</div>
-							)}
+
 							{canResized && (
 								<DraggableCore
 									onDrag={onHandleDrag}
@@ -374,39 +387,43 @@ export const XSidebar = memo(
 						</div>
 					</div>
 				</XSidebarContext.Provider>
-				{true && (
-					<div className="fixed transition-all duration-200 ease-in-out bg-black/50 text-white w-54 -right-50 has-checked:right-0 hover:right-0 top-12 p-4 z-50">
-						fre: <input type="checkbox" />
-						<br />
-						breakpoint: {breakpoint} - {ctx?.width}
-						<br />
-						isOpen: {isOpen ? "true" : "false"}
-						<br />
-						isMini: {isMini ? "true" : "false"}
-						<br />
-						isEvents: {isEvents ? "true" : "false"}
-						<br />
-						belowBreakpoint: {belowBreakpoint ? "true" : "false"}
-						<br />
-						isOverlay: {isOverlay ? "true" : "false"}
-						<br />
-						isMiniOverlay: {isMiniOverlay ? "true" : "false"}
-						<br />
-						isOpenBreakpoint: {isOpenBreakpoint ? "true" : "false"}
-						<br />
-						canResized: {canResized ? "true" : "false"}
-						<br />
-						isMouseEvent: {isMouseEvent ? "true" : "false"}
-						<br />
-						width: {width}
-						<br />
-						miniWidth: {miniWidth}
-						<br />
-						containerStyle: {JSON.stringify(containerStyle)}
-						<br />
-						style: {JSON.stringify(style)}
-						<br />
-					</div>
+				{false && (
+					<Teleport target="body">
+						<div className="fixed transition-all duration-200 ease-in-out bg-black/50 text-white w-54 -right-50 has-checked:right-0 hover:right-0 top-12 p-4 z-50">
+							fre: <input type="checkbox" />
+							<br />
+							breakpoint: {breakpoint} - {ctx?.width}
+							<br />
+							isOpen: {isOpen ? "true" : "false"}
+							<br />
+							isMini: {isMini ? "true" : "false"}
+							<br />
+							isEvents: {isEvents ? "true" : "false"}
+							<br />
+							belowBreakpoint:{" "}
+							{belowBreakpoint ? "true" : "false"}
+							<br />
+							isOverlay: {isOverlay ? "true" : "false"}
+							<br />
+							isMiniOverlay: {isMiniOverlay ? "true" : "false"}
+							<br />
+							isOpenBreakpoint:{" "}
+							{isOpenBreakpoint ? "true" : "false"}
+							<br />
+							canResized: {canResized ? "true" : "false"}
+							<br />
+							isMouseEvent: {isMouseEvent ? "true" : "false"}
+							<br />
+							width: {width}
+							<br />
+							miniWidth: {miniWidth}
+							<br />
+							containerStyle: {JSON.stringify(containerStyle)}
+							<br />
+							style: {JSON.stringify(style)}
+							<br />
+						</div>
+					</Teleport>
 				)}
 			</>
 		);

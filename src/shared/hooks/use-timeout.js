@@ -1,10 +1,13 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from "react";
 
 export const useTimeout = (fn, delay = 0, when = true) => {
 	const timeout = useRef(null);
 	const savedCallback = useRef(null);
 
-	const clear = useCallback(() => clearTimeout(timeout.current), [timeout.current]);
+	const clear = useCallback(
+		() => clearTimeout(timeout.current),
+		[timeout.current]
+	);
 
 	useEffect(() => {
 		savedCallback.current = fn;

@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import settingManager from "../../../entites/core/setting-manager";
+import { useObjectState } from "../../../shared/hooks";
 import { cached } from "../../../shared/utils/cached";
 
 export const XStorage = cached(function XStorage(type, key) {
@@ -61,6 +62,22 @@ export const XStorage = cached(function XStorage(type, key) {
 				this.set(name, state);
 			}, [state]);
 			return [state, setState];
+		},
+		useState(name, initial) {
+			const [state, setState] = useState(this.get(name, initial));
+			useEffect(() => {
+				this.set(name, state);
+			}, [state]);
+			return [state, setState];
+		},
+		useObjectState(name, initial) {
+			const [state, updateState] = useObjectState(
+				this.get(name, initial)
+			);
+			useEffect(() => {
+				this.set(name, state);
+			}, [state]);
+			return [state, updateState];
 		},
 	};
 });

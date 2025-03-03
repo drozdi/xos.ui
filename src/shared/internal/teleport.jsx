@@ -58,7 +58,7 @@ export const Teleport = forwardRef(function Teleport(
 	const [mounted, setMounted] = useState(false);
 	const nodeRef = useRef(null);
 
-	useRenderEffect(() => {
+	useLayoutEffect(() => {
 		setMounted(true);
 
 		nodeRef.current = !target
@@ -66,7 +66,7 @@ export const Teleport = forwardRef(function Teleport(
 			: isString(target)
 			? document.querySelector(target)
 			: target;
-
+		console.log(target, nodeRef.current);
 		setRef(ref, nodeRef.current);
 
 		if (!target && nodeRef.current) {

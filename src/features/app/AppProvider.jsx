@@ -11,7 +11,7 @@ export const AppProvider = ({ children, smKey, ...config }) => {
 					return XStorage(type, smKey);
 				},
 				$sm(type) {
-					return XStorage(type, smKey);
+					return this.sm(type, smKey);
 				},
 				...new EventBus(),
 				...{

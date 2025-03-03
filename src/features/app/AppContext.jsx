@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { useObjectState } from "../../shared/hooks";
 
 export const AppContext = createContext({
 	sm() {
@@ -19,6 +20,9 @@ export const AppContext = createContext({
 			},
 			useState(name, initial) {
 				return useState(initial);
+			},
+			useObjectState(name, initial) {
+				return useObjectState(initial);
 			},
 		};
 	},

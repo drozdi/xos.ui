@@ -1,18 +1,15 @@
 import classNames from "classnames";
-import { memo, useEffect, useMemo, useRef } from "react";
+import { memo, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 import { useForkRef, useResizeObserver } from "../../hooks";
 import { Box } from "../../internal/box";
 import { forwardRefWithAs } from "../../internal/render";
 import "./style.css";
 import { XLayoutProvider, useXLayoutContext } from "./XLayoutContext";
 
-export function XLayout({
-	children,
-	className,
-	container,
-	view = "hhh lpr fff",
-	onResize,
-}) {
+export const XLayout = forwardRefWithAs(function XLayoutFn(
+	{ children, className, container, view = "hhh lpr fff", onResize },
+	ref
+) {
 	const {
 		ref: containerRef,
 		width,
@@ -46,7 +43,8 @@ export function XLayout({
 			height,
 		};
 	}, [container, width, height, rows]);
-	console.log("layout", ctx);
+
+	useImperativeHandle(ref, () => ctx);
 
 	const isHl = useMemo(
 		() => rows[0][0] === "l" || !ctx.instances.header,
@@ -93,7 +91,7 @@ export function XLayout({
 			<XLayoutProvider value={ctx}>{layout}</XLayoutProvider>
 		</>
 	);
-}
+});
 
 export const XMain = memo(
 	forwardRefWithAs(function XMain({ children, className, ...props }, ref) {
