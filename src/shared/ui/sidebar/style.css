@@ -1,11 +1,16 @@
 @reference "@style";
 
+.x-sidebar,
+.x-sidebar-container {
+	@apply w-64 h-full max-h-full;
+}
+
 .x-sidebar {
-	@apply min-w-14 w-64 flex flex-col justify-between max-h-full h-full absolute top-0 bottom-0 
+	@apply min-w-14 flex flex-col justify-between absolute top-0 bottom-0 
 	bg-surface border-r border-solid border-color z-50;
 }
 .x-sidebar-container {
-	@apply w-64 relative border-none max-h-full;
+	@apply relative border-none;
 }
 .x-sidebar-content {
 	@apply max-w-full max-h-full overflow-y-auto overflow-x-hidden;

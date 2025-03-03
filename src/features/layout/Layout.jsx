@@ -25,20 +25,29 @@ export const Layout = memo(function LayoutFn({
 		[width, breakpoint]
 	);
 
-	const lll = {
+	const [lll, setLLL] = useState({
 		type: "left",
-		open: ls.open,
+		/*open: ls.open,
 		overlay: overlay,
 		breakpoint: breakpoint,
 		toggle: belowBreakpoint,
 		mini: ls.mini,
 		miniOverlay: overlay || belowBreakpoint,
-		miniMouse: overlay && toggle,
+		miniMouse: true,
 		miniToggle: toggle && !belowBreakpoint,
-		//resizeable: true,
-		onMini: (mini) => setLs({ ...ls, mini }),
-		onResize: (width) => setLs({ ...ls, width }),
-		//onToggle: (open) => setLs({ ...ls, open }),
+		resizeable: true,*/
+		open: false,
+		overlay: false,
+		breakpoint: breakpoint,
+		toggle: false,
+		mini: false,
+		miniOverlay: false,
+		miniMouse: false,
+		miniToggle: false,
+		resizeable: false,
+	});
+	const uLll = ({ target }) => {
+		setLLL((v) => ({ ...v, [target.name]: !v[target.name] }));
 	};
 	return (
 		<XLayout
@@ -51,11 +60,27 @@ export const Layout = memo(function LayoutFn({
 			<XHeader>
 				<ThemeProviderToggler></ThemeProviderToggler>
 			</XHeader>
-			<XSidebar {...lll}>left</XSidebar>
+			<XSidebar {...lll} w={256} miniW={56}>
+				left
+			</XSidebar>
 			<XFooter noPadding>
 				<WindowManager></WindowManager>
 			</XFooter>
-			<XMain></XMain>
+			<XMain className="pl-128 *:block *:border-b *:border-color">
+				{"open overlay toggle mini miniOverlay miniMouse miniToggle"
+					.split(/\s+/)
+					.map((prop) => (
+						<label key={prop}>
+							<input
+								name={prop}
+								checked={lll[prop]}
+								type="checkbox"
+								onChange={uLll}
+							/>
+							<span className="ml-3 font-medium">{prop}</span>
+						</label>
+					))}
+			</XMain>
 		</XLayout>
 	);
 });

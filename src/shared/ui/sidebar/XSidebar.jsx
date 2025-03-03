@@ -1,15 +1,9 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import React, {
-	memo,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { DraggableCore } from "react-draggable";
+import { useObjectState } from "../../hooks";
 import { useForkRef } from "../../hooks/use-fork-ref";
 import { forwardRefWithAs } from "../../internal/render";
 import { XBtn } from "../btn/XBtn";
@@ -18,7 +12,6 @@ import "./style.css";
 import { XSidebarContext } from "./XSidebarContext";
 
 /**
- *
  * @param {*} breakpoint
  * @param {*} ctxWidth
  * @returns {boolean} true if the breakpoint is met
@@ -92,56 +85,46 @@ export const XSidebar = memo(
 		const ctx = useXLayoutContext();
 
 		const isLayout = !!ctx;
+		const isLeftSidebar = type === "left";
 
-		const [width, setWidth] = useState(w);
-		const [miniWidth, setMiniWidth] = useState(miniW);
-		const [isOpenBreakpoint, setOpenBreakpoint] = useState(false);
-		const [isMounted, setMounted] = useState(false);
-
-		const [innerMini, setInnerMini] = useState(mini);
+		const [
+			{ isMounted, width, miniWidth, innerMini, isOpenBreakpoint },
+			updateState,
+		] = useObjectState({
+			width: w,
+			miniWidth: miniW,
+			isOpenBreakpoint: false,
+			isMounted: false,
+			innerMini: mini,
+		});
 
 		const reverse = useMemo(() => type === "right", [type]);
 
-		const belowBreakpoint = useBreakpoint(breakpoint, ctx.width);
+		const belowBreakpoint = useBreakpoint(breakpoint, ctx?.width || 1000);
 
-		const innerEvents = useMemo(
-			() => !belowBreakpoint && (miniMouse || miniToggle),
-			[belowBreakpoint, miniMouse, miniToggle]
-		);
-		const isMouseEvent = useMemo(
-			() => !belowBreakpoint && miniMouse && !miniToggle,
-			[belowBreakpoint, miniMouse, miniToggle]
-		);
-
-		const isOpen = useMemo(
-			() => (belowBreakpoint ? isOpenBreakpoint : open),
-			[belowBreakpoint, isOpenBreakpoint, open]
-		);
-		const isMini = useMemo(
-			() => (innerEvents ? innerMini : mini && !belowBreakpoint),
-			[innerEvents, innerMini, mini, belowBreakpoint]
+		const { isEvents, isMouseEvent, isOpen, isOverlay } = useMemo(
+			() => ({
+				isEvents: !belowBreakpoint && (miniMouse || miniToggle),
+				isMouseEvent: belowBreakpoint && miniMouse && !miniToggle,
+				isOpen: belowBreakpoint ? isOpenBreakpoint : open,
+				isOverlay: overlay || (belowBreakpoint && miniOverlay),
+			}),
+			[belowBreakpoint, miniMouse, miniToggle, open, overlay, miniOverlay]
 		);
 
-		const isOverlay = useMemo(
-			() => overlay || (belowBreakpoint && miniOverlay),
-			[overlay, belowBreakpoint, miniOverlay]
-		);
-
-		const isMiniOverlay = useMemo(
-			() =>
-				(miniOverlay || ((innerEvents || mini) && overlay)) &&
-				!belowBreakpoint,
-			[miniOverlay, innerEvents, overlay, mini, belowBreakpoint]
+		const { isMiniOverlay, isMini } = useMemo(
+			() => ({
+				isMiniOverlay:
+					(miniOverlay || ((isEvents || mini) && overlay)) &&
+					!belowBreakpoint,
+				isMini: isEvents ? innerMini : mini && !belowBreakpoint,
+			}),
+			[miniOverlay, isEvents, innerMini, overlay, mini, belowBreakpoint]
 		);
 
 		const canResized = useMemo(
-			() =>
-				false &&
-				resizeable &&
-				!innerEvents &&
-				!isMini &&
-				!belowBreakpoint,
-			[resizeable, innerEvents, isMini, belowBreakpoint]
+			() => resizeable && !isEvents && !isMini && !belowBreakpoint,
+			[resizeable, isEvents, isMini, belowBreakpoint]
 		);
 
 		const containerStyle = useMemo(
@@ -173,21 +156,39 @@ export const XSidebar = memo(
 
 		useEffect(() => {
 			if (innerRef.current) {
-				const style = window.getComputedStyle(innerRef.current);
-				const w = parseInt(style.width || 0, 10) || 0;
-				const minWidth = parseInt(style.minWidth || 0, 10) || 0;
-				//width ?? setWidth(w);
-				miniWidth ?? setMiniWidth(minWidth);
+				if (typeof window !== "undefined") {
+					const style = window.getComputedStyle(innerRef.current);
+					const w = parseInt(style.width || 0, 10) || 0;
+					const minWidth = parseInt(style.minWidth || 0, 10) || 0;
+					//width ?? updateState({width: w});
+					miniWidth ?? updateState({ miniWidth: minWidth });
+				}
 			}
 		}, [innerRef]);
-		useEffect(() => setOpenBreakpoint((v) => !v), [open]);
-		useEffect(() => setOpenBreakpoint(false), [belowBreakpoint]);
+
+		useEffect(
+			() =>
+				updateState({
+					isOpenBreakpoint: !isOpenBreakpoint,
+				}),
+			[open]
+		);
+
+		useEffect(
+			() =>
+				updateState({
+					isOpenBreakpoint: false,
+				}),
+			[belowBreakpoint]
+		);
 
 		useEffect(() => {
 			const handleClose = ({ target }) => {
 				if (target.closest(".x-sidebar") !== innerRef.current) {
-					setInnerMini(true);
-					setOpenBreakpoint(false);
+					updateState({
+						innerMini: true,
+						isOpenBreakpoint: false,
+					});
 				}
 			};
 			if (miniMouse && (miniToggle || belowBreakpoint)) {
@@ -202,35 +203,42 @@ export const XSidebar = memo(
 
 		const onHandleDrag = useCallback(
 			(e, ui) => {
-				setWidth((w) =>
-					Math.max(miniWidth, w + (reverse ? -ui.deltaX : ui.deltaX))
-				);
+				updateState({
+					width: Math.max(
+						miniWidth,
+						w + (reverse ? -ui.deltaX : ui.deltaX)
+					),
+				});
 			},
 			[reverse, miniWidth]
 		);
+
 		const onHandleDragEnd = useCallback(
 			(e, ui) => {
 				const width = Math.max(
 					innerRef.current?.getBoundingClientRect().width,
 					miniWidth
 				);
-				setWidth(width);
+				updateState({ width });
 				onResize?.(width);
 			},
 			[innerRef.current, miniWidth]
 		);
+
 		const onMouseEnter = useCallback(
 			(e) => {
-				isMouseEvent && setInnerMini(false);
+				isMouseEvent && updateState({ innerMini: false });
 			},
 			[isMouseEvent]
 		);
+
 		const onMouseLeave = useCallback(
 			(e) => {
-				isMouseEvent && setInnerMini(true);
+				isMouseEvent && updateState({ innerMini: true });
 			},
 			[isMouseEvent]
 		);
+
 		const onHandleToggle = useCallback(() => {
 			if (
 				false ===
@@ -242,7 +250,9 @@ export const XSidebar = memo(
 			) {
 				return;
 			}
-			setOpenBreakpoint((v) => !v);
+			updateState({
+				isOpenBreakpoint: !isOpenBreakpoint,
+			});
 		}, [width, isOpen, isMini]);
 
 		const onHandleMiniToggle = useCallback(() => {
@@ -256,15 +266,18 @@ export const XSidebar = memo(
 			) {
 				return;
 			}
-			setInnerMini((m) => !m);
+			updateState({ innerMini: !innerMini });
 		}, [width, isOpen, isMini]);
+
 		useEffect(() => {
-			setMounted(true);
-			if (innerRef.current) {
+			updateState({ isMounted: true });
+			if (ctx && innerRef.current) {
 				ctx.instances[type] = innerRef.current;
 			}
 			return () => {
-				delete ctx.instances[type];
+				if (ctx) {
+					delete ctx.instances[type];
+				}
 			};
 		}, []);
 
@@ -315,7 +328,7 @@ export const XSidebar = memo(
 										leftSection={
 											isMini
 												? `mdi-arrow-${
-														type === "left"
+														isLeftSidebar
 															? "right"
 															: "left"
 												  }-bold-box-outline`
@@ -337,7 +350,7 @@ export const XSidebar = memo(
 											isOpen
 												? `mdi-menu-${type}`
 												: `mdi-menu-${
-														type === "left"
+														isLeftSidebar
 															? "right"
 															: "left"
 												  }`
@@ -365,23 +378,23 @@ export const XSidebar = memo(
 					<div className="fixed transition-all duration-200 ease-in-out bg-black/50 text-white w-54 -right-50 has-checked:right-0 hover:right-0 top-12 p-4 z-50">
 						fre: <input type="checkbox" />
 						<br />
-						breakpoint: {breakpoint} - {ctx.width}
+						breakpoint: {breakpoint} - {ctx?.width}
 						<br />
 						isOpen: {isOpen ? "true" : "false"}
 						<br />
 						isMini: {isMini ? "true" : "false"}
 						<br />
+						isEvents: {isEvents ? "true" : "false"}
+						<br />
+						belowBreakpoint: {belowBreakpoint ? "true" : "false"}
+						<br />
 						isOverlay: {isOverlay ? "true" : "false"}
 						<br />
 						isMiniOverlay: {isMiniOverlay ? "true" : "false"}
 						<br />
-						belowBreakpoint: {belowBreakpoint ? "true" : "false"}
-						<br />
 						isOpenBreakpoint: {isOpenBreakpoint ? "true" : "false"}
 						<br />
 						canResized: {canResized ? "true" : "false"}
-						<br />
-						innerEvents: {innerEvents ? "true" : "false"}
 						<br />
 						isMouseEvent: {isMouseEvent ? "true" : "false"}
 						<br />
