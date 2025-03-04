@@ -1,6 +1,7 @@
+import PropTypes from "prop-types";
 import { memo, useMemo, useRef, useState } from "react";
 import { useBreakpoint } from "../../shared/hooks";
-import { ThemeProviderToggler } from "../../shared/hooks/useTheme";
+import { Box } from "../../shared/internal/box";
 import {
 	XBtn,
 	XFooter,
@@ -10,15 +11,19 @@ import {
 	XSidebar,
 } from "../../shared/ui";
 import { useApp } from "../app";
-import { WindowManager } from "../window-manager";
 
 export const Layout = memo(function LayoutFn({
 	children,
+	className,
 	container,
 	view = "hhh lpr fff",
 	breakpoint = 600,
 	overlay,
 	toggle,
+	header,
+	footer,
+	left,
+	right,
 }) {
 	const layoutRef = useRef();
 	const [width, setWidth] = useState(0);
@@ -56,25 +61,28 @@ export const Layout = memo(function LayoutFn({
 	const rightProps = useMemo(
 		() => ({
 			type: "right",
-			open: ls.open,
+			open: rs.open,
 			overlay: overlay,
 			breakpoint: breakpoint,
 			//toggle: belowBreakpoint,
-			mini: ls.mini,
+			mini: rs.mini,
 			miniOverlay: overlay || belowBreakpoint,
 			miniMouse: true,
 			miniToggle: toggle && !belowBreakpoint,
 			//resizeable: true,
-			onMini: (mini) => updateLs({ mini }),
-			onResize: (width) => updateLs({ width }),
+			onMini: (mini) => updateRs({ mini }),
+			onResize: (width) => updateRs({ width }),
 			//onToggle: () => true,
 		}),
 		[rs, overlay, breakpoint, toggle, belowBreakpoint]
 	);
-	console.log(layoutRef);
+	console.log(children);
 	return (
-		<XLayout
+		<Box
+			as={XLayout}
+			noPadding
 			container={container}
+			className={className}
 			view={view}
 			onResize={({ width }) => {
 				setWidth(width);
@@ -82,8 +90,10 @@ export const Layout = memo(function LayoutFn({
 			ref={layoutRef}
 		>
 			<XHeader
+				if={() => !!header}
 				leftSection={
-					belowBreakpoint && (
+					belowBreakpoint &&
+					!!left && (
 						<XBtn
 							color="primary"
 							leftSection="mdi-dock-left"
@@ -98,7 +108,8 @@ export const Layout = memo(function LayoutFn({
 					)
 				}
 				rightSection={
-					belowBreakpoint && (
+					belowBreakpoint &&
+					!!right && (
 						<XBtn
 							color="primary"
 							leftSection="mdi-dock-right"
@@ -113,29 +124,28 @@ export const Layout = memo(function LayoutFn({
 					)
 				}
 			>
-				<ThemeProviderToggler></ThemeProviderToggler>
+				{header}
 			</XHeader>
-			<XSidebar {...leftProps}></XSidebar>
-			<XSidebar {...rightProps}></XSidebar>
-			<XFooter noPadding>
-				<WindowManager></WindowManager>
+			<XSidebar {...leftProps} if={() => !!left}>
+				{left}
+			</XSidebar>
+			<XSidebar {...rightProps} if={() => !!right}>
+				{right}
+			</XSidebar>
+			<XFooter if={() => !!footer} noPadding>
+				{footer}
 			</XFooter>
-			<XMain className="pl-64 *:block *:border-b *:border-color">
-				{false &&
-					"open overlay toggle mini miniOverlay miniMouse miniToggle"
-						.split(/\s+/)
-						.map((prop) => (
-							<label key={prop}>
-								<input
-									name={prop}
-									checked={lll[prop]}
-									type="checkbox"
-									onChange={uLll}
-								/>
-								<span className="ml-3 font-medium">{prop}</span>
-							</label>
-						))}
-			</XMain>
-		</XLayout>
+			<XMain>{children}</XMain>
+		</Box>
 	);
 });
+
+Layout.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+	view: PropTypes.string,
+	container: PropTypes.bool,
+	breakpoint: PropTypes.number,
+	overlay: PropTypes.bool,
+	toggle: PropTypes.bool,
+};

@@ -1,9 +1,10 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { DraggableCore } from "react-draggable";
 import { useBreakpoint, useForkRef, useObjectState } from "../../hooks";
+import { Box } from "../../internal/box";
 import { forwardRefWithAs } from "../../internal/render";
 import { Teleport } from "../../internal/teleport";
 import { isUndefined } from "../../utils/is";
@@ -12,7 +13,6 @@ import { XIcon } from "../icon";
 import { useXLayoutContext } from "../layout";
 import "./style.css";
 import { XSidebarContext } from "./XSidebarContext";
-
 /**
  *
  * @param {*} param0
@@ -289,21 +289,23 @@ export const XSidebar = memo(
 
 		return (
 			<>
-				<XSidebarContext.Provider value={{ width, isMini, isOpen }}>
-					<div
-						className={classNames("x-sidebar-container", {
-							"x-layout-sidebar": isLayout,
-							[`x-layout-sidebar--${type}`]: isLayout && type,
-							"x-sidebar--animate": !canResized,
-						})}
-						style={containerStyle}
-						onMouseEnter={() =>
-							isMouseEvent && updateState({ innerMini: false })
-						}
-						onMouseLeave={() =>
-							isMouseEvent && updateState({ innerMini: true })
-						}
-					>
+				<Box
+					{...props}
+					noPadding
+					className={classNames("x-sidebar-container", {
+						"x-layout-sidebar": isLayout,
+						[`x-layout-sidebar--${type}`]: isLayout && type,
+						"x-sidebar--animate": !canResized,
+					})}
+					style={containerStyle}
+					onMouseEnter={() =>
+						isMouseEvent && updateState({ innerMini: false })
+					}
+					onMouseLeave={() =>
+						isMouseEvent && updateState({ innerMini: true })
+					}
+				>
+					<XSidebarContext.Provider value={{ width, isMini, isOpen }}>
 						<div
 							className={classNames("x-sidebar", {
 								"is-mounted": isMounted,
@@ -385,8 +387,9 @@ export const XSidebar = memo(
 								</DraggableCore>
 							)}
 						</div>
-					</div>
-				</XSidebarContext.Provider>
+					</XSidebarContext.Provider>
+				</Box>
+
 				{false && (
 					<Teleport target="body">
 						<div className="fixed transition-all duration-200 ease-in-out bg-black/50 text-white w-54 -right-50 has-checked:right-0 hover:right-0 top-12 p-4 z-50">

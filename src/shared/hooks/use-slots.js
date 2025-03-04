@@ -6,7 +6,7 @@ import {
 	useMemo,
 } from "react";
 
-import { isString } from "../utils/is";
+import { isArray, isString } from "../utils/is";
 
 export function useSlots(children) {
 	const slots = useMemo(() => {
@@ -16,7 +16,7 @@ export function useSlots(children) {
 			tmpChildren = children.props.children;
 		}
 
-		tmpChildren = Array.isArray(tmpChildren) ? tmpChildren : [tmpChildren];
+		tmpChildren = isArray(tmpChildren) ? tmpChildren : [tmpChildren];
 		const collect = {
 			default: [],
 		};
@@ -25,7 +25,7 @@ export function useSlots(children) {
 			if (!collect[slotName]) {
 				collect[slotName] = [];
 			}
-			collect[slotName].push(child);
+			collect[slotName].concat(child);
 		}
 
 		for (const child of tmpChildren) {
@@ -43,14 +43,16 @@ export function useSlots(children) {
 		return collect;
 	}, [children]);
 
+	/**
+	 * Рендерит слот с указанным именем.
+	 * Если слот пуст, использует defaultChildren.
+	 */
 	const slot = (name = "", defaultChildren = [], ...args) => {
 		name ||= "default";
 
 		const children =
 			slots[name] ??
-			(Array.isArray(defaultChildren)
-				? defaultChildren
-				: [defaultChildren]);
+			(isArray(defaultChildren) ? defaultChildren : [defaultChildren]);
 
 		function genSlot(child, ...args) {
 			if (isValidElement(child)) {
@@ -74,15 +76,21 @@ export function useSlots(children) {
 		return genSlot(children[0], ...args);
 	};
 
-	const hasSlot = (slot) => {
-		return slots.hasOwnProperty(slot) && slots[slot].length > 0;
+	/**
+	 * Проверяет, существует ли слот и содержит ли он элементы.
+	 */
+	const hasSlot = (slotName) => {
+		return slots.hasOwnProperty(slotName) && slots[slotName].length > 0;
 	};
 
-	const wrapSlot = (slot, componentName, props = {}) => {
-		if (slot.type === componentName) {
+	/**
+	 * Оборачивает элемент в указанный компонент, если он еще не обернут.
+	 */
+	const wrapSlot = (slot, component, props = {}) => {
+		if (slot.type === component) {
 			return cloneElement(slot, props);
 		}
-		return h(componentName, props, slot);
+		return h(component, props, slot);
 	};
 
 	return { slot, hasSlot, wrapSlot, slots };

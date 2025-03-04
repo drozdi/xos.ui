@@ -1,10 +1,9 @@
 import classNames from "classnames";
-import { memo, useEffect, useImperativeHandle, useMemo, useRef } from "react";
-import { useForkRef, useResizeObserver } from "../../hooks";
-import { Box } from "../../internal/box";
+import { useImperativeHandle, useMemo, useRef } from "react";
+import { useResizeObserver } from "../../hooks";
 import { forwardRefWithAs } from "../../internal/render";
 import "./style.css";
-import { XLayoutProvider, useXLayoutContext } from "./XLayoutContext";
+import { XLayoutProvider } from "./XLayoutContext";
 
 export const XLayout = forwardRefWithAs(function XLayoutFn(
 	{ children, className, container, view = "hhh lpr fff", onResize },
@@ -17,26 +16,28 @@ export const XLayout = forwardRefWithAs(function XLayoutFn(
 	} = useResizeObserver({
 		onResize,
 	});
-
+	const instances = useRef({});
 	const rows = useMemo(
 		() =>
-			view.split(" ").map((row) => {
-				return row.split("");
-			}),
+			view
+				.toLowerCase()
+				.split(" ")
+				.map((row) => {
+					return row.split("");
+				}),
 		[view]
 	);
 
 	const ctx = useMemo(() => {
-		const instances = {};
 		return {
 			get container() {
-				return container;
+				return container.current;
 			},
 			get instances() {
-				return instances;
+				return instances.current;
 			},
 			set instances(val) {
-				instances = val;
+				instances.current = val;
 			},
 			rows,
 			width,
@@ -46,21 +47,14 @@ export const XLayout = forwardRefWithAs(function XLayoutFn(
 
 	useImperativeHandle(ref, () => ctx);
 
-	const isHl = useMemo(
-		() => rows[0][0] === "l" || !ctx.instances.header,
-		[rows]
-	);
-	const isHr = useMemo(
-		() => rows[0][2] === "r" || !ctx.instances.header,
-		[rows]
-	);
-	const isFl = useMemo(
-		() => rows[2][0] === "l" || !ctx.instances.footer,
-		[rows]
-	);
-	const isFr = useMemo(
-		() => rows[2][2] === "r" || !ctx.instances.footer,
-		[rows]
+	const { isHl, isHr, isFl, isFr } = useMemo(
+		() => ({
+			isHl: rows[0][0] === "l" || !instances.current.header,
+			isHr: rows[0][2] === "r" || !instances.current.header,
+			isFl: rows[2][0] === "l" || !instances.current.footer,
+			isFr: rows[2][2] === "r" || !instances.current.footer,
+		}),
+		[rows, instances.current.header, instances.current.footer]
 	);
 
 	const classes = useMemo(
@@ -92,39 +86,3 @@ export const XLayout = forwardRefWithAs(function XLayoutFn(
 		</>
 	);
 });
-
-export const XMain = memo(
-	forwardRefWithAs(function XMain({ children, className, ...props }, ref) {
-		const innerRef = useRef(null);
-		const handleRef = useForkRef(innerRef, ref);
-
-		const ctx = useXLayoutContext();
-
-		useEffect(() => {
-			if (innerRef.current) {
-				ctx.instances.main = innerRef.current;
-			}
-			return () => {
-				delete ctx.instances.main;
-			};
-		}, [innerRef.current]);
-
-		const isLayout = !!ctx;
-		return (
-			<Box
-				as="section"
-				square
-				{...props}
-				className="x-layout-main"
-				ref={handleRef}
-			>
-				<Box.Section
-					as="main"
-					className={classNames("x-layout-body", className)}
-				>
-					{children}
-				</Box.Section>
-			</Box>
-		);
-	})
-);

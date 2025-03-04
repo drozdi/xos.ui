@@ -6,11 +6,14 @@
 }
 
 .x-sidebar {
-	@apply min-w-14 flex flex-col justify-between bg-surface border-r border-solid border-color z-50;
+	@apply min-w-14 flex flex-col justify-between absolute top-0 bottom-0 
+	bg-surface border-r border-solid border-color z-50;
 }
+
 .x-sidebar-content {
-	@apply max-w-full max-h-full overflow-y-auto overflow-x-hidden relative z-50;
+	@apply max-w-full max-h-full overflow-y-auto overflow-x-hidden;
 }
+
 .x-sidebar-toggle-mini {
 	@apply w-full border-t border-color;
 }

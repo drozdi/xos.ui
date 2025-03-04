@@ -18,7 +18,37 @@ function App() {
 
 	return (
 		<AppProvider smKey="core">
-			<Layout container overlay toggle view="lhr lpr lff"></Layout>
+			<Layout
+				container
+				overlay
+				toggle
+				view="hhh lpr lff"
+				left={
+					<XList separator>
+						{routers.map((item, index) => (
+							<XItem
+								key={index}
+								onClick={() => {
+									setView(item.element);
+									setPath(item.path);
+								}}
+								active={item.path === path}
+							>
+								<XItemSection side>
+									<XIcon>{item.icon}</XIcon>
+								</XItemSection>
+								<XItemSection>
+									<XItemLabel lines>{item.label}</XItemLabel>
+								</XItemSection>
+							</XItem>
+						))}
+					</XList>
+				}
+				header={<ThemeProviderToggler></ThemeProviderToggler>}
+				footer={<WindowManager></WindowManager>}
+			>
+				{view}
+			</Layout>
 		</AppProvider>
 	);
 
