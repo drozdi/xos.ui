@@ -9,7 +9,7 @@
 	@apply py-0 border-b border-color;
 }
 .xWindow-content {
-	@apply relative;
+	@apply relative overflow-hidden;
 }
 
 .xWindow-res {

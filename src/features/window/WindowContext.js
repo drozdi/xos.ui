@@ -1,3 +1,3 @@
 import { createSafeContext } from "../../shared/internal/createSafeContext";
 
-export const [XWindowProvider, useXWindowContext] = createSafeContext();
+export const [WindowProvider, useWindowContext] = createSafeContext();

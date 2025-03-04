@@ -15,10 +15,10 @@ import { Box } from "../../shared/internal/box";
 import { XBtn } from "../../shared/ui/btn/XBtn";
 import { getComputedSize } from "../../shared/utils/domFns";
 import { minMax } from "../../shared/utils/fns";
-import { useApp } from "../app/hooks/useApp";
+import { useApp } from "../app";
 import { useWM } from "../window-manager";
 import "./style.css";
-import { XWindowProvider } from "./XWindowContext";
+import { WindowProvider } from "./WindowContext";
 
 const changeHandle = {
 	e(rect, dx) {
@@ -69,7 +69,7 @@ const changeHandle = {
 	},
 };
 
-export const XWindow = forwardRef(function XWindowFn(
+export const Window = forwardRef(function WindowFn(
 	{
 		parent = document.body,
 		aspectFactor,
@@ -465,7 +465,7 @@ export const XWindow = forwardRef(function XWindowFn(
 	}, []);
 
 	return (
-		<XWindowProvider value={win}>
+		<WindowProvider value={win}>
 			<DraggableCore
 				disabled={!draggable && isFullscreen}
 				onDragStart={onDragStart}
@@ -524,11 +524,11 @@ export const XWindow = forwardRef(function XWindowFn(
 					</div>
 				</Resizable>
 			</DraggableCore>
-		</XWindowProvider>
+		</WindowProvider>
 	); //*/
 });
 
-XWindow.propTypes = {
+Window.propTypes = {
 	parent: PropTypes.any,
 	children: PropTypes.node,
 	className: PropTypes.string,

@@ -4,7 +4,6 @@ import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { DraggableCore } from "react-draggable";
 import { useBreakpoint, useForkRef, useObjectState } from "../../hooks";
-import { Box } from "../../internal/box";
 import { forwardRefWithAs } from "../../internal/render";
 import { Teleport } from "../../internal/teleport";
 import { isUndefined } from "../../utils/is";
@@ -289,9 +288,7 @@ export const XSidebar = memo(
 
 		return (
 			<>
-				<Box
-					{...props}
-					noPadding
+				<div
 					className={classNames("x-sidebar-container", {
 						"x-layout-sidebar": isLayout,
 						[`x-layout-sidebar--${type}`]: isLayout && type,
@@ -388,7 +385,7 @@ export const XSidebar = memo(
 							)}
 						</div>
 					</XSidebarContext.Provider>
-				</Box>
+				</div>
 
 				{false && (
 					<Teleport target="body">

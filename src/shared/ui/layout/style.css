@@ -1,7 +1,7 @@
 @reference "@style";
 
 .x-layout-container {
-	@apply relative w-full h-full;
+	@apply relative w-full h-full overflow-hidden;
 }
 .x-layout {
 	@apply grid w-full max-h-full h-full grid-rows-(--grid-row-layout) grid-cols-(--grid-col-layout);
