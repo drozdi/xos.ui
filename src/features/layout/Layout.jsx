@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { memo, useMemo, useRef, useState } from "react";
-import { useBreakpoint } from "../../shared/hooks";
+import { useBreakpoint, useSlots } from "../../shared/hooks";
 import { Box } from "../../shared/internal/box";
 import {
 	XBtn,
@@ -20,10 +20,6 @@ export const Layout = memo(function LayoutFn({
 	breakpoint = 600,
 	overlay,
 	toggle,
-	header,
-	footer,
-	left,
-	right,
 }) {
 	const layoutRef = useRef();
 	const [width, setWidth] = useState(0);
@@ -40,6 +36,7 @@ export const Layout = memo(function LayoutFn({
 		mini: true,
 	});
 	const belowBreakpoint = useBreakpoint(breakpoint, width);
+	const { slot, hasSlot, wrapSlot } = useSlots(children);
 	const leftProps = useMemo(
 		() => ({
 			type: "left",
@@ -76,7 +73,51 @@ export const Layout = memo(function LayoutFn({
 		}),
 		[rs, overlay, breakpoint, toggle, belowBreakpoint]
 	);
-	console.log(children);
+
+	const left = () => {
+		return wrapSlot(slot("left", null), XSidebar, leftProps);
+	};
+	const right = () => {
+		return wrapSlot(slot("right", null), XSidebar, rightProps);
+	};
+	const footer = () => {
+		return wrapSlot(slot("footer", null), XFooter, { noPadding: true });
+	};
+	const header = () => {
+		return wrapSlot(slot("header", null), XHeader, {
+			leftSection: belowBreakpoint && hasSlot("left") && (
+				<XBtn
+					color="primary"
+					leftSection="mdi-dock-left"
+					size="sm"
+					square
+					onClick={(e) => {
+						e.stopPropagation();
+						e.preventDefault();
+						updateLs({ open: !ls.open });
+					}}
+				/>
+			),
+			rightSection: belowBreakpoint && hasSlot("right") && (
+				<XBtn
+					color="primary"
+					leftSection="mdi-dock-right"
+					size="sm"
+					square
+					onClick={(e) => {
+						e.stopPropagation();
+						e.preventDefault();
+						updateRs({ open: !rs.open });
+					}}
+				/>
+			),
+		});
+	};
+	const def = () => {
+		return wrapSlot(slot(), XMain);
+	};
+
+	//console.log(children);
 	return (
 		<Box
 			as={XLayout}
@@ -89,53 +130,11 @@ export const Layout = memo(function LayoutFn({
 			}}
 			ref={layoutRef}
 		>
-			<XHeader
-				if={() => !!header}
-				leftSection={
-					belowBreakpoint &&
-					!!left && (
-						<XBtn
-							color="primary"
-							leftSection="mdi-dock-left"
-							size="sm"
-							square
-							onClick={(e) => {
-								e.stopPropagation();
-								e.preventDefault();
-								updateLs({ open: !ls.open });
-							}}
-						/>
-					)
-				}
-				rightSection={
-					belowBreakpoint &&
-					!!right && (
-						<XBtn
-							color="primary"
-							leftSection="mdi-dock-right"
-							size="sm"
-							square
-							onClick={(e) => {
-								e.stopPropagation();
-								e.preventDefault();
-								updateRs({ open: !rs.open });
-							}}
-						/>
-					)
-				}
-			>
-				{header}
-			</XHeader>
-			<XSidebar {...leftProps} if={() => !!left}>
-				{left}
-			</XSidebar>
-			<XSidebar {...rightProps} if={() => !!right}>
-				{right}
-			</XSidebar>
-			<XFooter if={() => !!footer} noPadding>
-				{footer}
-			</XFooter>
-			<XMain>{children}</XMain>
+			{hasSlot("left") && left()}
+			{hasSlot("right") && right()}
+			{hasSlot("header") && header()}
+			{hasSlot("footer") && footer()}
+			{def()}
 		</Box>
 	);
 });

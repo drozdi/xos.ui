@@ -34,18 +34,17 @@ export const XMain = memo(
 				className={classNames("x-main", { "x-layout-main": isLayout })}
 				ref={handleRef}
 			>
-				<Box.Section
-					as="main"
+				<main
 					className={classNames(
 						"x-main-content",
 						{
-							"x-layout-body": isLayout,
+							"x-layout-content": isLayout,
 						},
 						className
 					)}
 				>
 					{children}
-				</Box.Section>
+				</main>
 			</Box>
 		);
 	})

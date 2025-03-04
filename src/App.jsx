@@ -17,112 +17,49 @@ function App() {
 	}, [win]);*/
 
 	return (
-		<AppProvider smKey="core">
-			<Layout
-				container
-				overlay
-				toggle
-				view="hhh lpr lff"
-				left={
-					<XList separator>
-						{routers.map((item, index) => (
-							<XItem
-								key={index}
-								onClick={() => {
-									setView(item.element);
-									setPath(item.path);
-								}}
-								active={item.path === path}
-							>
-								<XItemSection side>
-									<XIcon>{item.icon}</XIcon>
-								</XItemSection>
-								<XItemSection>
-									<XItemLabel lines>{item.label}</XItemLabel>
-								</XItemSection>
-							</XItem>
-						))}
-					</XList>
-				}
-				header={<ThemeProviderToggler></ThemeProviderToggler>}
-				footer={<WindowManager></WindowManager>}
-			>
-				{view}
-			</Layout>
-		</AppProvider>
-	);
-
-	return (
-		<AppProvider smKey="core">
-			<XLayout container overlay toggle view="lhr lpr lff">
-				{{
-					header: <ThemeProviderToggler></ThemeProviderToggler>,
-					footer: () => <WindowManager></WindowManager>,
-					default: (props) => {
-						return (
-							<AppProvider smKey="app-1">
-								<XWindow title="Title" ref={win}>
-									<XLayout
-										container
-										overlay
-										toggle
-										view="lhr lpr lff"
-									>
-										{{
-											left: (props) => {
-												return (
-													<XList separator>
-														{routers.map(
-															(item, index) => (
-																<XItem
-																	key={index}
-																	onClick={() => {
-																		setView(
-																			item.element
-																		);
-																		setPath(
-																			item.path
-																		);
-																	}}
-																	active={
-																		item.path ===
-																		path
-																	}
-																>
-																	<XItemSection
-																		side
-																	>
-																		<XIcon>
-																			{
-																				item.icon
-																			}
-																		</XIcon>
-																	</XItemSection>
-																	<XItemSection>
-																		<XItemLabel
-																			lines
-																		>
-																			{
-																				item.label
-																			}
-																		</XItemLabel>
-																	</XItemSection>
-																</XItem>
-															)
-														)}
-													</XList>
-												);
-											},
-											default: (props) => view,
-										}}
-									</XLayout>
-								</XWindow>
-							</AppProvider>
-						);
-					},
-				}}
-			</XLayout>
-		</AppProvider>
+		<>
+			<AppProvider smKey="core">
+				<Layout container overlay toggle view="hhh lpr lff">
+					<ThemeProviderToggler slot="header"></ThemeProviderToggler>
+					<WindowManager slot="footer"></WindowManager>
+					<>
+						<AppProvider smKey="app-1">
+							<XWindow title="Title" ref={win}>
+								<Layout
+									container
+									overlay
+									toggle
+									view="lhr lpr lff"
+								>
+									<XList slot="left" separator>
+										{routers.map((item, index) => (
+											<XItem
+												key={index}
+												onClick={() => {
+													setView(item.element);
+													setPath(item.path);
+												}}
+												active={item.path === path}
+											>
+												<XItemSection side>
+													<XIcon>{item.icon}</XIcon>
+												</XItemSection>
+												<XItemSection>
+													<XItemLabel lines>
+														{item.label}
+													</XItemLabel>
+												</XItemSection>
+											</XItem>
+										))}
+									</XList>
+									<>{view}</>
+								</Layout>
+							</XWindow>
+						</AppProvider>
+					</>
+				</Layout>
+			</AppProvider>
+		</>
 	);
 }
 
