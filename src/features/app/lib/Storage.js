@@ -3,7 +3,7 @@ import settingManager from "../../../entites/core/setting-manager";
 import { useObjectState } from "../../../shared/hooks";
 import { cached } from "../../../shared/utils/cached";
 
-export const Storage = cached(function XStorage(type, key) {
+export const Storage = cached(function StorageFn(type, key) {
 	let smActive = false;
 	let sm = {
 		set(key, val) {
@@ -14,6 +14,7 @@ export const Storage = cached(function XStorage(type, key) {
 		},
 		remove(key) {},
 	};
+
 	if (settingManager[type] && key) {
 		sm = settingManager[type].sub(key);
 	} else if (key === "core") {
@@ -55,13 +56,6 @@ export const Storage = cached(function XStorage(type, key) {
 			smActive = false;
 			fn(...args);
 			smActive = old;
-		},
-		useState(name, initial) {
-			const [state, setState] = useState(this.get(name, initial));
-			useEffect(() => {
-				this.set(name, state);
-			}, [state]);
-			return [state, setState];
 		},
 		useState(name, initial) {
 			const [state, setState] = useState(this.get(name, initial));

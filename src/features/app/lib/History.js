@@ -13,6 +13,9 @@ export class History {
 	get isLast() {
 		return this.index === this.length - 1;
 	}
+	isCurrent(history) {
+		return this.history[this.index] === history;
+	}
 	back() {
 		if (this.index > 0) {
 			this.index--;
@@ -34,6 +37,11 @@ export class History {
 	del() {
 		this.history.splice(this.index, 1);
 		this.index--;
+		this.fn?.(this.history[this.index]);
+	}
+	init({ history = [], index = -1 }) {
+		this.history = history;
+		this.index = index;
 		this.fn?.(this.history[this.index]);
 	}
 }

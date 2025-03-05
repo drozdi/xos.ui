@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useObjectState } from "../../shared/hooks";
 import { EventBus } from "../../shared/utils/EventBus";
+import { History } from "./lib/History";
 import { Storage } from "./lib/Storage";
 
 export const AppContext = createContext({
@@ -34,16 +35,38 @@ export const AppContext = createContext({
 });
 
 export const AppProvider = ({ children, smKey, ...config }) => {
+	const history = useRef();
 	return (
 		<AppContext.Provider
 			value={{
 				...config,
+				history(fn) {
+					if (!history.current) {
+						history.current = new History(fn);
+					}
+
+					const [h, sh] = this.sm("APP").useState("history", {
+						history: history.current?.history,
+						index: history.current?.index,
+					});
+
+					useEffect(() => {
+						sh({
+							history: history.current?.history,
+							index: history.current?.index,
+						});
+					}, [history.current.history, history.current.index]);
+
+					useEffect(() => {
+						history.current?.init(h);
+						this.sm("APP").active = true;
+					}, []);
+
+					return history.current;
+				},
 				smKey,
 				sm(type) {
 					return Storage(type, smKey);
-				},
-				$sm(type) {
-					return this.sm(type, smKey);
 				},
 				...new EventBus(),
 				...{
