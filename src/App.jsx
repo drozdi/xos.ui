@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import { AppExample } from "./apps/example/app";
 import { Layout } from "./features";
 import { AppProvider } from "./features/app";
@@ -7,14 +6,6 @@ import { ThemeProviderToggler } from "./shared/hooks/useTheme";
 import "./style/index.css";
 
 function App() {
-	const [view, setView] = useState();
-	const [path, setPath] = useState();
-	const win = useRef();
-
-	/*useEffect(() => {
-		console.log(win);
-	}, [win]);*/
-
 	return (
 		<>
 			<AppProvider smKey="core">

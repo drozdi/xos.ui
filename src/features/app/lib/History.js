@@ -1,47 +1,55 @@
 export class History {
 	constructor(fn) {
-		this.history = [];
+		this.histories = [];
 		this.index = -1;
 		this.fn = fn;
 	}
 	get length() {
-		return this.history.length;
+		return this.histories.length;
 	}
-	get isFirst() {
-		return this.index === 0;
+	canGoBack() {
+		return this.index <= 0;
 	}
-	get isLast() {
-		return this.index === this.length - 1;
+	canGoForward() {
+		return this.index === this.histories.length - 1;
 	}
 	isCurrent(history) {
-		return this.history[this.index] === history;
+		return this.histories[this.index] === history;
 	}
-	back() {
+	current() {
+		return this.histories[this.index];
+	}
+	isEmpty() {
+		return this.histories.length === 0;
+	}
+	back(callback) {
 		if (this.index > 0) {
 			this.index--;
-			this.fn?.(this.history[this.index]);
+			this.fn?.(this.histories[this.index]);
+			callback?.();
 		}
 	}
-	up() {
+	forward(callback) {
 		if (this.index < this.length - 1) {
 			this.index++;
-			this.fn?.(this.history[this.index]);
+			this.fn?.(this.histories[this.index]);
+			callback?.();
 		}
 	}
 	add(history) {
 		this.index++;
-		this.history = this.history.slice(0, this.history.index);
-		this.history.push(history);
+		this.histories = this.histories.slice(0, this.index);
+		this.histories.push(history);
 		this.fn?.(history);
 	}
 	del() {
-		this.history.splice(this.index, 1);
+		this.histories.splice(this.index, 1);
 		this.index--;
-		this.fn?.(this.history[this.index]);
+		this.fn?.(this.histories[this.index]);
 	}
-	init({ history = [], index = -1 }) {
-		this.history = history;
+	init({ histories = [], index = -1 }) {
+		this.histories = histories;
 		this.index = index;
-		this.fn?.(this.history[this.index]);
+		this.fn?.(this.histories[this.index]);
 	}
 }

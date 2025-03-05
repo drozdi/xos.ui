@@ -85,6 +85,7 @@ export const Layout = memo(function LayoutFn({
 	};
 	const header = () => {
 		return wrapSlot(slot("header", null), XHeader, {
+			align: "normal",
 			leftSection: belowBreakpoint && hasSlot("left") && (
 				<XBtn
 					color="primary"

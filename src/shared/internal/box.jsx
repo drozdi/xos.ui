@@ -54,7 +54,14 @@ Box.propTypes = {
 	col: PropTypes.bool,
 	noWrap: PropTypes.bool,
 	size: PropTypes.oneOf(["xs", "sm", "xl"]),
-	align: PropTypes.oneOf(["start", "center", "end", "stretch", "baseline"]),
+	align: PropTypes.oneOf([
+		"start",
+		"center",
+		"end",
+		"stretch",
+		"baseline",
+		"normal",
+	]),
 	justify: PropTypes.oneOf([
 		"start",
 		"center",

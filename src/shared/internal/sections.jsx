@@ -32,6 +32,7 @@ const processSection = (section) => {
  * @param {string | Function} props.bodyClass - Классы для тела компонента.
  * @param {boolean} props.noPadding - Флаг, указывающий на отсутствие внутренних отступов.
  * @param {boolean} props.col - Флаг, указывающий на отображение компонента в виде колонки.
+ * @param {boolean} props.col - Флаг, указывающий на отображение содержимого компонента в виде строки.
  * @param {boolean} props.noWrap - Флаг, указывающий на отсутствие обертки для элементов.
  * @param {boolean} props.dense - Флаг, указывающий на плотное расположение элементов.
  * @param {boolean} props.square - Флаг, указывающий на квадратную форму компонента.
@@ -53,6 +54,7 @@ export const Sections = forwardRefWithAs(function Box(
 		bodyClass,
 		noPadding,
 		col,
+		row,
 		noWrap,
 		dense,
 		square,
@@ -85,7 +87,8 @@ export const Sections = forwardRefWithAs(function Box(
 		return classNames(
 			"x-box-section",
 			{
-				[`align-${align}`]: align,
+				"x-box-section--row": row,
+				[`items-${align}`]: align,
 				[`justify-${justify}`]: justify,
 			},
 			bodyClass
@@ -110,11 +113,19 @@ Sections.propTypes = {
 	bodyClass: PropTypes.string,
 	noPadding: PropTypes.bool,
 	col: PropTypes.bool,
+	row: PropTypes.bool,
 	noWrap: PropTypes.bool,
 	dense: PropTypes.bool,
 	square: PropTypes.bool,
 	size: PropTypes.oneOf(["xs", "sm", "xl"]),
-	align: PropTypes.oneOf(["start", "center", "end", "stretch", "baseline"]),
+	align: PropTypes.oneOf([
+		"start",
+		"center",
+		"end",
+		"stretch",
+		"baseline",
+		"normal",
+	]),
 	justify: PropTypes.oneOf([
 		"start",
 		"center",

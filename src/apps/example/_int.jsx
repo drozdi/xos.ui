@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Layout, Window } from "../../features";
+import { History, Layout, Window } from "../../features";
 import { useApp } from "../../features/app";
 import { XIcon, XItem, XItemLabel, XItemSection, XList } from "../../shared/ui";
 import { routers } from "./index";
@@ -9,6 +9,9 @@ export function App_Int() {
 	const $history = $app.history((history) => {
 		setView(routers.find((item) => item.path === history)?.element);
 	});
+	if ($history.isEmpty()) {
+		$history.add("/");
+	}
 	return (
 		<Window title="Title">
 			<Layout container overlay toggle view="lhr lpr lff">
@@ -30,6 +33,7 @@ export function App_Int() {
 						</XItem>
 					))}
 				</XList>
+				<History slot="header" />
 				<>{view}</>
 			</Layout>
 		</Window>

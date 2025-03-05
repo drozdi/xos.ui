@@ -67,3 +67,6 @@
 .items-stretch {
 	@apply items-stretch;
 }
+.items-normal {
+	align-items: normal;
+}

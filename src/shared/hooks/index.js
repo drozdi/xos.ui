@@ -1,4 +1,5 @@
 export * from "./use-breakpoint";
+export * from "./use-force-update";
 export * from "./use-fork-ref";
 export * from "./use-id";
 export * from "./use-object-state";
