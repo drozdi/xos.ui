@@ -13,6 +13,7 @@ import { Resizable } from "react-resizable";
 import { useId } from "../../shared/hooks/use-id";
 import { Box } from "../../shared/internal/box";
 import { XBtn } from "../../shared/ui/btn/XBtn";
+import { isString } from "../../shared/utils//is";
 import { getComputedSize } from "../../shared/utils/domFns";
 import { minMax } from "../../shared/utils/fns";
 import { useApp } from "../app";
@@ -116,9 +117,12 @@ export const Window = forwardRef(function WindowFn(
 	const [isCollapse, setCollapse] = $sm.useState("isCollapse", false);
 	const [active, setActive] = $sm.useState("active", false);
 
-	const emit = useCallback((...args) => {
-		$app?.emit?.(...args);
-	}, []);
+	const emit = useCallback(
+		(...args) => {
+			$app?.emit?.(...args);
+		},
+		[$app]
+	);
 
 	const nodeRef = useRef();
 	const contentRef = useRef();
@@ -259,6 +263,11 @@ export const Window = forwardRef(function WindowFn(
 			contentRef,
 			aspectFactor,
 			title,
+			parent,
+			setActive,
+			setCollapse,
+			setFullscreen,
+			setPosition,
 		]
 	);
 
@@ -282,28 +291,37 @@ export const Window = forwardRef(function WindowFn(
 			}
 			setFullscreen((v) => !v);
 		},
-		[canDo, isFullscreen]
+		[canDo, setCollapse, setFullscreen, isFullscreen]
 	);
-	const handlerCollapse = useCallback((event) => {
-		if (!canDo("collapse")) {
-			return false;
-		}
-		setCollapse((v) => !v);
-	}, []);
-	const handlerClose = useCallback((event) => {
-		if (!canDo("close")) {
-			return false;
-		}
-		emit("close", event);
-		onClose?.(event);
-	}, []);
-	const handlerReload = useCallback((event) => {
-		if (!canDo("reload")) {
-			return false;
-		}
-		emit("reload", event);
-		onReload?.(event);
-	}, []);
+	const handlerCollapse = useCallback(
+		(event) => {
+			if (!canDo("collapse")) {
+				return false;
+			}
+			setCollapse((v) => !v);
+		},
+		[canDo, setCollapse]
+	);
+	const handlerClose = useCallback(
+		(event) => {
+			if (!canDo("close")) {
+				return false;
+			}
+			emit("close", event);
+			onClose?.(event);
+		},
+		[canDo, emit, onClose]
+	);
+	const handlerReload = useCallback(
+		(event) => {
+			if (!canDo("reload")) {
+				return false;
+			}
+			emit("reload", event);
+			onReload?.(event);
+		},
+		[canDo, emit, onReload]
+	);
 
 	const mixIcons = useMemo(
 		() => (
@@ -383,15 +401,12 @@ export const Window = forwardRef(function WindowFn(
 	const onActive = useCallback(() => {
 		if (!win.active && wmActive) {
 			wmActive(win);
+			win.z = ++zIndex;
+			setZIndex?.(zIndex);
 		}
-		let z = Math.max(win.z, zIndex);
-		z++;
-		win.z = ++z;
-		win.z++;
-		setZIndex?.(win.z);
 		win.active = true;
 		win.isCollapse = false;
-	}, [win]);
+	}, [win, setZIndex, zIndex, wmActive]);
 	const onDeActive = useCallback(
 		(event) => {
 			if (win.active && !nodeRef.current?.contains(event.target)) {
@@ -399,7 +414,7 @@ export const Window = forwardRef(function WindowFn(
 				win.active = false;
 			}
 		},
-		[nodeRef, win]
+		[nodeRef, win, uid, isActive, wmDisable]
 	);
 
 	const onFocus = useCallback((event) => {
@@ -419,7 +434,6 @@ export const Window = forwardRef(function WindowFn(
 		}
 	}, []);
 
-	const onDragStart = useCallback(() => {}, []);
 	const onDragMove = useCallback(
 		(e, { deltaX, deltaY }) => {
 			!isFullscreen &&
@@ -431,9 +445,7 @@ export const Window = forwardRef(function WindowFn(
 		},
 		[isFullscreen]
 	);
-	const onDragStop = useCallback(() => {}, []);
-	//
-	const onResizeStart = useCallback(() => {}, []);
+
 	const onResizeMove = useCallback((e, { handle, size }) => {
 		setPosition((v) => ({
 			...v,
@@ -444,17 +456,19 @@ export const Window = forwardRef(function WindowFn(
 			),
 		}));
 	}, []);
-	const onResizeStop = useCallback(() => {}, []);
 
 	useImperativeHandle(ref, () => win);
 
 	useEffect(() => {
 		$sm.active = true;
-		let z = Math.max(zIndex, parseInt(position.zIndex, 10) || 0);
-		setZIndex(z);
+		win.z = zIndex = Math.max(zIndex, position.zIndex);
+		setZIndex(zIndex);
 		wmAdd(win);
-		//win.active && wmActive(win);
-		return () => $sm.remove();
+		win.active && wmActive(win);
+		return () => {
+			wmDisable();
+			$sm.remove();
+		};
 	}, []);
 	useEffect(() => {
 		document.documentElement.addEventListener("click", onDeActive);
@@ -475,9 +489,7 @@ export const Window = forwardRef(function WindowFn(
 		<WindowProvider value={win}>
 			<DraggableCore
 				disabled={!draggable && isFullscreen}
-				onDragStart={onDragStart}
 				onDrag={onDragMove}
-				onDragStop={onDragStop}
 				handle=".xWindow-bar"
 				cancel=".xWindow-res, .xWindow-drag-no"
 				nodeRef={nodeRef}
@@ -488,9 +500,7 @@ export const Window = forwardRef(function WindowFn(
 					}}
 					width={position.width}
 					height={position.height}
-					onResizeStart={onResizeStart}
 					onResize={onResizeMove}
-					onResizeStop={onResizeStop}
 					resizeHandles={["s", "w", "e", "n", "sw", "nw", "se", "ne"]}
 					handle={(handleAxis, ref) => (
 						<div
@@ -539,6 +549,7 @@ Window.propTypes = {
 	parent: PropTypes.any,
 	children: PropTypes.node,
 	className: PropTypes.string,
+	aspectFactor: PropTypes.number,
 	x: PropTypes.number,
 	y: PropTypes.number,
 	z: PropTypes.number,
