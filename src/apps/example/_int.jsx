@@ -33,7 +33,11 @@ export function App_Int() {
 						</XItem>
 					))}
 				</XList>
-				<History slot="header" />
+				<History slot="header" show>
+					{(history) =>
+						routers.find((item) => item.path === history)?.label
+					}
+				</History>
 				<>{view}</>
 			</Layout>
 		</Window>

@@ -14,6 +14,7 @@ function App() {
 					<WindowManager slot="footer"></WindowManager>
 					<>
 						<AppExample smKey="app-1" />
+						<AppExample smKey="app-2" />
 					</>
 				</Layout>
 			</AppProvider>

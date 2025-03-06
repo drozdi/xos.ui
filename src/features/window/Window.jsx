@@ -16,7 +16,7 @@ import { XBtn } from "../../shared/ui/btn/XBtn";
 import { getComputedSize } from "../../shared/utils/domFns";
 import { minMax } from "../../shared/utils/fns";
 import { useApp } from "../app";
-import { useWM } from "../window-manager";
+import { wmStore } from "../window-manager";
 import "./style.css";
 import { WindowProvider } from "./WindowContext";
 
@@ -96,14 +96,21 @@ export const Window = forwardRef(function WindowFn(
 	const uid = useId();
 	const $app = useApp();
 	const $sm = $app.sm("WINDOW");
-	const wmStack = useWM();
+	let {
+		zIndex,
+		setZIndex,
+		active: wmActive,
+		disable: wmDisable,
+		add: wmAdd,
+		isActive,
+	} = wmStore();
 
 	const [position, setPosition] = $sm.useState("position", {
 		top: y,
 		left: x,
 		width: w,
 		height: h,
-		zIndex: z ?? wmStack.zIndex,
+		zIndex: z ?? zIndex,
 	});
 	const [isFullscreen, setFullscreen] = $sm.useState("isFullscreen", false);
 	const [isCollapse, setCollapse] = $sm.useState("isCollapse", false);
@@ -374,21 +381,22 @@ export const Window = forwardRef(function WindowFn(
 	);
 
 	const onActive = useCallback(() => {
-		if (!win.active && wmStack) {
-			wmStack.active(win);
-			win.z = wmStack.zIndex++;
+		if (!win.active && wmActive) {
+			wmActive(win);
 		}
+		let z = Math.max(win.z, zIndex);
+		z++;
+		win.z = ++z;
+		win.z++;
+		setZIndex?.(win.z);
 		win.active = true;
 		win.isCollapse = false;
 	}, [win]);
 	const onDeActive = useCallback(
 		(event) => {
-			if (win.active) {
-				const target = event.target || event.srcElement;
-				if (!nodeRef.current?.contains(target)) {
-					wmStack.disable();
-					win.active = false;
-				}
+			if (win.active && !nodeRef.current?.contains(event.target)) {
+				isActive({ uid }) && wmDisable();
+				win.active = false;
 			}
 		},
 		[nodeRef, win]
@@ -442,11 +450,10 @@ export const Window = forwardRef(function WindowFn(
 
 	useEffect(() => {
 		$sm.active = true;
-		win.z = Math.max(wmStack.zIndex, parseInt(position.zIndex, 10) || 0);
-		win.z++;
-		wmStack.setZIndex(win.z);
-		wmStack.add(win);
-		win.active && wmStack.active(win);
+		let z = Math.max(zIndex, parseInt(position.zIndex, 10) || 0);
+		setZIndex(z);
+		wmAdd(win);
+		//win.active && wmActive(win);
 		return () => $sm.remove();
 	}, []);
 	useEffect(() => {

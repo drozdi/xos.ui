@@ -1,15 +1,15 @@
 import { forwardRef, memo, useMemo } from "react";
 import { XBtn } from "../../shared/ui/btn";
-import { useWM } from "./store";
+import { wmStore } from "./store";
 
 export const WindowManager = memo(
 	forwardRef(function WindowManagerFn({}, ref) {
-		const wmStack = useWM();
-		const stack = useMemo(() => Object.values(wmStack.stack), [wmStack]);
+		const store = wmStore();
+		const stack = useMemo(() => Object.values(store.stack), [store]);
 		return (
 			<XBtn.Group size="lg" square separator>
 				{stack.map((win) => (
-					<XBtn active={wmStack.isActive(win)} key={win.uid}>
+					<XBtn active={store.isActive(win)} key={win.uid}>
 						{win.title}
 					</XBtn>
 				))}

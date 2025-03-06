@@ -1,37 +1,8 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { useForceUpdate, useObjectState } from "../../shared/hooks";
+import { createContext, useContext, useEffect, useRef } from "react";
 import { EventBus } from "../../shared/utils/EventBus";
-import { History } from "./lib/History";
+import { HistoryStore } from "./lib/History";
 import { Storage } from "./lib/Storage";
-export const AppContext = createContext({
-	sm() {
-		return {
-			active: false,
-			set(key, val) {
-				return val;
-			},
-			get(key, val) {
-				return val;
-			},
-			remove() {},
-			save(fn = () => {}, ...args) {
-				fn(...args);
-			},
-			no(fn = () => {}, ...args) {
-				fn(...args);
-			},
-			useState(name, initial) {
-				return useState(initial);
-			},
-			useObjectState(name, initial) {
-				return useObjectState(initial);
-			},
-		};
-	},
-	$sm() {
-		return this.sm();
-	},
-});
+export const AppContext = createContext(null);
 
 export const AppProvider = ({ children, smKey, ...config }) => {
 	const history = useRef();
@@ -42,35 +13,31 @@ export const AppProvider = ({ children, smKey, ...config }) => {
 				smKey,
 				history(fn) {
 					if (!history.current) {
-						history.current = new History(fn);
+						history.current = HistoryStore(fn);
 					}
-
-					const forceUpdate = useForceUpdate();
+					const store = history.current();
 
 					const [h, sh] = this.sm("APP").useState("history", {
-						histories: history.current?.histories,
-						index: history.current?.index,
+						histories: store.histories,
+						index: store.index,
 					});
 
 					useEffect(() => {
 						sh({
-							histories: history.current?.histories,
-							index: history.current?.index,
+							histories: store.histories,
+							index: store?.index,
 						});
-						this.emit("history");
-					}, [history.current.histories, history.current.index]);
+					}, [store.histories, store.index]);
 
 					useEffect(() => {
-						this.on("history", forceUpdate);
-						history.current?.init(h);
+						store.init(h);
 						this.sm("APP").active = true;
 						return () => {
-							this.off("history", forceUpdate);
 							this.sm("APP").remove("history");
 						};
 					}, []);
 
-					return history.current;
+					return store;
 				},
 
 				sm(type) {

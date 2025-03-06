@@ -1,10 +1,9 @@
-import { memo } from "react";
 import { Sections } from "../../shared/internal/sections";
 import { XBtn } from "../../shared/ui";
+import { isFunction } from "../../shared/utils/is";
 import { useApp } from "../app";
-export const History = memo(function HistoryFn() {
+export const History = function HistoryFn({ children, show }) {
 	const $history = useApp().history();
-
 	return (
 		<Sections
 			leftSection={
@@ -22,7 +21,11 @@ export const History = memo(function HistoryFn() {
 				</XBtn.Group>
 			}
 		>
-			{$history.current()}
+			{show &&
+				((isFunction(children)
+					? children($history.current())
+					: children) ??
+					$history.current())}
 		</Sections>
 	);
-});
+};
