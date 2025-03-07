@@ -13,7 +13,7 @@ export const WindowManager = memo(
 					<XBtn
 						active={store.isActive(win)}
 						key={win.uid}
-						onClick={() => win.focus()}
+						onClick={(e) => win.focus(e)}
 					>
 						{win.title}
 					</XBtn>

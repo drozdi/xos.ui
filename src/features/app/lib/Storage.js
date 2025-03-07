@@ -58,7 +58,9 @@ export const Storage = cached(function StorageFn(type, key) {
 			smActive = old;
 		},
 		useState(name, initial) {
-			const [state, setState] = useState(this.get(name, initial));
+			const [state, setState] = useState(
+				initial || this.get(name, initial)
+			);
 			useEffect(() => {
 				this.set(name, state);
 			}, [state, name]);
@@ -72,6 +74,36 @@ export const Storage = cached(function StorageFn(type, key) {
 				this.set(name, state);
 			}, [state, name]);
 			return [state, updateState];
+		},
+		useStateProxy(name, initial) {
+			const [state, dispatch] = useState(this.get(name, initial));
+			useEffect(() => {
+				this.set(name, state);
+			}, [state, name]);
+			return new Proxy(state, {
+				get(target, property) {
+					if (property in target) {
+						return target[property];
+					}
+					return undefined;
+				},
+				set(target, property, value) {
+					dispatch((v) => ({ ...v, [property]: value }));
+					target[property] = value;
+					return true;
+				},
+				has(target, property) {
+					return property in target;
+				},
+				ownKeys(target) {
+					return Object.keys(target);
+				},
+				deleteProperty(target, property) {
+					dispatch((v) => ({ ...v, [property]: undefined }));
+					delete target[property];
+					return true;
+				},
+			});
 		},
 	};
 });

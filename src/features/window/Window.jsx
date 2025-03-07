@@ -76,11 +76,11 @@ export const Window = forwardRef(function WindowFn(
 		aspectFactor,
 		children,
 		className,
-		x = 0,
-		y = 0,
+		x,
+		y,
 		z,
-		w = 300,
-		h = 300,
+		w,
+		h,
 		title,
 		icons = "reload collapse fullscreen close",
 		onFullscreen,
@@ -97,6 +97,7 @@ export const Window = forwardRef(function WindowFn(
 	const uid = useId();
 	const $app = useApp();
 	const $sm = $app.sm("WINDOW");
+
 	let {
 		zIndex,
 		setZIndex,
@@ -106,19 +107,9 @@ export const Window = forwardRef(function WindowFn(
 		isActive,
 	} = wmStore();
 
-	const [position, setPosition] = $sm.useState("position", {
-		top: y,
-		left: x,
-		width: w,
-		height: h,
-		zIndex: z ?? zIndex,
-	});
+	const [position, setPosition] = $sm.useState("position");
 	const [{ isFullscreen, isCollapse, active }, updateState] =
-		$sm.useStateObject("state", {
-			isFullscreen: false,
-			isCollapse: false,
-			active: false,
-		});
+		$sm.useStateObject("state");
 
 	const emit = useCallback(
 		(...args) => {
@@ -130,13 +121,56 @@ export const Window = forwardRef(function WindowFn(
 	const nodeRef = useRef();
 	const contentRef = useRef();
 
+	const canDo = useCallback((type) => icons.includes(type), [icons]);
+
+	const handlerFullscreen = useCallback(
+		(event) => {
+			if (!canDo("fullscreen")) {
+				return;
+			}
+			if (!isFullscreen) {
+				updateState({ isCollapse: false });
+			}
+			updateState({ isFullscreen: !isFullscreen });
+		},
+		[canDo, updateState, isFullscreen]
+	);
+	const handlerCollapse = useCallback(
+		(event) => {
+			if (!canDo("collapse")) {
+				return;
+			}
+			updateState({ isCollapse: !isCollapse });
+		},
+		[canDo, updateState, isCollapse]
+	);
+	const handlerClose = useCallback(
+		(event) => {
+			if (!canDo("close")) {
+				return false;
+			}
+			emit("close", event);
+			onClose?.(event);
+		},
+		[canDo, emit, onClose]
+	);
+	const handlerReload = useCallback(
+		(event) => {
+			if (!canDo("reload")) {
+				return false;
+			}
+			emit("reload", event);
+			onReload?.(event);
+		},
+		[canDo, emit, onReload]
+	);
+
 	const onActive = useCallback(() => {
 		if (!active) {
 			setZIndex?.(zIndex + 2);
 			setPosition((v) => ({ ...v, zIndex }));
 			wmActive?.({ uid });
 		}
-
 		updateState({ active: true, isCollapse: false });
 	}, [updateState, setPosition, setZIndex, active, uid, zIndex, wmActive]);
 	const onDeActive = useCallback(
@@ -324,50 +358,6 @@ export const Window = forwardRef(function WindowFn(
 			  }
 			: position;
 	}, [isFullscreen, isCollapse, position]);
-
-	const canDo = useCallback((type) => icons.includes(type), [icons]);
-
-	const handlerFullscreen = useCallback(
-		(event) => {
-			if (!canDo("fullscreen")) {
-				return;
-			}
-			if (!isFullscreen) {
-				updateState({ isCollapse: false });
-			}
-			updateState({ isFullscreen: isFullscreen });
-		},
-		[canDo, updateState, isFullscreen]
-	);
-	const handlerCollapse = useCallback(
-		(event) => {
-			if (!canDo("collapse")) {
-				return false;
-			}
-			updateState({ isCollapse: !isCollapse });
-		},
-		[canDo, updateState, isCollapse]
-	);
-	const handlerClose = useCallback(
-		(event) => {
-			if (!canDo("close")) {
-				return false;
-			}
-			emit("close", event);
-			onClose?.(event);
-		},
-		[canDo, emit, onClose]
-	);
-	const handlerReload = useCallback(
-		(event) => {
-			if (!canDo("reload")) {
-				return false;
-			}
-			emit("reload", event);
-			onReload?.(event);
-		},
-		[canDo, emit, onReload]
-	);
 
 	const mixIcons = useMemo(
 		() => (
