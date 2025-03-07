@@ -4,7 +4,22 @@ import config from "./config";
 const settingManager = new SettingManager({
 	CONFIG: config,
 	APP: Setting({}, {}, "HKEY_APPLICATION"),
-	LAYOUT: Setting({}, {}, "HKEY_LAYOUT"),
+	LAYOUT: Setting(
+		{
+			left: {
+				width: 300,
+				open: true,
+				mini: true,
+			},
+			right: {
+				width: 300,
+				open: true,
+				mini: true,
+			},
+		},
+		{},
+		"HKEY_LAYOUT"
+	),
 	MODAL: Setting({}, {}, "HKEY_MODAL"),
 	WINDOW: Setting(
 		{
@@ -19,6 +34,7 @@ const settingManager = new SettingManager({
 				isFullscreen: false,
 				isCollapse: false,
 				active: false,
+				def: true,
 			},
 		},
 		{},

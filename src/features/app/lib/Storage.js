@@ -58,9 +58,7 @@ export const Storage = cached(function StorageFn(type, key) {
 			smActive = old;
 		},
 		useState(name, initial) {
-			const [state, setState] = useState(
-				initial || this.get(name, initial)
-			);
+			const [state, setState] = useState(this.get(name, initial));
 			useEffect(() => {
 				this.set(name, state);
 			}, [state, name]);

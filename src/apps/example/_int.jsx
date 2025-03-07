@@ -1,17 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { History, Layout, Window } from "../../features";
 import { useApp } from "../../features/app";
-import { XIcon, XItem, XItemLabel, XItemSection, XList } from "../../shared/ui";
+import {
+	XIcon,
+	XItem,
+	XItemLabel,
+	XItemSection,
+	XList,
+	XMain,
+} from "../../shared/ui";
 import { routers } from "./index";
-export function App_Int() {
+export function App_Int({ ...props }) {
 	const [view, setView] = useState("");
 	const $app = useApp();
 	const $history = $app.history((history) => {
 		setView(routers.find((item) => item.path === history)?.element);
 	});
-	if ($history.isEmpty()) {
-		//$history.add("/");
-	}
+
+	useEffect(() => {
+		if ($history.isEmpty()) {
+			$history.add("/");
+		}
+	}, []);
 	return (
 		<Window title="Title">
 			<Layout container overlay toggle view="lhr lpr lff">
@@ -38,7 +48,7 @@ export function App_Int() {
 						routers.find((item) => item.path === history)?.label
 					}
 				</History>
-				<>{view}</>
+				<XMain>{view}</XMain>
 			</Layout>
 		</Window>
 	);

@@ -30,11 +30,12 @@ export const XMain = memo(
 			<Box
 				as="section"
 				square
-				{...props}
+				noPadding
 				className={classNames("x-main", { "x-layout-main": isLayout })}
 				ref={handleRef}
 			>
 				<main
+					{...props}
 					className={classNames(
 						"x-main-content",
 						{

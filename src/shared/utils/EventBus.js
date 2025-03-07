@@ -1,6 +1,13 @@
 export class EventBus {
-	constructor() {
+	constructor(events = {}) {
 		this.__stack = {};
+		Object.entries(events).forEach(([key, handler]) => {
+			this.__stack[key] = this.__stack[key] || [];
+			this.__stack[key]?.push({
+				fn: handler,
+				ctx: undefined,
+			});
+		});
 	}
 	on(key, handler, ctx) {
 		this.__stack[key] = this.__stack[key] || [];

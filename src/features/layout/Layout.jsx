@@ -25,16 +25,8 @@ export const Layout = memo(function LayoutFn({
 	const [width, setWidth] = useState(0);
 	const $app = useApp();
 	const $sm = $app.sm("LAYOUT");
-	const [ls, updateLs] = $sm.useStateObject("left", {
-		width: 300,
-		open: true,
-		mini: true,
-	});
-	const [rs, updateRs] = $sm.useStateObject("right", {
-		width: 300,
-		open: true,
-		mini: true,
-	});
+	const [ls, updateLs] = $sm.useStateObject("left");
+	const [rs, updateRs] = $sm.useStateObject("right");
 	const belowBreakpoint = useBreakpoint(breakpoint, width);
 	const { slot, hasSlot, wrapSlot } = useSlots(children);
 	const leftProps = useMemo(

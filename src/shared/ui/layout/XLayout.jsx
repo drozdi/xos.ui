@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useImperativeHandle, useMemo, useRef } from "react";
-import { useStateObject } from "../../hooks";
+import { useResizeObserver } from "../../hooks";
 import { forwardRefWithAs } from "../../internal/render";
 import "./style.css";
 import { XLayoutProvider } from "./XLayoutContext";
@@ -13,7 +13,7 @@ export const XLayout = forwardRefWithAs(function XLayoutFn(
 		ref: containerRef,
 		width,
 		height,
-	} = useStateObject({
+	} = useResizeObserver({
 		onResize,
 	});
 	const instances = useRef({});
@@ -30,15 +30,13 @@ export const XLayout = forwardRefWithAs(function XLayoutFn(
 
 	const ctx = useMemo(() => {
 		return {
-			get container() {
-				return container.current;
-			},
 			get instances() {
 				return instances.current;
 			},
 			set instances(val) {
 				instances.current = val;
 			},
+			container,
 			rows,
 			width,
 			height,
