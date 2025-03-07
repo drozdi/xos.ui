@@ -6,6 +6,7 @@ export const History = function HistoryFn({ children, show }) {
 	const $history = useApp().history();
 	return (
 		<Sections
+			className="!p-0"
 			leftSection={
 				<XBtn.Group color="primary">
 					<XBtn

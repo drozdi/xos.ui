@@ -4,13 +4,13 @@ import { useApp } from "../../features/app";
 import { XIcon, XItem, XItemLabel, XItemSection, XList } from "../../shared/ui";
 import { routers } from "./index";
 export function App_Int() {
-	const [view, setView] = useState();
+	const [view, setView] = useState("");
 	const $app = useApp();
 	const $history = $app.history((history) => {
 		setView(routers.find((item) => item.path === history)?.element);
 	});
 	if ($history.isEmpty()) {
-		$history.add("/");
+		//$history.add("/");
 	}
 	return (
 		<Window title="Title">
