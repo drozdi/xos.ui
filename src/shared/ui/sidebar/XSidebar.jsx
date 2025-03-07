@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { DraggableCore } from "react-draggable";
-import { useBreakpoint, useForkRef, useObjectState } from "../../hooks";
+import { useBreakpoint, useForkRef, useStateObject } from "../../hooks";
 import { forwardRefWithAs } from "../../internal/render";
 import { Teleport } from "../../internal/teleport";
 import { isUndefined } from "../../utils/is";
@@ -101,7 +101,7 @@ export const XSidebar = memo(
 		const [
 			{ isMounted, width, miniWidth, innerMini, isOpenBreakpoint },
 			updateState,
-		] = useObjectState({
+		] = useStateObject({
 			width: w,
 			miniWidth: miniW,
 			isOpenBreakpoint: false,

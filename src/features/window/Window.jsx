@@ -113,9 +113,12 @@ export const Window = forwardRef(function WindowFn(
 		height: h,
 		zIndex: z ?? zIndex,
 	});
-	const [isFullscreen, setFullscreen] = $sm.useState("isFullscreen", false);
-	const [isCollapse, setCollapse] = $sm.useState("isCollapse", false);
-	const [active, setActive] = $sm.useState("active", false);
+	const [{ isFullscreen, isCollapse, active }, updateState] =
+		$sm.useStateObject("state", {
+			isFullscreen: false,
+			isCollapse: false,
+			active: false,
+		});
 
 	const emit = useCallback(
 		(...args) => {
@@ -126,6 +129,47 @@ export const Window = forwardRef(function WindowFn(
 
 	const nodeRef = useRef();
 	const contentRef = useRef();
+
+	const onActive = useCallback(() => {
+		if (!active) {
+			setZIndex?.(zIndex + 2);
+			setPosition((v) => ({ ...v, zIndex }));
+			wmActive?.({ uid });
+		}
+
+		updateState({ active: true, isCollapse: false });
+	}, [updateState, setPosition, setZIndex, active, uid, zIndex, wmActive]);
+	const onDeActive = useCallback(
+		(event) => {
+			if (active && !nodeRef.current?.contains(event.target)) {
+				isActive({ uid }) && wmDisable();
+				updateState({ active: false });
+			}
+		},
+		[nodeRef, active, uid, isActive, updateState, wmDisable]
+	);
+	const onFocus = useCallback(
+		(event) => {
+			emit("focus", event);
+			if ($app?.emit) {
+				emit("activated", event);
+			} else {
+				onActive(event);
+			}
+		},
+		[emit, onActive, $app]
+	);
+	const onBlur = useCallback(
+		(event) => {
+			emit("blur", event);
+			if ($app?.emit) {
+				emit("deactivated", event);
+			} else {
+				onDeActive(event);
+			}
+		},
+		[emit, onDeActive, $app]
+	);
 
 	const win = useMemo(
 		() => ({
@@ -144,14 +188,14 @@ export const Window = forwardRef(function WindowFn(
 			get isFullscreen() {
 				return isFullscreen;
 			},
-			set isFullscreen(val) {
-				setFullscreen(val);
+			set isFullscreen(isFullscreen) {
+				updateState({ isFullscreen });
 			},
 			get isCollapse() {
 				return isCollapse;
 			},
-			set isCollapse(val) {
-				setCollapse(val);
+			set isCollapse(isCollapse) {
+				updateState({ isCollapse });
 			},
 			get w() {
 				return position.width;
@@ -239,7 +283,7 @@ export const Window = forwardRef(function WindowFn(
 				return active;
 			},
 			set active(val) {
-				setActive(val);
+				updateState({ active: val });
 			},
 			get content() {
 				return contentRef.current;
@@ -250,6 +294,8 @@ export const Window = forwardRef(function WindowFn(
 			get title() {
 				return title;
 			},
+			focus: onFocus,
+			blur: onBlur,
 		}),
 		[
 			uid,
@@ -264,10 +310,10 @@ export const Window = forwardRef(function WindowFn(
 			aspectFactor,
 			title,
 			parent,
-			setActive,
-			setCollapse,
-			setFullscreen,
+			updateState,
 			setPosition,
+			onBlur,
+			onFocus,
 		]
 	);
 
@@ -287,20 +333,20 @@ export const Window = forwardRef(function WindowFn(
 				return;
 			}
 			if (!isFullscreen) {
-				setCollapse(false);
+				updateState({ isCollapse: false });
 			}
-			setFullscreen((v) => !v);
+			updateState({ isFullscreen: isFullscreen });
 		},
-		[canDo, setCollapse, setFullscreen, isFullscreen]
+		[canDo, updateState, isFullscreen]
 	);
 	const handlerCollapse = useCallback(
 		(event) => {
 			if (!canDo("collapse")) {
 				return false;
 			}
-			setCollapse((v) => !v);
+			updateState({ isCollapse: !isCollapse });
 		},
-		[canDo, setCollapse]
+		[canDo, updateState, isCollapse]
 	);
 	const handlerClose = useCallback(
 		(event) => {
@@ -398,42 +444,16 @@ export const Window = forwardRef(function WindowFn(
 		]
 	);
 
-	const onActive = useCallback(() => {
-		if (!win.active && wmActive) {
-			wmActive(win);
-			win.z = ++zIndex;
-			setZIndex?.(zIndex);
-		}
-		win.active = true;
-		win.isCollapse = false;
-	}, [win, setZIndex, zIndex, wmActive]);
-	const onDeActive = useCallback(
-		(event) => {
-			if (win.active && !nodeRef.current?.contains(event.target)) {
-				isActive({ uid }) && wmDisable();
-				win.active = false;
-			}
-		},
-		[nodeRef, win, uid, isActive, wmDisable]
-	);
-
-	const onFocus = useCallback((event) => {
-		emit("focus", event);
-		if ($app?.emit) {
-			emit("activated", event);
-		} else {
-			onActive(event);
-		}
+	const onResizeMove = useCallback((e, { handle, size }) => {
+		setPosition((v) => ({
+			...v,
+			...changeHandle[handle](
+				v,
+				v.width - size.width,
+				v.height - size.height
+			),
+		}));
 	}, []);
-	const onBlur = useCallback((event) => {
-		emit("blur", event);
-		if ($app?.emit) {
-			emit("deactivated", event);
-		} else {
-			onDeActive(event);
-		}
-	}, []);
-
 	const onDragMove = useCallback(
 		(e, { deltaX, deltaY }) => {
 			!isFullscreen &&
@@ -446,17 +466,6 @@ export const Window = forwardRef(function WindowFn(
 		[isFullscreen]
 	);
 
-	const onResizeMove = useCallback((e, { handle, size }) => {
-		setPosition((v) => ({
-			...v,
-			...changeHandle[handle](
-				v,
-				v.width - size.width,
-				v.height - size.height
-			),
-		}));
-	}, []);
-
 	useImperativeHandle(ref, () => win);
 
 	useEffect(() => {
@@ -464,7 +473,7 @@ export const Window = forwardRef(function WindowFn(
 		win.z = zIndex = Math.max(zIndex, position.zIndex);
 		setZIndex(zIndex);
 		wmAdd(win);
-		win.active && wmActive(win);
+		active && wmActive(win);
 		return () => {
 			wmDisable();
 			$sm.remove();

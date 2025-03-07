@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-export function useProxy(initiState = {}) {
-	const [state, setState] = useState(initiState);
+export function useStateProxy(initiState = {}) {
+	const [state, dispatch] = useState(initiState);
 	return new Proxy(state, {
 		get(target, property) {
 			if (property in target) {
@@ -11,17 +11,17 @@ export function useProxy(initiState = {}) {
 			}
 		},
 		set(target, property, value) {
-			setState((v) => ({ ...v, [property]: value }));
+			dispatch((v) => ({ ...v, [property]: value }));
 			target[property] = value;
 			return true;
 		},
 		deleteProperty(target, property) {
-			// перехватываем удаление свойства
-			setState((v) => {
+			/*dispatch((v) => {
 				let newV = { ...v };
 				delete newV[property];
 				return newV;
-			});
+			});*/
+			dispatch((v) => ({ ...v, [property]: undefined }));
 			delete target[property];
 			return true;
 		},

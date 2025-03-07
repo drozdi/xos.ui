@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import settingManager from "../../../entites/core/setting-manager";
-import { useObjectState } from "../../../shared/hooks";
+import { useStateObject } from "../../../shared/hooks";
 import { cached } from "../../../shared/utils/cached";
 
 export const Storage = cached(function StorageFn(type, key) {
@@ -61,16 +61,16 @@ export const Storage = cached(function StorageFn(type, key) {
 			const [state, setState] = useState(this.get(name, initial));
 			useEffect(() => {
 				this.set(name, state);
-			}, [state]);
+			}, [state, name]);
 			return [state, setState];
 		},
-		useObjectState(name, initial) {
-			const [state, updateState] = useObjectState(
+		useStateObject(name, initial) {
+			const [state, updateState] = useStateObject(
 				this.get(name, initial)
 			);
 			useEffect(() => {
 				this.set(name, state);
-			}, [state]);
+			}, [state, name]);
 			return [state, updateState];
 		},
 	};

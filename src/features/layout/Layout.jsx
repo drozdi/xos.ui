@@ -25,12 +25,12 @@ export const Layout = memo(function LayoutFn({
 	const [width, setWidth] = useState(0);
 	const $app = useApp();
 	const $sm = $app.sm("LAYOUT");
-	const [ls, updateLs] = $sm.useObjectState("left", {
+	const [ls, updateLs] = $sm.useStateObject("left", {
 		width: 300,
 		open: true,
 		mini: true,
 	});
-	const [rs, updateRs] = $sm.useObjectState("right", {
+	const [rs, updateRs] = $sm.useStateObject("right", {
 		width: 300,
 		open: true,
 		mini: true,

@@ -10,7 +10,11 @@ export const WindowManager = memo(
 		return (
 			<XBtn.Group size="lg" square separator>
 				{stack.map((win) => (
-					<XBtn active={store.isActive(win)} key={win.uid}>
+					<XBtn
+						active={store.isActive(win)}
+						key={win.uid}
+						onClick={() => win.focus()}
+					>
 						{win.title}
 					</XBtn>
 				))}
