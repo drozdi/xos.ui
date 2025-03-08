@@ -1,4 +1,4 @@
-import { Setting, SettingManager } from "../../shared/lib";
+import { Setting, SettingManager } from "../lib";
 import config from "./config";
 
 const settingManager = new SettingManager({

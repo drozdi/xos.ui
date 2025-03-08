@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { AppProvider } from "../../features/app";
+import { App } from "../../features/app/lib/App";
 import { parameterize } from "../../shared/utils/request";
 
 const appsManager = {
@@ -16,42 +17,51 @@ const appsManager = {
 		return "app-" + String(this.id++);
 	},
 	get$App(instance) {
-		return instance.props.app._x;
+		return instance?.props?.app || app;
 	},
-	_buildApp(Proto, { smKey, app, pathName, ...conf }) {
-		return (
-			<AppProvider smKey={smKey} app={app}>
+	_buildApp(Proto, { app, ...conf }) {
+		return (app.element = (
+			<AppProvider app={app}>
 				<Proto {...conf} />
 			</AppProvider>
-		);
+		));
 	},
-	buildApp(Proto, { smKey, app, ...conf }, mount = true) {
-		conf = { ...(this.defs[Proto.displayName] || {}), ...conf };
-		let pathName = this.genPath(conf);
-		if (pathName) {
-			if (!this.runs[pathName]) {
-				this.runs[pathName] = this._buildApp(Proto, {
-					smKey,
-					app,
-					...conf,
-				});
-			} else {
-				console.log(this.get$App(this.runs[pathName]));
-				this.get$App(this.runs[pathName])?.active();
-			}
-			return this.runs[pathName];
+	buildApp(Proto, { smKey, ..._conf }, mount = true) {
+		let { pathName, ...conf } = {
+			...(this.defs[Proto.displayName] || {}),
+			..._conf,
+		};
+		pathName = this.genPath({ pathName, ...conf });
+		if (!pathName) {
+			return this._buildApp(Proto, { app: new App(smKey), ...conf });
 		}
-		return this._buildApp(Proto, { smKey, app, ...conf });
+		if (!this.runs[pathName]) {
+			this.runs[pathName] = this._buildApp(Proto, {
+				app: new App(smKey),
+				...conf,
+			});
+			this.get$App(this.runs[pathName]).on("close", () => {
+				delete this.runs[pathName];
+			});
+			mount && this.mountRoot(this.runs[pathName]);
+		} else {
+			this.get$App(this.runs[pathName])?.active();
+		}
+		return this.runs[pathName];
 	},
 	createRoot() {
 		const wrapper = document.createElement("div");
 		document.body.prepend(wrapper);
 		return createRoot(wrapper);
 	},
-	createApp(proto, { smKey, ...conf }, mount = true) {
-		let _smKey = smKey || this.genId();
-		const app = this.createRoot();
-		app.render(this.buildApp(proto, { smKey: _smKey, app, ...conf }));
+	mountRoot(app) {
+		app = this.get$App(app);
+		app.root = this.createRoot();
+		app.root.render(app.element);
+	},
+	createApp(proto, { smKey, ...conf }, save = true) {
+		smKey = smKey ?? this.genId();
+		this.buildApp(proto, { smKey, ...conf });
 	},
 };
 

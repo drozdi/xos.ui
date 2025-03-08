@@ -1,4 +1,4 @@
-import { isObject, isString } from "../utils/is";
+import { isObject, isString } from "../../shared/utils/is";
 
 export let Config = function Config(conf) {
 	if (conf instanceof Config) {

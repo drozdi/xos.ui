@@ -11,14 +11,15 @@ const core = {
 	$roles: roles,
 	$apps: appsManager,
 	list: {},
-	app(proto, conf = {}, app) {
-		const _app = app ?? appsManager.createRoot();
+	app(proto, conf = {}, root) {
+		root = root ?? appsManager.createRoot();
 		if (!this.list[proto.displayName]) {
-			_app.render(
-				(this.list[proto.displayName] = appsManager.buildApp(proto, {
-					app: _app,
-					...conf,
-				}))
+			root.render(
+				(this.list[proto.displayName] = appsManager.buildApp(
+					proto,
+					conf,
+					false
+				))
 			);
 		}
 		return this.list[proto.displayName];

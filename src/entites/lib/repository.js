@@ -1,47 +1,50 @@
-import { parameterize } from '../utils/request.js';
+import { parameterize } from "../../shared/utils/request.js";
 
 export class BaseRepository {
 	constructor(endpoint) {
 		this.endpoint = endpoint;
 	}
 	async query({
-		method = 'GET',
-		nestedEndpoint = '',
+		method = "GET",
+		nestedEndpoint = "",
 		urlParameters = {},
 		data = undefined,
 		headers = {},
 	}) {
-		const url = parameterize(`${this.endpoint}${nestedEndpoint}`, urlParameters);
+		const url = parameterize(
+			`${this.endpoint}${nestedEndpoint}`,
+			urlParameters
+		);
 		return await fetch(url, {
 			method,
 			headers,
 			body: data,
 		});
 	}
-	async get(id = '') {
+	async get(id = "") {
 		return await this.query({
-			method: 'GET',
+			method: "GET",
 			nestedEndpoint: `/${id}`,
 		});
 	}
 	async post(requestBody) {
 		return await this.query({
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
+			method: "POST",
+			headers: { "Content-Type": "application/json;charset=utf-8" },
 			data: JSON.stringify(requestBody),
 		});
 	}
-	async put(id = '', requestBody) {
+	async put(id = "", requestBody) {
 		return await this.query({
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json;charset=utf-8' },
+			method: "PUT",
+			headers: { "Content-Type": "application/json;charset=utf-8" },
 			nestedEndpoint: `/${id}`,
 			data: JSON.stringify(requestBody),
 		});
 	}
-	async delete(id = '') {
+	async delete(id = "") {
 		return await this.query({
-			method: 'DELETE',
+			method: "DELETE",
 			nestedEndpoint: `/${id}`,
 		});
 	}

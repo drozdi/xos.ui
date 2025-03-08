@@ -13,6 +13,7 @@ import {
 import { routers } from "./index";
 
 export function AppExample({ ...props }) {
+	console.log(props);
 	const [view, setView] = useState("");
 	const $app = useApp();
 	const $history = $app.history((history) => {
