@@ -42,7 +42,7 @@ export const AppProvider = ({ children, app, smKey, ...config }) => {
 			return Storage(type, smKey);
 		},
 		...new EventBus({
-			//close: () => context.unmount(),
+			close: () => context.unmount(),
 		}),
 		...{
 			on: EventBus.prototype.on,
@@ -67,6 +67,7 @@ export const AppProvider = ({ children, app, smKey, ...config }) => {
 			}
 		},
 	};
+	context.app._x = context;
 	return (
 		<AppContext.Provider value={context}>{children}</AppContext.Provider>
 	);

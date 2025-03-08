@@ -1,9 +1,68 @@
-import { AppProvider } from "../../features/app";
-import { App_Int } from "./_int";
-export function AppExample({ smKey }) {
+import { useEffect, useState } from "react";
+import appsManager from "../../entites/core/apps-manager";
+import { History, Layout, Window } from "../../features";
+import { useApp } from "../../features/app";
+import {
+	XIcon,
+	XItem,
+	XItemLabel,
+	XItemSection,
+	XList,
+	XMain,
+} from "../../shared/ui";
+import { routers } from "./index";
+
+export function AppExample({ ...props }) {
+	const [view, setView] = useState("");
+	const $app = useApp();
+	const $history = $app.history((history) => {
+		setView(routers.find((item) => item.path === history)?.element);
+	});
+
+	useEffect(() => {
+		if ($history.isEmpty()) {
+			$history.add("/");
+		}
+	}, []);
 	return (
-		<AppProvider smKey={smKey}>
-			<App_Int />
-		</AppProvider>
+		<Window title="Title">
+			<Layout container overlay toggle view="lhr lpr lff">
+				<XList slot="left" separator>
+					{routers.map((item, index) => (
+						<XItem
+							key={index}
+							onClick={() => {
+								$history.add(item.path);
+							}}
+							active={$history.isCurrent(item.path)}
+						>
+							<XItemSection side>
+								<XIcon>{item.icon}</XIcon>
+							</XItemSection>
+							<XItemSection>
+								<XItemLabel lines>{item.label}</XItemLabel>
+							</XItemSection>
+						</XItem>
+					))}
+				</XList>
+				<History slot="header" show>
+					{(history) =>
+						routers.find((item) => item.path === history)?.label
+					}
+				</History>
+				<XMain>{view}</XMain>
+			</Layout>
+		</Window>
 	);
 }
+
+AppExample.displayName = "./example/AppExample";
+
+appsManager.append(
+	{ displayName: "./example/AppExample" },
+	{
+		pathName: "example-app",
+		wmGroup: "example-app",
+		wmSort: 1,
+	}
+);

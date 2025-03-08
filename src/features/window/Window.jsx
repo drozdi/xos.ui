@@ -106,6 +106,7 @@ export const Window = memo(
 			active: wmActive,
 			disable: wmDisable,
 			add: wmAdd,
+			del: wmDel,
 			isActive,
 		} = wmStore();
 
@@ -486,6 +487,7 @@ export const Window = memo(
 			return () => {
 				wmDisable();
 				$sm.remove();
+				wmDel(win);
 			};
 		}, []);
 		useEffect(() => {
