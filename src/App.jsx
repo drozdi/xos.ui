@@ -1,3 +1,4 @@
+import { AppCalculator } from "./apps/calculator/AppCalculator";
 import { AppExample } from "./apps/example/app";
 import appsManager from "./entites/core/apps-manager";
 import { Layout } from "./features";
@@ -10,6 +11,9 @@ function App() {
 	const onExample = () => {
 		appsManager.createApp(AppExample, {});
 	};
+	const onCalculator = () => {
+		appsManager.createApp(AppCalculator, {});
+	};
 	return (
 		<ThemeProvider>
 			<Layout container overlay toggle view="hhh lpr lff">
@@ -17,6 +21,7 @@ function App() {
 				<WindowManager slot="footer"></WindowManager>
 				<XMain id="parent_win">
 					<XBtn onClick={onExample}>Exammple</XBtn>
+					<XBtn onClick={onCalculator}>Calculator</XBtn>
 				</XMain>
 			</Layout>
 		</ThemeProvider>
