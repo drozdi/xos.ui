@@ -55,6 +55,9 @@
 .x-box--no-padding {
 	@apply !gap-0 !px-0 !py-0;
 }
+.x-box--no-gap {
+	@apply !gap-0;
+}
 
 .x-box-section--no-padding:is(:last-child) {
 	@apply -mr-3;

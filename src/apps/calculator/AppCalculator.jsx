@@ -1,15 +1,62 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import appsManager from "../../entites/core/apps-manager";
 import { Window } from "../../features";
+import { useStateObject } from "../../shared/hooks";
 import { Box } from "../../shared/internal/box";
 import { XBtn } from "../../shared/ui";
 
-export function AppCalculator() {
-	const [operator, setOperator] = useState("");
-	const [operand1, setOperand1] = useState("");
-	const [operand2, setOperand2] = useState("");
-	const [isResult, setIsResult] = useState(false);
+const zeroDivisionError = "Can't divide with 0";
+const matrix = [
+	["C", "+-", "%", "/"],
+	[7, 8, 9, "*"],
+	[4, 5, 6, "-"],
+	[1, 2, 3, "+"],
+	[0, ".", "="],
+];
 
+export function AppCalculator() {
+	const [{ expr1, expr2, sign }, updateOperand] = useStateObject({
+		expr1: "0",
+		expr2: "",
+		sign: "",
+	});
+
+	const handleClickReset = () => {
+		updateOperand({ expr1: "0", expr2: "", sign: "" });
+	};
+	const handleClickNum = (num) => {
+		if (sign) {
+			updateOperand({
+				expr2: expr2 ? expr2 + num : String(num || ""),
+			});
+		} else {
+			updateOperand({
+				expr1: expr1 !== "0" ? expr1 + num : String(num || ""),
+			});
+		}
+	};
+	const handleClickEqual = () => {};
+	const handleClickSign = (sign) => {
+		updateOperand({ sign });
+	};
+	const handlerClickInvert = () => {
+		/*setCalc({
+			num: num ? toLocaleString(removeSpaces(num) * -1) : 0,
+			res: res ? toLocaleString(removeSpaces(res) * -1) : 0,
+			sign: "",
+		});*/
+	};
+
+	const handleClickButton = (num) => {
+		num === "C" || expr2 === zeroDivisionError
+			? handleClickReset()
+			: num === "+-"
+			? handlerClickInvert()
+			: "+-*/".split("").includes(num)
+			? handleClickSign(num)
+			: handleClickNum(num);
+	};
+	/*
 	const onNumClick = (num) => {
 		if (operator) {
 			setOperand2(operand2 ? operand2 + num : String(num || ""));
@@ -54,113 +101,57 @@ export function AppCalculator() {
 		}
 		setIsResult(true);
 	};
+*/
+	const title = useMemo(() => {
+		if (!sign) {
+			return expr1;
+		}
+		return expr2;
+	}, [expr1, expr2, sign]);
+
+	const subTitle = useMemo(() => {
+		if (!sign) {
+			return "";
+		}
+		return `${expr1} ${sign}`;
+	}, [expr1, sign]);
 
 	return (
 		<Window title="Калькулятор">
 			<div className="calculator">
-				<Box justify="end">
-					<Box.Header className="text-3xl text-right">0</Box.Header>
-				</Box>
 				<Box col>
-					<XBtn.Group grow pills color="info">
-						<XBtn
-							className="w-1/4"
-							onClick={() => onOperatorClick("C")}
-						>
-							C
-						</XBtn>
-						<XBtn
-							className="w-1/4"
-							onClick={() => onOperatorClick("I")}
-						>
-							+−
-						</XBtn>
-						<XBtn
-							className="w-1/4"
-							onClick={() => onOperatorClick("%")}
-						>
-							%
-						</XBtn>
-						<XBtn
-							className="w-1/4"
-							onClick={() => onOperatorClick("+")}
-							color="accent"
-						>
-							÷
-						</XBtn>
-					</XBtn.Group>
-					<XBtn.Group grow pills color="info">
-						<XBtn className="w-1/4" onClick={() => onNumClick(7)}>
-							7
-						</XBtn>
-						<XBtn className="w-1/4" onClick={() => onNumClick(8)}>
-							8
-						</XBtn>
-						<XBtn className="w-1/4" onClick={() => onNumClick(9)}>
-							9
-						</XBtn>
-						<XBtn
-							className="w-1/4"
-							onClick={() => onOperatorClick("*")}
-							color="accent"
-						>
-							×
-						</XBtn>
-					</XBtn.Group>
-					<XBtn.Group grow pills color="info">
-						<XBtn className="w-1/4" onClick={() => onNumClick(4)}>
-							4
-						</XBtn>
-						<XBtn className="w-1/4" onClick={() => onNumClick(5)}>
-							5
-						</XBtn>
-						<XBtn className="w-1/4" onClick={() => onNumClick(6)}>
-							6
-						</XBtn>
-						<XBtn
-							className="w-1/4"
-							onClick={() => onOperatorClick("-")}
-							color="accent"
-						>
-							−
-						</XBtn>
-					</XBtn.Group>
-					<XBtn.Group grow pills color="info">
-						<XBtn className="w-1/4" onClick={() => onNumClick(1)}>
-							1
-						</XBtn>
-						<XBtn className="w-1/4" onClick={() => onNumClick(2)}>
-							2
-						</XBtn>
-						<XBtn className="w-1/4" onClick={() => onNumClick(3)}>
-							3
-						</XBtn>
-						<XBtn
-							className="w-1/4"
-							onClick={() => onOperatorClick("+")}
-							color="accent"
-						>
-							+
-						</XBtn>
-					</XBtn.Group>
-					<XBtn.Group grow pills color="info">
-						<XBtn className="w-1/4" onClick={() => onNumClick(0)}>
-							0
-						</XBtn>
-						<XBtn
-							className="w-1/4"
-							onClick={() => onOperatorClick(".")}
-						>
-							.
-						</XBtn>
-						<XBtn
-							className="w-[calc(50%+6*var(--spacing))]"
-							onClick={() => onOperatorClick("=")}
-							color="accent"
-						>
-							=
-						</XBtn>
-					</XBtn.Group>
+					<Box.Section className="items-end">
+						<Box.Subtitle className="opacity-80">
+							{"\u00A0"}
+							{subTitle}
+						</Box.Subtitle>
+						<Box.Title className="text-3xl">
+							{"\u00A0"}
+							{title}
+						</Box.Title>
+					</Box.Section>
+					{matrix.map((lines, index) => (
+						<XBtn.Group grow pills key={index}>
+							{lines.map((num, index) => (
+								<XBtn
+									key={index}
+									className={
+										num === "="
+											? "w-[calc(50%+6*var(--spacing))]"
+											: "w-1/4"
+									}
+									color={
+										index === 3 || num === "="
+											? "accent"
+											: "info"
+									}
+									onClick={() => handleClickButton(num)}
+								>
+									{num}
+								</XBtn>
+							))}
+						</XBtn.Group>
+					))}
 				</Box>
 			</div>
 		</Window>

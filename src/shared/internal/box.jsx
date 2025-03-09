@@ -12,6 +12,7 @@ import { forwardRefWithAs, render } from "./render";
  * @param {string} [props.size] - Размер контейнера.
  * @param {boolean} [props.square] - Квадратные углы.
  * @param {boolean} [props.noPadding] - Отсутствие внутренних отступов.
+ * @param {boolean} [props.noGap] - Отсутствие внутренних отступов между элементами.
  * @param {string} [props.align] - Выравнивание по вертикали.
  * @param {string} [props.justify] - Выравнивание по горизонтали.
  * @param {any} ref - Референс компонента.
@@ -22,6 +23,7 @@ export const Box = forwardRefWithAs(function Box(
 		className,
 		col,
 		noWrap,
+		noGap,
 		size,
 		square,
 		noPadding,
@@ -37,9 +39,10 @@ export const Box = forwardRefWithAs(function Box(
 			"x-box",
 			{
 				"x-box--col": col,
-				"x-box--nowrap": noWrap,
+				"x-box--no-wrap": noWrap,
 				"x-box--square": square,
 				"x-box--no-padding": noPadding,
+				"x-box--no-gap": noGap,
 				[`x-box--${size}`]: size,
 				[`items-${align}`]: align,
 				[`justify-${justify}`]: justify,
@@ -53,6 +56,8 @@ Box.propTypes = {
 	className: PropTypes.string,
 	col: PropTypes.bool,
 	noWrap: PropTypes.bool,
+	noGap: PropTypes.bool,
+	noPadding: PropTypes.bool,
 	size: PropTypes.oneOf(["xs", "sm", "xl"]),
 	align: PropTypes.oneOf([
 		"start",
@@ -90,7 +95,7 @@ Box.propTypes = {
  * @returns {JSX.Element} Элемент span с заданной структурой и стилями.
  * */
 Box.Section = forwardRefWithAs(function Section(
-	{ className, top, side, row, noPadding, noWrap, ...props },
+	{ className, top, side, row, noPadding, noGap, noWrap, ...props },
 	ref
 ) {
 	return render("span", {
@@ -115,6 +120,7 @@ Box.Section.propTypes = {
 	side: PropTypes.bool,
 	row: PropTypes.bool,
 	noPadding: PropTypes.bool,
+	noGap: PropTypes.bool,
 	noWrap: PropTypes.bool,
 };
 
