@@ -35,7 +35,32 @@ export function AppCalculator() {
 			});
 		}
 	};
-	const handleClickEqual = () => {};
+	const handleClickEqual = () => {
+		let num1 = +expr1;
+		let num2 = +expr2;
+		switch (sign) {
+			case "+":
+				updateOperand({
+					expr1: String(num1 + num2),
+				});
+				break;
+			case "-":
+				updateOperand({
+					expr1: String(num1 - num2),
+				});
+				break;
+			case "*":
+				updateOperand({
+					expr1: String(num1 * num2),
+				});
+				break;
+			case "/":
+				updateOperand({
+					expr1: String(num1 / num2),
+				});
+				break;
+		}
+	};
 	const handleClickSign = (sign) => {
 		updateOperand({ sign });
 	};
@@ -52,6 +77,8 @@ export function AppCalculator() {
 			? handleClickReset()
 			: num === "+-"
 			? handlerClickInvert()
+			: num === "="
+			? handleClickEqual()
 			: "+-*/".split("").includes(num)
 			? handleClickSign(num)
 			: handleClickNum(num);
