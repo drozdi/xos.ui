@@ -150,52 +150,7 @@ export function AppCalculator() {
 			? handleClickComa()
 			: handleClickNum(num);
 	};
-	/*
-	const onNumClick = (num) => {
-		if (operator) {
-			setOperand2(operand2 ? operand2 + num : String(num || ""));
-		} else {
-			setOperand1(operand1 ? operand1 + num : String(num || ""));
-		}
-	};
-	const onOperatorClick = (operator) => {
-		if (operator === "=") {
-			resultClick();
-		} else if (operator === "C") {
-			clearClick();
-		} else if (operand2) {
-			resultClick();
-			setOperator(operator);
-			setIsResult(false);
-		} else {
-			setOperator(operator);
-			setIsResult(false);
-		}
-	};
-	const clearClick = () => {
-		setOperator("");
-		setOperand1("");
-		setOperand2("");
-		setIsResult(false);
-	};
-	const resultClick = () => {
-		let num1 = +operand1;
-		let num2 = +operand2;
-		setOperand1("");
-		setOperand2("");
-		switch (operator) {
-			case "+":
-				setOperand1(num1 + num2);
-				setOperator("");
-				break;
-			case "-":
-				setOperand1(num1 - num2);
-				setOperator("");
-				break;
-		}
-		setIsResult(true);
-	};
-*/
+
 	const title = useMemo(() => {
 		if (!sign || prev) {
 			return expr1;
@@ -214,7 +169,7 @@ export function AppCalculator() {
 	}, [expr1, prev, sign]);
 
 	return (
-		<Window title="Калькулятор" h={380}>
+		<Window title="Калькулятор" h={380} icons="reload collapse close">
 			<Box col>
 				<Box.Section className="items-end">
 					<Box.Subtitle className="opacity-80">

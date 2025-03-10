@@ -18,10 +18,10 @@ const WIN_COMBINATIONS = [
 ];
 
 export function AppTicTacToe() {
-	const { isGameEnded, field, restart, draw, endGame, setCurrentPlayer } =
-		store();
+	const { isEnd, field, setPlayer, draw, endGame, restart } = store();
+
 	const checkWinner = () => {
-		if (isGameEnded) {
+		if (isEnd) {
 			return;
 		}
 		let win = false;
@@ -30,7 +30,7 @@ export function AppTicTacToe() {
 			if (field[a] && field[a] === field[b] && field[b] === field[c]) {
 				win = true;
 				endGame();
-				setCurrentPlayer(field[a]);
+				setPlayer(field[a]);
 			}
 		}
 		if (!win && field.every((cell) => cell !== "")) {
@@ -39,26 +39,26 @@ export function AppTicTacToe() {
 	};
 
 	checkWinner();
-	//}, [field]);
 
 	return (
-		<Window title="Крестик Нолик">
+		<Window title="Крестик Нолик" icons="collapse close">
 			<Box col className="tic-tao-toe">
-				<Box.Section side>
-					<Information />
+				<Box.Section row side className="text-2xl">
+					<Box.Section>
+						<Information />
+					</Box.Section>
+					<Box.Section side>
+						<XBtn
+							size="sm"
+							disabled={!isEnd}
+							leftSection="mdi-reload"
+							color="info"
+							onClick={() => restart()}
+						/>
+					</Box.Section>
 				</Box.Section>
 				<Box.Section>
 					<Field />
-				</Box.Section>
-				<Box.Section side>
-					<XBtn
-						disabled={!isGameEnded}
-						leftSection="mdi-reload"
-						color="info"
-						onClick={() => restart()}
-					>
-						Начать заново
-					</XBtn>
 				</Box.Section>
 			</Box>
 		</Window>

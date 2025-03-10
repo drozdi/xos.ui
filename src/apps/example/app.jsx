@@ -26,7 +26,7 @@ export function AppExample({ ...props }) {
 		}
 	}, []);
 	return (
-		<Window title="Title">
+		<Window title="Title" icons="collapse fullscreen close">
 			<Layout container overlay toggle view="lhr lpr lff">
 				<XList slot="left" separator>
 					{routers.map((item, index) => (

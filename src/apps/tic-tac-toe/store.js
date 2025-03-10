@@ -1,20 +1,20 @@
 import { create } from "zustand";
 
 export default create((set, get) => ({
-	field: Array(9).fill(""),
+	isEnd: false,
+	player: "X",
 	isDraw: false,
-	isGameEnded: false,
-	currentPlayer: "X",
+	field: Array(9).fill(""),
 	setField(field) {
 		set({
 			...get(),
 			field,
 		});
 	},
-	setCurrentPlayer(currentPlayer) {
+	setPlayer(player) {
 		set({
 			...get(),
-			currentPlayer,
+			player,
 		});
 	},
 	draw() {
@@ -26,15 +26,15 @@ export default create((set, get) => ({
 	endGame() {
 		set({
 			...get(),
-			isGameEnded: true,
+			isEnd: true,
 		});
 	},
 	restart() {
 		set({
 			field: Array(9).fill(""),
 			isDraw: false,
-			isGameEnded: false,
-			currentPlayer: "X",
+			isEnd: false,
+			player: "X",
 		});
 	},
 }));

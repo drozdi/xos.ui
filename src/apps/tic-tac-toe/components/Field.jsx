@@ -1,16 +1,15 @@
 import store from "../store";
 
 export function Field() {
-	const { isGameEnded, currentPlayer, field, setCurrentPlayer, setField } =
-		store();
+	const { isEnd, player, field, setPlayer, setField } = store();
 	const handleClickField = (i) => {
-		if (isGameEnded || field[i]) {
+		/*if (isEnd || field[i]) {
 			return;
 		}
 		let newField = field.slice();
-		newField[i] = currentPlayer;
+		newField[i] = player;
 		setField(newField);
-		setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
+		setPlayer(player === "X" ? "O" : "X");*/
 	};
 	return (
 		<div className="tic-tac-toe__board">

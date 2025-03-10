@@ -4,5 +4,5 @@
 	@apply float-left text-2xl w-12 h-12 m-1 text-white bg-black/40 border border-white/15;
 }
 .tic-tac-toe__board {
-	@apply text-center grid grid-cols-3 grid-rows-3 m-auto w-52 h-52;
+	@apply text-center grid grid-cols-3 grid-rows-3 m-auto;
 }
