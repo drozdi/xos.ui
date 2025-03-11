@@ -11,12 +11,26 @@ export class App extends EventBus {
 		this.__history = {
 			current: null,
 		};
+		this.__instance = {};
 		this.on("close", () => {
 			this.unmount();
 		});
 		"remove close reload".split(/\s+/).forEach((evt) => {
 			this[evt] = (...args) => this.emit(evt, ...args);
 		});
+	}
+	register(instance) {
+		if (instance?.__) {
+			this.__instance[instance.__] = instance;
+		}
+	}
+	unRegister(instance) {
+		if (instance?.__) {
+			delete this.__instance[instance.__];
+		}
+	}
+	get win() {
+		return this.__instance.window;
 	}
 	default(config = {}) {
 		this.__config = config;

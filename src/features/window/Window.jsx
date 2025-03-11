@@ -97,6 +97,29 @@ export const Window = memo(
 		},
 		ref
 	) {
+		/*const {
+			parent = document.body,
+			aspectFactor,
+			children,
+			className,
+			x,
+			y,
+			z,
+			w,
+			h,
+			title,
+			icons = "close",
+			//icons = "reload collapse fullscreen close",
+			onFullscreen,
+			onCollapse,
+			onReload,
+			onClose,
+			resizable,
+			draggable,
+			wmGroup,
+			wmSort = 0,
+		} = useProps(props);*/
+
 		const uid = useId();
 		const $app = useApp();
 		const $sm = $app.sm("WINDOW");
@@ -150,9 +173,9 @@ export const Window = memo(
 				if (!canDo("collapse")) {
 					return;
 				}
-				updateState({ isCollapse: !isCollapse });
+				updateState((v) => ({ isCollapse: !v.isCollapse }));
 			},
-			[canDo, updateState, isCollapse]
+			[canDo, updateState]
 		);
 		const handlerClose = useCallback(
 			(event) => {
@@ -202,9 +225,9 @@ export const Window = memo(
 		);
 		const onFocus = useCallback(
 			(event) => {
+				//event?.stopPropagation();
 				emit("focus", event);
-				event?.stopPropagation();
-				if ($app?.emit) {
+				if ($app) {
 					emit("activated", event);
 				} else {
 					onActive(event);
@@ -215,7 +238,7 @@ export const Window = memo(
 		const onBlur = useCallback(
 			(event) => {
 				emit("blur", event);
-				if ($app?.emit) {
+				if ($app) {
 					emit("deactivated", event);
 				} else {
 					onDeActive(event);
@@ -226,6 +249,7 @@ export const Window = memo(
 
 		const win = useMemo(
 			() => ({
+				__: "window",
 				uid,
 				wmGroup,
 				wmSort,
@@ -492,11 +516,23 @@ export const Window = memo(
 		useImperativeHandle(ref, () => win);
 
 		useEffect(() => {
+			document.documentElement.addEventListener("click", onDeActive);
+			return () => {
+				document.documentElement.removeEventListener(
+					"click",
+					onDeActive
+				);
+			};
+		}, [onDeActive]);
+
+		useEffect(() => {
 			$sm.active = true;
 			win.z = zIndex = Math.max(zIndex, position.zIndex);
 			setZIndex(zIndex);
 			wmAdd(win);
+
 			active && wmActive(win);
+
 			$sm.first(() => {
 				if (w) win.w = w;
 				if (h) win.h = h;
@@ -506,25 +542,19 @@ export const Window = memo(
 
 			return () => {
 				wmDisable();
-				$sm.remove();
 				wmDel(win);
+				$sm.remove();
 			};
 		}, []);
+
 		useEffect(() => {
-			document.documentElement.addEventListener("click", onDeActive);
-			return () => {
-				document.documentElement.removeEventListener(
-					"click",
-					onDeActive
-				);
-			};
-		}, [onDeActive]);
-		useEffect(() => {
+			$app?.register(win);
 			$app?.on?.("activated", onActive);
 			$app?.on?.("deactivated", onDeActive);
 			return () => {
 				$app?.off?.("activated", onActive);
 				$app?.off?.("deactivated", onDeActive);
+				$app?.unRegister(win);
 			};
 		}, []);
 
@@ -563,6 +593,7 @@ export const Window = memo(
 						)}
 					>
 						<div
+							id={uid}
 							className={classNames("xWindow", className, {
 								"xWindow--active": active,
 								"xWindow--resizable":
