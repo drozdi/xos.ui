@@ -90,8 +90,8 @@ export const Window = memo(
 			onCollapse,
 			onReload,
 			onClose,
-			resizable = true,
-			draggable = true,
+			resizable,
+			draggable,
 			wmGroup,
 			wmSort = 0,
 		},
@@ -121,6 +121,7 @@ export const Window = memo(
 		//??? error DevTools
 		const [{ isFullscreen, isCollapse, active }, updateState] =
 			$sm.useStateObject("state", {});
+
 		const emit = useCallback(
 			(...args) => {
 				$app?.emit?.(...args);
@@ -202,6 +203,7 @@ export const Window = memo(
 		const onFocus = useCallback(
 			(event) => {
 				emit("focus", event);
+				event?.stopPropagation();
 				if ($app?.emit) {
 					emit("activated", event);
 				} else {
@@ -255,18 +257,20 @@ export const Window = memo(
 					if (!val) {
 						return;
 					}
-					const pos = { ...position };
-					if (isString(val) && val.substr(-1) === "%") {
-						val = Math.ceil(
-							(getComputedSize(parent)[0] * parseInt(val, 10)) /
-								100
-						);
-					}
-					pos.width = minMax(val, 0, 10000);
-					if (aspectFactor) {
-						pos.height = pos.width * aspectFactor;
-					}
-					setPosition(pos);
+					setPosition((pos) => {
+						if (isString(val) && val.substr(-1) === "%") {
+							val = Math.ceil(
+								(getComputedSize(parent)[0] *
+									parseInt(val, 10)) /
+									100
+							);
+						}
+						pos.width = minMax(val, 0, 10000);
+						if (aspectFactor) {
+							pos.height = pos.width * aspectFactor;
+						}
+						return { ...pos };
+					});
 				},
 				get h() {
 					return position.height;
@@ -275,56 +279,64 @@ export const Window = memo(
 					if (!val) {
 						return;
 					}
-					const pos = { ...position };
-					if (isString(val) && val.substr(-1) === "%") {
-						val = Math.ceil(
-							(getComputedSize(parent)[1] * parseInt(val, 10)) /
-								100
-						);
-					}
-					pos.height = minMax(val, 0, 10000);
-					if (aspectFactor) {
-						pos.width = pos.height / aspectFactor;
-					}
-					setPosition(pos);
+					setPosition((pos) => {
+						if (isString(val) && val.substr(-1) === "%") {
+							val = Math.ceil(
+								(getComputedSize(parent)[1] *
+									parseInt(val, 10)) /
+									100
+							);
+						}
+						pos.height = minMax(val, 0, 10000);
+						if (aspectFactor) {
+							pos.width = pos.height / aspectFactor;
+						}
+						return { ...pos };
+					});
 				},
 				get x() {
 					return position.left;
 				},
 				set x(val) {
-					const pos = { position };
-					const [width] = getComputedSize(parent);
-					if (val === "center") {
-						pos.left = (width - pos.width) / 2;
-					} else if (val === "right") {
-						pos.left = width - pos.width;
-					} else if (val === "left") {
-						pos.left = 0;
-					} else if (isString(val) && val.substr(-1) === "%") {
-						pos.left = Math.ceil((width * parseInt(val, 10)) / 100);
-					} else {
-						pos.left = val;
-					}
-					setPosition(pos);
+					setPosition((pos) => {
+						const [width] = getComputedSize(parent);
+						if (val === "center") {
+							pos.left = (width - pos.width) / 2;
+						} else if (val === "right") {
+							pos.left = width - pos.width;
+						} else if (val === "left") {
+							pos.left = 0;
+						} else if (isString(val) && val.substr(-1) === "%") {
+							pos.left = Math.ceil(
+								(width * parseInt(val, 10)) / 100
+							);
+						} else {
+							pos.left = val;
+						}
+						return { ...pos };
+					});
 				},
 				get y() {
 					return position.top;
 				},
 				set y(val) {
-					const pos = { ...position };
-					const [, height] = getComputedSize(parent);
-					if (val === "center") {
-						pos.top = (height - pos.height) / 2;
-					} else if (val === "bottom") {
-						pos.top = height - pos.height;
-					} else if (val === "top") {
-						pos.top = 0;
-					} else if (isString(val) && val.substr(-1) === "%") {
-						pos.top = Math.ceil((height * parseInt(val, 10)) / 100);
-					} else {
-						pos.top = val;
-					}
-					setPosition(pos);
+					setPosition((pos) => {
+						const [, height] = getComputedSize(parent);
+						if (val === "center") {
+							pos.top = (height - pos.height) / 2;
+						} else if (val === "bottom") {
+							pos.top = height - pos.height;
+						} else if (val === "top") {
+							pos.top = 0;
+						} else if (isString(val) && val.substr(-1) === "%") {
+							pos.top = Math.ceil(
+								(height * parseInt(val, 10)) / 100
+							);
+						} else {
+							pos.top = val;
+						}
+						return { ...pos };
+					});
 				},
 				get z() {
 					return position.zIndex;
@@ -485,6 +497,13 @@ export const Window = memo(
 			setZIndex(zIndex);
 			wmAdd(win);
 			active && wmActive(win);
+			$sm.first(() => {
+				if (w) win.w = w;
+				if (h) win.h = h;
+				if (x) win.x = x;
+				if (y) win.y = y;
+			});
+
 			return () => {
 				wmDisable();
 				$sm.remove();

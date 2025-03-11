@@ -18,6 +18,19 @@ export class App extends EventBus {
 			this[evt] = (...args) => this.emit(evt, ...args);
 		});
 	}
+	default(config = {}) {
+		this.__config = config;
+	}
+	config(key = "") {
+		const conf = {};
+		for (let name in this.__config) {
+			if (name.indexOf(key + ".") !== 0) {
+				continue;
+			}
+			conf[name.replace(key + ".", "")] = this.__config[name];
+		}
+		return conf;
+	}
 	history(fn) {
 		if (!this.__history.current) {
 			this.__history.current = HistoryStore(fn);

@@ -1,4 +1,4 @@
-import { isObject, isString } from "../../shared/utils/is";
+import { isString } from "../../shared/utils/is";
 
 export let Config = function Config(conf) {
 	if (conf instanceof Config) {
@@ -40,13 +40,7 @@ Config.prototype = {
 	},
 	get: function (name, def) {
 		let val = this.conf[this.key(name)] || def;
-		while ((isString(val) && "@" === val.substr(0, 1)) || isObject(val)) {
-			if (isObject(val) && (val.default || val.default !== undefined)) {
-				val = val.default;
-				continue;
-			} else if (isObject(val)) {
-				break;
-			}
+		while (isString(val) && "@" === val.substr(0, 1)) {
 			val = this.resolveValue(val.substr(1));
 			if (this.conf[this.key(val)]) {
 				val = this.conf[this.key(val)];

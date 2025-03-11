@@ -57,6 +57,13 @@ export const Storage = cached(function StorageFn(type, key) {
 			fn(...args);
 			smActive = old;
 		},
+		first(fn = () => {}, ...args) {
+			let first = this.get(".first", true);
+			if (first) {
+				fn(...args);
+			}
+			this.set(".first", false);
+		},
 		useState(name, initial) {
 			const [state, setState] = useState(this.get(name, initial));
 			useEffect(() => {
