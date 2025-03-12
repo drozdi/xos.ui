@@ -158,15 +158,15 @@ export const Window = memo(
 
 		const handlerFullscreen = useCallback(
 			(event) => {
-				if (!canDo("fullscreen")) {
+				if (!canDo("fullscreen") || !resizable) {
 					return;
 				}
-				if (!isFullscreen) {
-					updateState({ isCollapse: false });
-				}
-				updateState({ isFullscreen: !isFullscreen });
+				updateState({
+					isCollapse: false,
+					isFullscreen: !isFullscreen,
+				});
 			},
-			[canDo, updateState, isFullscreen]
+			[canDo, updateState, resizable]
 		);
 		const handlerCollapse = useCallback(
 			(event) => {
@@ -450,7 +450,7 @@ export const Window = memo(
 									onClick={handlerReload}
 								/>
 							);
-						} else if (type === "fullscreen") {
+						} else if (type === "fullscreen" && resizable) {
 							return (
 								<XBtn
 									onClick={handlerFullscreen}
@@ -483,6 +483,7 @@ export const Window = memo(
 			),
 			[
 				icons,
+				resizable,
 				isFullscreen,
 				handlerFullscreen,
 				handlerCollapse,
@@ -549,11 +550,11 @@ export const Window = memo(
 
 		useEffect(() => {
 			$app?.register(win);
-			$app?.on?.("activated", onActive);
-			$app?.on?.("deactivated", onDeActive);
+			$app?.on("activated", onActive);
+			$app?.on("deactivated", onDeActive);
 			return () => {
-				$app?.off?.("activated", onActive);
-				$app?.off?.("deactivated", onDeActive);
+				$app?.off("activated", onActive);
+				$app?.off("deactivated", onDeActive);
 				$app?.unRegister(win);
 			};
 		}, []);
@@ -561,7 +562,7 @@ export const Window = memo(
 		return (
 			<WindowProvider value={win}>
 				<DraggableCore
-					disabled={!draggable && isFullscreen}
+					disabled={!draggable || isFullscreen}
 					onDrag={onDragMove}
 					handle=".xWindow-bar"
 					cancel=".xWindow-res, .xWindow-drag-no"
