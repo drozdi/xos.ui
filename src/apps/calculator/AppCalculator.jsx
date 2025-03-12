@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import appsManager from "../../entites/core/apps-manager";
 import { Window } from "../../features";
+import { useApp } from "../../features/app";
 import { useStateObject } from "../../shared/hooks";
 import { Box } from "../../shared/internal/box";
 import { XBtn } from "../../shared/ui";
@@ -15,6 +16,7 @@ const matrix = [
 ];
 
 export function AppCalculator() {
+	const $app = useApp();
 	const [{ expr1, expr2, prev, sign }, updateOperand] = useStateObject({
 		expr1: "0",
 		expr2: "",
@@ -168,10 +170,24 @@ export function AppCalculator() {
 		return `${expr1} ${sign}`;
 	}, [expr1, prev, sign]);
 
+	useEffect(() => {
+		$app?.on("activated", () => {
+			console.log("activated");
+		});
+		$app?.on("deactivated", () => {
+			console.log("deactivated");
+		});
+		console.log($app);
+		return () => {
+			$app?.off("activated");
+			$app?.off("deactivated");
+		};
+	}, []);
+
 	return (
 		<Window
 			title="Калькулятор"
-			h={380}
+			h={370}
 			draggable
 			onReload={() => handleClickReset()}
 			icons="reload collapse close"

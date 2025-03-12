@@ -94,6 +94,7 @@ export const Window = memo(
 			draggable,
 			wmGroup,
 			wmSort = 0,
+			tabIndex = -1,
 		},
 		ref
 	) {
@@ -517,14 +518,11 @@ export const Window = memo(
 		useImperativeHandle(ref, () => win);
 
 		useEffect(() => {
-			document.documentElement.addEventListener("click", onDeActive);
+			document.documentElement.addEventListener("click", onBlur);
 			return () => {
-				document.documentElement.removeEventListener(
-					"click",
-					onDeActive
-				);
+				document.documentElement.removeEventListener("click", onBlur);
 			};
-		}, [onDeActive]);
+		}, [onBlur]);
 
 		useEffect(() => {
 			$sm.active = true;
@@ -606,7 +604,7 @@ export const Window = memo(
 							})}
 							style={style}
 							ref={nodeRef}
-							onClick={onActive}
+							onClick={onFocus}
 						>
 							<Box
 								className="xWindow-bar"
