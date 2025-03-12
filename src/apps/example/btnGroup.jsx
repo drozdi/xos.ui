@@ -41,8 +41,7 @@ export function BtnGroupExample() {
 	);
 
 	return (
-		<div className="max-w-4xl m-auto py-4">
-			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XBtn.Group</h2>
+		<div className="max-w-4xl m-auto flex flex-col gap-3">
 			<div className="p-4">
 				<XBtn.Group
 					{...btnGroupProps}
@@ -70,7 +69,6 @@ export function BtnGroupExample() {
 					</XBtn>
 				</XBtn.Group>
 			</div>
-			<hr className="my-2" />
 			<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-separator">
 				<div>
 					<pre className="bg-sky-500/50 text-white p-2 rounded-md mt-4 select-text">

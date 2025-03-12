@@ -41,8 +41,7 @@ export function BtnExample() {
 	);
 
 	return (
-		<div className="max-w-4xl m-auto py-4">
-			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XBtn</h2>
+		<div className="max-w-4xl m-auto flex flex-col gap-3">
 			{true && (
 				<table className="table-auto w-full border-collapse border-spacing-0 border border-color">
 					<thead>
@@ -152,8 +151,7 @@ export function BtnExample() {
 					</tbody>
 				</table>
 			)}
-
-			<hr className="my-2" />
+			<h3>Generate</h3>
 			<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-color">
 				<div>
 					<XBtn {...btnExample.props}>{label}</XBtn>

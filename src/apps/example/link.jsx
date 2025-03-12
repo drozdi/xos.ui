@@ -2,9 +2,8 @@ import { XChevron, XIcon, XLink } from "../../shared/ui";
 
 export function LinkExample() {
 	return (
-		<div className="max-w-4xl m-auto py-4 relative">
-			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XLink</h2>
-			<div className="grid grid-cols-2">
+		<div className="max-w-4xl m-auto flex flex-col gap-3">
+			<div className="grid grid-cols-2 gap-3">
 				<div>
 					<XLink
 						to="#required-for-focus"
@@ -51,7 +50,7 @@ export function LinkExample() {
 						active
 					/>
 				</div>
-				<pre className="ps-4">
+				<pre className="bg-sky-500/50 text-white p-2 rounded-md mt-4 select-text">
 					<code className="language-jsx">
 						{`<XLink
 	href="#required-for-focus"
@@ -93,135 +92,125 @@ export function LinkExample() {
 					</code>
 				</pre>
 			</div>
-			<h3 className="py-4 text-xl/none text-center border-t border-color">
-				Nested XLink
-			</h3>
-			<div className="p-4">
-				<div className="grid grid-cols-2">
-					<div>
-						<XLink label="label" href="#1" leftSection="mdi-close">
-							<XLink
-								label="label"
-								href="#1"
-								leftSection="mdi-home"
-							>
-								<XLink
-									label="label"
-									leftSection="mdi-home"
-									description="description"
-									href="#1"
-								/>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-							</XLink>
-							<XLink
-								label="label"
-								description="description"
-								href="#1"
-								active
-							/>
+			<h3>Nested XLink</h3>
+
+			<div className="grid grid-cols-2 gap-3">
+				<div>
+					<XLink label="label" href="#1" leftSection="mdi-close">
+						<XLink label="label" href="#1" leftSection="mdi-home">
 							<XLink
 								label="label"
 								leftSection="mdi-home"
 								description="description"
 								href="#1"
-								disabled
 							/>
 							<XLink
 								label="label"
 								description="description"
 								href="#1"
-								leftSection={<XIcon>mdi-close</XIcon>}
-								disabled
-							>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-							</XLink>
+							/>
 						</XLink>
-						<XLink label="label" href="#1" leftSection="mdi-close">
-							<XLink
-								label="label"
-								href="#1"
-								leftSection="mdi-home"
-							>
-								<XLink
-									label="label"
-									leftSection="mdi-home"
-									description="description"
-									href="#1"
-								/>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-							</XLink>
+						<XLink
+							label="label"
+							description="description"
+							href="#1"
+							active
+						/>
+						<XLink
+							label="label"
+							leftSection="mdi-home"
+							description="description"
+							href="#1"
+							disabled
+						/>
+						<XLink
+							label="label"
+							description="description"
+							href="#1"
+							leftSection={<XIcon>mdi-close</XIcon>}
+							disabled
+						>
 							<XLink
 								label="label"
 								description="description"
 								href="#1"
-								active
-							/>
-							<XLink
-								label="label"
-								leftSection="mdi-home"
-								description="description"
-								href="#1"
-								disabled
 							/>
 							<XLink
 								label="label"
 								description="description"
 								href="#1"
-								leftSection={<XIcon>mdi-close</XIcon>}
-							>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-								<XLink
-									label="label"
-									description="description"
-									href="#1"
-								/>
-							</XLink>
+							/>
+							<XLink
+								label="label"
+								description="description"
+								href="#1"
+							/>
+							<XLink
+								label="label"
+								description="description"
+								href="#1"
+							/>
 						</XLink>
-					</div>
-					<pre className="ps-4">
-						<code className="language-jsx">
-							{`<XLink 
+					</XLink>
+					<XLink label="label" href="#1" leftSection="mdi-close">
+						<XLink label="label" href="#1" leftSection="mdi-home">
+							<XLink
+								label="label"
+								leftSection="mdi-home"
+								description="description"
+								href="#1"
+							/>
+							<XLink
+								label="label"
+								description="description"
+								href="#1"
+							/>
+						</XLink>
+						<XLink
+							label="label"
+							description="description"
+							href="#1"
+							active
+						/>
+						<XLink
+							label="label"
+							leftSection="mdi-home"
+							description="description"
+							href="#1"
+							disabled
+						/>
+						<XLink
+							label="label"
+							description="description"
+							href="#1"
+							leftSection={<XIcon>mdi-close</XIcon>}
+						>
+							<XLink
+								label="label"
+								description="description"
+								href="#1"
+							/>
+							<XLink
+								label="label"
+								description="description"
+								href="#1"
+							/>
+							<XLink
+								label="label"
+								description="description"
+								href="#1"
+							/>
+							<XLink
+								label="label"
+								description="description"
+								href="#1"
+							/>
+						</XLink>
+					</XLink>
+				</div>
+				<pre className="bg-sky-500/50 text-white p-2 rounded-md mt-4 select-text">
+					<code className="language-jsx">
+						{`<XLink 
 	label="label"
 	href="#1"
 	leftSection="mdi-close">
@@ -326,9 +315,8 @@ export function LinkExample() {
 				href="#1" />
 	</XLink>
 </XLink>`}
-						</code>
-					</pre>
-				</div>
+					</code>
+				</pre>
 			</div>
 		</div>
 	);

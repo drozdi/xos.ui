@@ -29,8 +29,8 @@ export function HomeExample() {
 	);
 
 	return (
-		<>
-			<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-color">
+		<div className="max-w-4xl m-auto flex flex-col gap-3">
+			<div className="grid grid-cols-2 *:col-span-1 *:p-3 *:border *:border-color">
 				<div>
 					<Box
 						{...boxExample.props}
@@ -107,6 +107,6 @@ export function HomeExample() {
 				<hr className="my-4" />
 				<Sections className="bg-bgmb4">asdasd</Sections>
 			</div>
-		</>
+		</div>
 	);
 }

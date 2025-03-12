@@ -57,9 +57,7 @@ export function SelectExample() {
 		"XInputSelect"
 	);
 	return (
-		<div className="max-w-4xl m-auto py-4">
-			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XInput</h2>
-
+		<div className="max-w-4xl m-auto">
 			<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-separator">
 				<div>
 					<div>

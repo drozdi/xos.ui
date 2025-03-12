@@ -2,11 +2,15 @@ import { Sections } from "../../shared/internal/sections";
 import { XBtn } from "../../shared/ui";
 import { isFunction } from "../../shared/utils/is";
 import { useApp } from "../app";
-export const History = function HistoryFn({ children, show }) {
+export const History = function HistoryFn({ children, show, ...props }) {
 	const $history = useApp().history();
 	return (
 		<Sections
-			className="!p-0 items-normal"
+			{...props}
+			className="!p-0"
+			row
+			align="center"
+			justify="cenetr"
 			leftSection={
 				<XBtn.Group color="primary">
 					<XBtn

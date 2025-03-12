@@ -52,12 +52,13 @@ export function AppExample({ ...props }) {
 						</XItem>
 					))}
 				</XList>
-				<History slot="header" show>
+				<History
+					slot="header"
+					show
+					bodyClass="text-center text-2xl bg-bgmb1"
+				>
 					{(history) => (
-						<Box.Header
-							level={2}
-							className="text-center text-2xl mb-4 bg-bgmb1"
-						>
+						<Box.Header level={2}>
 							{
 								routers.find((item) => item.path === history)
 									?.label
@@ -65,7 +66,7 @@ export function AppExample({ ...props }) {
 						</Box.Header>
 					)}
 				</History>
-				<XMain>{view}</XMain>
+				<XMain className="p-3 relative">{view}</XMain>
 			</Layout>
 		</Window>
 	);

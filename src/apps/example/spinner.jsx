@@ -25,8 +25,7 @@ export function SpinnerExample() {
 		"XSpinner"
 	);
 	return (
-		<div className="max-w-4xl m-auto py-4 relative flex flex-col gap-4">
-			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XSpinner</h2>
+		<div className="max-w-4xl m-auto flex flex-col gap-3">
 			<XList dense>
 				{[
 					{
@@ -68,13 +67,12 @@ export function SpinnerExample() {
 				].map((v, i) => (
 					<XItem key={i}>
 						<XItemSection side>{v.elem}</XItemSection>
-						<XItemSection className="bg-sky-500/50 text-white pl-2 rounded-md">
+						<XItemSection className="bg-sky-500/50 text-white pl-3 rounded-md">
 							<XItemLabel>{v.code}</XItemLabel>
 						</XItemSection>
 					</XItem>
 				))}
 			</XList>
-			<hr className="my-2" />
 			<h3>Generate</h3>
 			<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-separator">
 				<div>

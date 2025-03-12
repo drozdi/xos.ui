@@ -1,8 +1,7 @@
 import { XBtn, XCard } from "../../shared/ui";
 export function CardsExample() {
 	return (
-		<div className="max-w-4xl m-auto py-4 relative">
-			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XCard</h2>
+		<div className="max-w-4xl m-auto">
 			<div className="max-w-lg m-auto">
 				<XCard border>
 					<XCard.Section horizontal>

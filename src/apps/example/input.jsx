@@ -58,9 +58,8 @@ export function InputExample() {
 		"XInput"
 	);
 	return (
-		<div className="max-w-4xl m-auto py-4">
-			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XInput</h2>
-			{false && (
+		<div className="max-w-4xl m-auto">
+			{true && (
 				<table className="table-auto w-full border-collapse border-spacing-0 border border-separator">
 					<thead>
 						<tr className="*:text-center">
@@ -170,71 +169,70 @@ export function InputExample() {
 				</table>
 			)}
 			{true && (
-				<>
-					<hr className="my-2" />
-					<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-separator">
-						<div>
-							<XInput {...inputExample.props} />
-							<pre className="bg-sky-500/50 text-white p-2 rounded-md mt-4 select-text">
+				<div className="grid grid-cols-2 *:col-span-1 *:p-4 *:border *:border-separator">
+					<div>
+						<XInput {...inputExample.props} />
+						<pre className="bg-sky-500/50 text-white p-2 rounded-md mt-4 select-text overflow-auto">
+							<code className="language-jsx">
 								{inputExample.code}
-							</pre>
-						</div>
-						<div>
-							{Form(
-								{
-									color: {
-										type: "select",
-										values: [
-											"primary",
-											"secondary",
-											"accent",
-											"positive",
-											"negative",
-											"info",
-											"warning",
-										],
-									},
-									labelColor: {
-										type: "select",
-										values: [
-											"primary",
-											"secondary",
-											"accent",
-											"positive",
-											"negative",
-											"info",
-											"warning",
-										],
-									},
-									leftSection: {
-										type: "checkbox",
-										val: "mdi-account",
-									},
-									rightSection: {
-										type: "checkbox",
-										val: "mdi-close",
-									},
-									label: { type: "text" },
-									placeholder: { type: "text" },
-									hint: { type: "text" },
-									errorMessage: { type: "text" },
-									outline: { type: "checkbox" },
-									filled: { type: "checkbox" },
-									square: { type: "checkbox" },
-									underlined: { type: "checkbox" },
-									dense: { type: "checkbox" },
-									stackLabel: { type: "checkbox" },
-									required: { type: "checkbox" },
-									disabled: { type: "checkbox" },
-									hideMessage: { type: "checkbox" },
-									lazyRules: { type: "checkbox" },
-									hideHint: { type: "checkbox" },
-								},
-								inputExample
-							)}
-						</div>
+							</code>
+						</pre>
 					</div>
-				</>
+					<div>
+						{Form(
+							{
+								color: {
+									type: "select",
+									values: [
+										"primary",
+										"secondary",
+										"accent",
+										"positive",
+										"negative",
+										"info",
+										"warning",
+									],
+								},
+								labelColor: {
+									type: "select",
+									values: [
+										"primary",
+										"secondary",
+										"accent",
+										"positive",
+										"negative",
+										"info",
+										"warning",
+									],
+								},
+								leftSection: {
+									type: "checkbox",
+									val: "mdi-account",
+								},
+								rightSection: {
+									type: "checkbox",
+									val: "mdi-close",
+								},
+								label: { type: "text" },
+								placeholder: { type: "text" },
+								hint: { type: "text" },
+								errorMessage: { type: "text" },
+								outline: { type: "checkbox" },
+								filled: { type: "checkbox" },
+								square: { type: "checkbox" },
+								underlined: { type: "checkbox" },
+								dense: { type: "checkbox" },
+								stackLabel: { type: "checkbox" },
+								required: { type: "checkbox" },
+								disabled: { type: "checkbox" },
+								hideMessage: { type: "checkbox" },
+								lazyRules: { type: "checkbox" },
+								hideHint: { type: "checkbox" },
+							},
+							inputExample
+						)}
+					</div>
+				</div>
 			)}
 		</div>
 	);

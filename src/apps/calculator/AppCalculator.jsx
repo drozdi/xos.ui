@@ -169,7 +169,13 @@ export function AppCalculator() {
 	}, [expr1, prev, sign]);
 
 	return (
-		<Window title="Калькулятор" h={380} icons="reload collapse close">
+		<Window
+			title="Калькулятор"
+			h={380}
+			draggable
+			onReload={() => handleClickReset()}
+			icons="reload collapse close"
+		>
 			<Box col>
 				<Box.Section className="items-end">
 					<Box.Subtitle className="opacity-80">

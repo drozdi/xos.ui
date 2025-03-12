@@ -32,8 +32,7 @@ export function TabsExample() {
 	`
 	);
 	return (
-		<div className="max-w-4xl m-auto py-4 relative">
-			<h2 className="text-center text-2xl mb-4 bg-bgmb1">XTabs</h2>
+		<div className="max-w-4xl m-auto">
 			<XTabs {...tabsExample.props}>
 				<XTabs.List grow>
 					<XTabs.Tab
