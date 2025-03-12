@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import appsManager from "../../entites/core/apps-manager";
 import { History, Layout, Window } from "../../features";
 import { useApp } from "../../features/app";
+import { Box } from "../../shared/internal/box";
 import {
 	XIcon,
 	XItem,
@@ -52,9 +53,17 @@ export function AppExample({ ...props }) {
 					))}
 				</XList>
 				<History slot="header" show>
-					{(history) =>
-						routers.find((item) => item.path === history)?.label
-					}
+					{(history) => (
+						<Box.Header
+							level={2}
+							className="text-center text-2xl mb-4 bg-bgmb1"
+						>
+							{
+								routers.find((item) => item.path === history)
+									?.label
+							}
+						</Box.Header>
+					)}
 				</History>
 				<XMain>{view}</XMain>
 			</Layout>
