@@ -5,7 +5,7 @@ import appsManager from "./entites/core/apps-manager";
 import { Layout } from "./features";
 import { WindowManager } from "./features/window-manager";
 import { ThemeProvider, ThemeProviderToggler } from "./shared/hooks/useTheme";
-import { XBtn, XMain, XTable } from "./shared/ui";
+import { XBtn, XColumn, XMain, XMarkupTable, XTable } from "./shared/ui";
 import "./style/index.css";
 
 function App() {
@@ -32,34 +32,65 @@ function App() {
 			<Layout container overlay toggle view="hhh lpr lff">
 				<ThemeProviderToggler slot="header"></ThemeProviderToggler>
 				<WindowManager slot="footer"></WindowManager>
-				<XMain id="parent_win">
-					<XBtn onClick={onExample}>Exammple</XBtn>
-					<XBtn onClick={onCalculator}>Calculator</XBtn>
-					<XBtn onClick={onTicTacToe}>TicTacToe</XBtn>
+				<XMain id="parent_win" className="p-3">
+					<XBtn.Group pills color="info">
+						<XBtn onClick={onExample}>Exammple</XBtn>
+						<XBtn onClick={onCalculator}>Calculator</XBtn>
+						<XBtn onClick={onTicTacToe}>TicTacToe</XBtn>
+					</XBtn.Group>
+
 					<hr className="my-3" />
 					<div className="max-w-5xl m-auto">
-						<XTable border hover striped rowBorder>
-							<XTable.Thead>
-								<XTable.Tr>
-									<XTable.Th>Element position</XTable.Th>
-									<XTable.Th>Element name</XTable.Th>
-									<XTable.Th>Symbol</XTable.Th>
-									<XTable.Th>Atomic mass</XTable.Th>
-								</XTable.Tr>
-							</XTable.Thead>
-							<XTable.Tbody>
-								{elements.map((element) => (
-									<XTable.Tr key={element.name}>
-										<XTable.Td>
-											{element.position}
-										</XTable.Td>
-										<XTable.Td>{element.name}</XTable.Td>
-										<XTable.Td>{element.symbol}</XTable.Td>
-										<XTable.Td>{element.mass}</XTable.Td>
-									</XTable.Tr>
-								))}
-							</XTable.Tbody>
+						<XTable>
+							<XColumn
+								field="position"
+								header="Element position"
+							/>
+							<XColumn field="name" header="Element name" />
+							<XColumn field="symbol" header="Symbol">
+								<XColumn header="Symbol 1" />
+								<XColumn header="Symbol 2" />
+							</XColumn>
+							<XColumn field="mass" header="Atomic mass" />
 						</XTable>
+						{false && (
+							<XMarkupTable border hover rowBorder colBorder>
+								<XMarkupTable.Thead>
+									<XMarkupTable.Tr>
+										<XMarkupTable.Th>
+											Element position
+										</XMarkupTable.Th>
+										<XMarkupTable.Th>
+											Element name
+										</XMarkupTable.Th>
+										<XMarkupTable.Th>
+											Symbol
+										</XMarkupTable.Th>
+										<XMarkupTable.Th>
+											Atomic mass
+										</XMarkupTable.Th>
+									</XMarkupTable.Tr>
+								</XMarkupTable.Thead>
+								<XMarkupTable.Tbody>
+									{elements.map((element) => (
+										<XMarkupTable.Tr key={element.name}>
+											<XMarkupTable.Td>
+												{element.position}
+											</XMarkupTable.Td>
+											<XMarkupTable.Td>
+												{element.name}
+											</XMarkupTable.Td>
+											<XMarkupTable.Td>
+												{element.symbol}
+											</XMarkupTable.Td>
+											<XMarkupTable.Td>
+												{element.mass}
+											</XMarkupTable.Td>
+										</XMarkupTable.Tr>
+									))}
+								</XMarkupTable.Tbody>
+							</XMarkupTable>
+						)}
 					</div>
 				</XMain>
 			</Layout>

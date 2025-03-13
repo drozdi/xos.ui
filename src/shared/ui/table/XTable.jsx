@@ -1,90 +1,112 @@
 import PropTypes from "prop-types";
-import { memo } from "react";
+import { useMemo, useRef } from "react";
+import { isFunction } from "../../utils/is";
+import { XTablerColumsProvider } from "./XTableColumsContext";
 
-import classNames from "classnames";
-import { forwardRefWithAs } from "../../internal/render";
-import { XTablerProvider } from "./XTableContext";
-import "./style.css";
+export const XTable = ({ children, className, ...props }) => {
+	props.groupAt = props.groupAt || "begin";
+	function editable(data, index) {
+		return isFunction(props.editable)
+			? props.editable(data, index)
+			: props.editable;
+	}
+	const columnsRef = useRef([]);
+	const ctx = useMemo(
+		() => ({
+			get columns() {
+				return columnsRef.current;
+			},
+			set columns(columns) {
+				columnsRef.current = columns;
+			},
+			level: 0,
+		}),
+		[]
+	);
 
-export const XTable = memo(
-	forwardRefWithAs(function XTableFn({
-		children,
-		className,
-		striped,
-		hover,
-		dense,
-		rowBorder,
-		colBorder,
-		border,
-	}) {
-		return (
-			<XTablerProvider value={{}}>
-				<table
-					className={classNames(
-						"x-table",
-						{
-							"x-table--striped": striped,
-							"x-table--hover": hover,
-							"x-table--dense": dense,
-							"x-table--row-border": rowBorder,
-							"x-table--col-border": colBorder,
-							"x-table--border": border,
-						},
-						className
-					)}
-				>
-					{children}
-				</table>
-			</XTablerProvider>
+	const columns = useMemo(
+		() =>
+			[...columnsRef.current].sort((a, b) => {
+				if (a.isGrouped) {
+					return props.groupAt === "begin" ? -1 : 1;
+				}
+				if (b.isGrouped) {
+					return props.groupAt === "begin" ? 1 : -1;
+				}
+				return 0;
+			}),
+		[columnsRef.current]
+	);
+
+	const fields = useMemo(() => {
+		let ret = [];
+		(function recursive(columns) {
+			for (let i = 0, cnt = columns.length; i < cnt; i++) {
+				if (columns[i].isEmpty && columns[i].isColumns) {
+					recursive(columns[i].columns);
+				} else {
+					ret.push(columns[i]);
+				}
+			}
+		})(columns);
+		return ret.filter(
+			(v) =>
+				v.field &&
+				(props.column?.isGrouped || v.field != props.column?.field)
 		);
-	})
-);
+	}, [columns, columnsRef]);
+
+	const rowspan = useMemo(() => {
+		let max = 0;
+		(function recursive(columns) {
+			for (let i = 0; i < columns.length; i++) {
+				max = max > columns[i].level ? max : columns[i].level;
+				if (columns[i].isColumns) {
+					recursive(columns[i].columns);
+				}
+			}
+		})(columns);
+		return max;
+	}, [columns, columnsRef]);
+
+	const colspan = useMemo(
+		() =>
+			columns.reduce((sum, column) => {
+				return sum + (column.isGroup ? 0 : column.colspan);
+			}, 0) || 1,
+		[columns, columnsRef]
+	);
+
+	const groupKey = useMemo(() => {
+		for (let i = 0; i < fields.length; i++) {
+			if (fields[i].isGrouped && !fields[i].isGroup) {
+				return fields[i].field;
+			}
+		}
+		return null;
+	}, [fields, columnsRef]);
+
+	console.log(columnsRef.current);
+	console.log("columns", columns);
+	console.log("fields", fields);
+	console.log("rowspan", rowspan);
+	console.log("colspan", colspan);
+	console.log("groupKey", groupKey);
+
+	return (
+		<XTablerColumsProvider value={ctx}>{children}</XTablerColumsProvider>
+	);
+};
 
 XTable.propTypes = {
 	children: PropTypes.node,
 	className: PropTypes.string,
-	striped: PropTypes.bool,
-	hover: PropTypes.bool,
-	dense: PropTypes.bool,
-	rowBorder: PropTypes.bool,
-	colBorder: PropTypes.bool,
-	border: PropTypes.bool,
-};
-
-XTable.Tr = ({ children, className }) => {
-	return <tr className={classNames("x-table-tr", className)}>{children}</tr>;
-};
-XTable.Td = ({ children, className }) => {
-	return <td className={classNames("x-table-td", className)}>{children}</td>;
-};
-XTable.Th = ({ children, className }) => {
-	return <th className={classNames("x-table-th", className)}>{children}</th>;
-};
-XTable.Thead = ({ children, className }) => {
-	return (
-		<thead className={classNames("x-table-thead", className)}>
-			{children}
-		</thead>
-	);
-};
-XTable.Tbody = ({ children, className }) => {
-	return (
-		<tbody className={classNames("x-table-tbody", className)}>
-			{children}
-		</tbody>
-	);
-};
-XTable.Tfoot = ({ children, className }) => {
-	return (
-		<tfoot className={classNames("x-table-tfoot", className)}>
-			{children}
-		</tfoot>
-	);
-};
-XTable.Caption = ({ children, className }) => {
-	return (
-		<caption className={classNames("x-table-caption", className)}>
-			{children}
-		</caption>
-	);
+	groupAt: PropTypes.oneOf(["begin", "end"]),
+	editable: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+	separate: PropTypes.bool,
+	column: PropTypes.object,
+	expand: PropTypes.bool,
+	sortKey: PropTypes.string,
+	sortDesc: PropTypes.bool,
+	values: PropTypes.array,
 };

@@ -77,3 +77,10 @@
 .x-table-tbody .x-table-tr:last-child {
 	@apply border-b-0;
 }
+
+.x-table--fixed {
+	@apply table-fixed;
+}
+.x-table--auto {
+	@apply table-auto;
+}
