@@ -20,7 +20,7 @@ export function AppExample({ ...props }) {
 	const $history = $app.history((history) => {
 		setView(routers.find((item) => item.path === history)?.element);
 	});
-
+	console.log($app);
 	useEffect(() => {
 		if ($history.isEmpty()) {
 			$history.add("/");

@@ -1,0 +1,79 @@
+@reference "@style";
+
+.x-table {
+	@apply w-full border-collapse border-spacing-0 table-auto caption-bottom border-color;
+}
+.x-table,
+.x-table *,
+.x-table *::before,
+.x-table *::after {
+	@apply transition-all duration-200 ease-in-out;
+}
+
+.x-table-tr {
+	@apply relative border-color;
+	&::after {
+		@apply absolute left-0 top-0 w-full h-full pointer-events-none -z-10 bg-current opacity-0;
+		content: "";
+	}
+}
+
+.x-table-td,
+.x-table-th {
+	@apply border-color px-4 py-2;
+}
+
+.x-table-td {
+}
+.x-table-th {
+	@apply select-none font-medium text-base;
+}
+
+.x-table-thead {
+}
+.x-table-tbody {
+}
+.x-table-tfoot {
+}
+
+.x-table--striped {
+	.x-table-tbody > :where(tr):nth-of-type(odd) {
+		@apply after:opacity-10;
+	}
+}
+.x-table--hover {
+	.x-table-tbody > :where(tr):not(.x-no-hover):hover {
+		@apply after:opacity-15;
+	}
+}
+.x-table--dense {
+	.x-table-td,
+	.x-table-th {
+		@apply px-2 py-1;
+		&:first-child {
+			@apply pl-4;
+		}
+		&:last-child {
+			@apply pr-4;
+		}
+	}
+}
+
+.x-table--row-border .x-table-tr {
+	@apply border-b;
+}
+
+.x-table--col-border {
+	.x-table-td,
+	.x-table-th {
+		&:not(:last-child) {
+			@apply border-r;
+		}
+	}
+}
+.x-table--border {
+	@apply border;
+}
+.x-table-tbody .x-table-tr:last-child {
+	@apply border-b-0;
+}

@@ -146,6 +146,11 @@ export const Window = memo(
 		const [{ isFullscreen, isCollapse, active }, updateState] =
 			$sm.useStateObject("state", {});
 
+		const _active = useMemo(
+			() => isActive({ uid }) ?? active,
+			[isActive, active]
+		);
+
 		const emit = useCallback(
 			(...args) => {
 				$app?.emit?.(...args);
@@ -162,10 +167,10 @@ export const Window = memo(
 				if (!canDo("fullscreen") || !resizable) {
 					return;
 				}
-				updateState({
+				updateState((v) => ({
 					isCollapse: false,
-					isFullscreen: !isFullscreen,
-				});
+					isFullscreen: !v.isFullscreen,
+				}));
 			},
 			[canDo, updateState, resizable]
 		);
