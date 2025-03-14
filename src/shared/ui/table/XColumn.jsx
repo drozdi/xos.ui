@@ -14,6 +14,7 @@ export const XColumn = ({ children, ...props }) => {
 			columns: columns.current,
 			isColumns: columns.current.length > 0,
 			isHeader: !!props.header,
+			isParentHeader: ctx.isHeader,
 			isField: !!props.field,
 			isEmpty: !props.field,
 			colspan:
@@ -41,7 +42,8 @@ export const XColumn = ({ children, ...props }) => {
 			set columns(columns) {
 				columns.current = columns;
 			},
-			level: ctx.level + 1,
+			level: col.level,
+			isHeader: col.isHeader,
 		}),
 		[]
 	);

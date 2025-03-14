@@ -54,40 +54,97 @@ XMarkupTable.propTypes = {
 	layout: PropTypes.oneOf(["fixed", "auto"]),
 };
 
-XMarkupTable.Tr = ({ children, className }) => {
-	return <tr className={classNames("x-table-tr", className)}>{children}</tr>;
-};
-XMarkupTable.Td = ({ children, className }) => {
-	return <td className={classNames("x-table-td", className)}>{children}</td>;
-};
-XMarkupTable.Th = ({ children, className }) => {
-	return <th className={classNames("x-table-th", className)}>{children}</th>;
-};
-XMarkupTable.Thead = ({ children, className }) => {
+XMarkupTable.Tr = ({ children, className, ...props }) => {
 	return (
-		<thead className={classNames("x-table-thead", className)}>
+		<tr {...props} className={classNames("x-table-tr", className)}>
+			{children}
+		</tr>
+	);
+};
+XMarkupTable.Tr.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+};
+
+XMarkupTable.Td = ({ children, className, ...props }) => {
+	return (
+		<td {...props} className={classNames("x-table-td", className)}>
+			{children}
+		</td>
+	);
+};
+XMarkupTable.Td.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+};
+
+XMarkupTable.Th = ({ children, className, ...props }) => {
+	return (
+		<th {...props} className={classNames("x-table-th", className)}>
+			{children}
+		</th>
+	);
+};
+XMarkupTable.Th.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+};
+
+XMarkupTable.Thead = ({ children, className, ...props }) => {
+	return (
+		<thead {...props} className={classNames("x-table-thead", className)}>
 			{children}
 		</thead>
 	);
 };
-XMarkupTable.Tbody = ({ children, className }) => {
+XMarkupTable.Thead.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+};
+
+XMarkupTable.Tbody = ({ children, className, ...props }) => {
 	return (
-		<tbody className={classNames("x-table-tbody", className)}>
+		<tbody {...props} className={classNames("x-table-tbody", className)}>
 			{children}
 		</tbody>
 	);
 };
-XMarkupTable.Tfoot = ({ children, className }) => {
+XMarkupTable.Tbody.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+};
+
+XMarkupTable.Tfoot = ({ children, className, ...props }) => {
 	return (
-		<tfoot className={classNames("x-table-tfoot", className)}>
+		<tfoot {...props} className={classNames("x-table-tfoot", className)}>
 			{children}
 		</tfoot>
 	);
 };
-XMarkupTable.Caption = ({ children, className }) => {
+XMarkupTable.Tfoot.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+};
+
+XMarkupTable.Caption = ({ children, className, ...props }) => {
 	return (
-		<caption className={classNames("x-table-caption", className)}>
+		<caption
+			{...props}
+			className={classNames("x-table-caption", className)}
+		>
 			{children}
 		</caption>
 	);
 };
+XMarkupTable.Caption.propTypes = {
+	children: PropTypes.node,
+	className: PropTypes.string,
+};
+
+XMarkupTable.Tr.displayName = "XMarkupTableTr";
+XMarkupTable.Td.displayName = "XMarkupTableTd";
+XMarkupTable.Th.displayName = "XMarkupTableTh";
+XMarkupTable.Thead.displayName = "XMarkupTableThead";
+XMarkupTable.Tbody.displayName = "XMarkupTableTbody";
+XMarkupTable.Tfoot.displayName = "XMarkupTableTfoot";
+XMarkupTable.Caption.displayName = "XMarkupTableCaption";
