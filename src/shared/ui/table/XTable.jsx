@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useCallback, useMemo, useRef } from "react";
-import { useArray } from "../../hooks";
+import { useArray, useToggle } from "../../hooks";
 import { isArray, isEmpty, isFunction } from "../../utils/is";
 import { XBtn } from "../btn";
 import { XMarkupTable } from "./XMarkupTable";
@@ -11,7 +11,7 @@ function convertNodes(items) {
 		return {
 			data: item,
 			index,
-			expand: false,
+			expand: useToggle(),
 			isParent: false,
 			isChildren: false,
 			nodes: [],
@@ -271,20 +271,21 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 		));
 	}, [columns, genTHeadCell]);
 
-	const nodes = useMemo(() => {
-		let nodes = convertNodes(values);
-		if (groupKey) {
-			nodes = groupBy(nodes, groupKey);
-		}
+	let nodes = convertNodes(values);
+	if (groupKey) {
+		nodes = groupBy(nodes, groupKey);
+	}
+
+	/*const nodes = useMemo(() => {
 		/*if (sort.current.key) {
 			nodes = sortBy(nodes, sort.current.key, sort.current.descending);
 		}*/
-		console.log(nodes);
+	/*console.log(nodes);
 		return nodes;
-	}, [values, groupKey]);
+	}, [values, groupKey]);*/
 
 	const onToggle = useCallback((node) => {
-		node.expand = !node.expand;
+		node.expand?.[1]();
 	}, []);
 
 	function genTBody() {
@@ -295,7 +296,7 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 			return genTBodyRow(node);
 		});
 	}
-	function genTBodyRow(node, expand = true) {
+	function genTBodyRow(node, expand = [true]) {
 		let rows = [];
 		let append = [];
 		(function recursive(node, fields) {
@@ -310,7 +311,11 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 				row.push(genTBodyCell(node, column));
 			});
 			rows.push(
-				<XMarkupTable.Tr if={() => expand} key={node.index} role="row">
+				<XMarkupTable.Tr
+					if={() => expand?.[0]}
+					key={node.index}
+					role="row"
+				>
 					{row}
 				</XMarkupTable.Tr>
 			);
@@ -371,7 +376,7 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 					<XBtn
 						round
 						rightSection={`mdi-${
-							node.expand ? "minus-box" : "plus-box"
+							node.expand[0] ? "minus-box" : "plus-box"
 						}`}
 						onClick={() => onToggle(node)}
 					></XBtn>

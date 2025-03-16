@@ -20,11 +20,6 @@ export function useStateProxy(initiState = {}) {
 			return true;
 		},
 		deleteProperty(target, property) {
-			/*dispatch((v) => {
-				let newV = { ...v };
-				delete newV[property];
-				return newV;
-			});*/
 			dispatch((v) => ({ ...v, [property]: undefined }));
 			delete target[property];
 			return true;
