@@ -25,6 +25,21 @@ function App() {
 		{ position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
 		{ position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
 		{ position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
+		{ position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
+		{ position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
+		{ position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
+		{ position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
+		{ position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
+		{ position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
+		{ position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
+		{ position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
+		{ position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
+		{ position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
+		{ position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
+		{ position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
+		{ position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
+		{ position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
+		{ position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
 	];
 
 	return (
@@ -41,16 +56,17 @@ function App() {
 
 					<hr className="my-3" />
 					<div className="max-w-5xl m-auto">
-						<XTable>
+						<XTable values={elements}>
 							<XColumn
 								field="position"
 								header="Element position"
 							/>
-							<XColumn field="name" header="Element name" />
-							<XColumn field="symbol" header="Symbol">
-								<XColumn header="Symbol 1" />
-								<XColumn header="Symbol 2" />
-							</XColumn>
+							<XColumn
+								field="name"
+								header="Element name"
+								isGrouped
+							/>
+							<XColumn field="symbol" header="Symbol" />
 							<XColumn field="mass" header="Atomic mass" />
 						</XTable>
 						{false && (

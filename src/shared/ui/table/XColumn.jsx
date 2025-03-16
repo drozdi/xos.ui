@@ -1,58 +1,61 @@
 import PropTypes from "prop-types";
-import { useEffect, useMemo, useRef } from "react";
-import {
-	useXTableColumsContext,
-	XTablerColumsProvider,
-} from "./XTableColumsContext";
-export const XColumn = ({ children, ...props }) => {
-	const ctx = useXTableColumsContext();
-	const columns = useRef([]);
-	const col = useMemo(
-		() => ({
-			size: 1,
-			level: ctx.level + 1,
-			columns: columns.current,
-			isColumns: columns.current.length > 0,
-			isHeader: !!props.header,
-			isParentHeader: ctx.isHeader,
-			isField: !!props.field,
-			isEmpty: !props.field,
-			colspan:
-				columns.current.reduce((sum, column) => {
-					return sum + column.colspan;
-				}, 0) ||
-				props.size ||
-				1,
-			...props,
-		}),
-		[columns.current, props]
-	);
-	useEffect(() => {
-		ctx.columns.push(col);
-		return () => {
-			ctx.columns = ctx.columns.filter((v) => v != col);
-		};
-	}, [col]);
+import React, { memo, useEffect } from "react";
+import { useId } from "../../hooks/";
+import { useXTableColumsContext } from "./XTableColumsContext";
 
-	const context = useMemo(
-		() => ({
-			get columns() {
-				return columns.current;
-			},
-			set columns(columns) {
-				columns.current = columns;
-			},
-			level: col.level,
-			isHeader: col.isHeader,
-		}),
-		[]
-	);
-	return (
-		<XTablerColumsProvider value={context}>
-			{children}
-		</XTablerColumsProvider>
-	);
+const calculateColspan = (children) => {
+	if (!children) return 1;
+	return React.Children.toArray(children).reduce((sum, child) => {
+		return sum + calculateColspan(child.props.children);
+	}, 0);
 };
+const calculateIsColumns = (children) => {
+	if (!children) return false;
+	return React.Children.count(children) > 0;
+};
+let id = 0;
+
+export const XColumn = memo((props) => {
+	const ctx = useXTableColumsContext();
+	const uid = useId();
+	const registerColumns = (column, level = 0, uid) => {
+		const col = {
+			uid: `${uid}-${id++}`,
+			size: 1,
+			level: level + 1,
+			parentLevel: level,
+			columns: [],
+			isColumns: calculateIsColumns(column.props.children),
+			isHeader: !!column.props.header,
+			isField: !!column.props.field,
+			isEmpty: !column.props.field,
+			colspan:
+				calculateColspan(column.props.children) ||
+				column.props.size ||
+				1,
+			...column.props,
+			children: undefined,
+		};
+
+		if (column.props.children) {
+			React.Children.forEach(column.props.children, (child) => {
+				col.columns.push(
+					registerColumns(child, col.level, col.isHeader)
+				);
+			});
+		}
+
+		level === 0 && ctx.addColumn(col);
+
+		return col;
+	};
+
+	useEffect(() => {
+		registerColumns({ props }, 0, uid);
+	}, [props]);
+
+	return null;
+});
 
 XColumn.propTypes = {
 	children: PropTypes.node,

@@ -1,3 +1,4 @@
+export * from "./use-array";
 export * from "./use-breakpoint";
 export * from "./use-force-update";
 export * from "./use-fork-ref";

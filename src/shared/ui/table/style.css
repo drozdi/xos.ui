@@ -84,3 +84,13 @@
 .x-table--auto {
 	@apply table-auto;
 }
+
+.x-table-td-title {
+	display: none;
+}
+
+.x-table--show-title {
+	.x-table-td-title {
+		display: block;
+	}
+}

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { memo } from "react";
 
 import classNames from "classnames";
-import { forwardRefWithAs } from "../../internal/render";
+import { forwardRefWithAs, render } from "../../internal/render";
 import "./style.css";
 
 export const XMarkupTable = memo(
@@ -17,28 +17,30 @@ export const XMarkupTable = memo(
 			colBorder,
 			border,
 			layout,
+			showTitle,
+			...props
 		},
 		ref
 	) {
-		return (
-			<table
-				className={classNames(
-					"x-table",
-					{
-						"x-table--striped": striped,
-						"x-table--hover": hover,
-						"x-table--dense": dense,
-						"x-table--row-border": rowBorder,
-						"x-table--col-border": colBorder,
-						"x-table--border": border,
-						[`x-table--${layout}`]: layout,
-					},
-					className
-				)}
-			>
-				{children}
-			</table>
-		);
+		return render("table", {
+			...props,
+			className: classNames(
+				"x-table",
+				{
+					"x-table--striped": striped,
+					"x-table--hover": hover,
+					"x-table--dense": dense,
+					"x-table--row-border": rowBorder,
+					"x-table--col-border": colBorder,
+					"x-table--border": border,
+					"x-table--show-title": showTitle,
+					[`x-table--${layout}`]: layout,
+				},
+				className
+			),
+			ref,
+			children,
+		});
 	})
 );
 
@@ -51,15 +53,16 @@ XMarkupTable.propTypes = {
 	rowBorder: PropTypes.bool,
 	colBorder: PropTypes.bool,
 	border: PropTypes.bool,
+	showTitle: PropTypes.bool,
 	layout: PropTypes.oneOf(["fixed", "auto"]),
 };
 
 XMarkupTable.Tr = ({ children, className, ...props }) => {
-	return (
-		<tr {...props} className={classNames("x-table-tr", className)}>
-			{children}
-		</tr>
-	);
+	return render("tr", {
+		...props,
+		className: classNames("x-table-tr", className),
+		children,
+	});
 };
 XMarkupTable.Tr.propTypes = {
 	children: PropTypes.node,

@@ -1,5 +1,7 @@
 import { useState } from "react";
-export function useForceUpdate() {
+import { debounce } from "../utils/debounce";
+
+export function useForceUpdate({ debounceTime = 100 } = {}) {
 	const [, setToggle] = useState(false);
-	return () => setToggle((toggle) => !toggle);
+	return () => debounce(() => setToggle((toggle) => !toggle), debounceTime);
 }

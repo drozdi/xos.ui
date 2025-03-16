@@ -1,22 +1,24 @@
 import PropTypes from "prop-types";
-import { useMemo, useState } from "react";
-import { useMemoObject } from "../../hooks";
-import { isArray } from "../../utils/is";
+import { useCallback, useMemo, useRef } from "react";
+import { useArray } from "../../hooks";
+import { isArray, isEmpty, isFunction } from "../../utils/is";
 import { XBtn } from "../btn";
 import { XMarkupTable } from "./XMarkupTable";
 import { XTablerColumsProvider } from "./XTableColumsContext";
 
-function groupBy(items, key = false) {
-	let nodes = Object.entries(items).map(([index, item]) => {
-		return useMemoObject({
+function convertNodes(items) {
+	return Object.entries(items).map(([index, item]) => {
+		return {
 			data: item,
 			index,
 			expand: false,
 			isParent: false,
 			isChildren: false,
 			nodes: [],
-		});
+		};
 	});
+}
+function groupBy(nodes, key = false) {
 	if (!key) {
 		return nodes;
 	}
@@ -63,29 +65,60 @@ function sortBy(nodes, key, descending) {
 	});
 }
 
-export const XTable = ({ children, className, ...props }) => {
+export const XTable = ({ children, className, values = [], ...props }) => {
 	props.groupAt = props.groupAt || "begin";
-	const sort = {
+	const sort = useRef({
 		key: props.sortKey,
 		descending: props.sortDesc,
-	};
-
-	const [columnsRef, setColumnsRef] = useState([]);
-	const context = useMemo(
-		() => ({
-			get columns() {
-				return [...columnsRef];
-			},
-			set columns(columns) {
-				setColumnsRef([...columns]);
-			},
-			level: 0,
-			isHeader: true,
-		}),
-		[columnsRef]
+	});
+	function editable(data, index) {
+		return isFunction(props.editable)
+			? props.editable(data, index)
+			: props.editable;
+	}
+	const onSort = useCallback(
+		(key) => {
+			if (sort.current.key === key) {
+				if (sort.current.descending) {
+					sort.current.descending = false;
+				} else {
+					sort.current.key = null;
+					sort.current.descending = true;
+				}
+			} else {
+				sort.current.key = key;
+				sort.current.descending = true;
+			}
+		},
+		[sort]
 	);
 
-	const onSort = () => {};
+	const getSlot = (column, name) => {
+		return column?.[name];
+	};
+
+	const [
+		columnsRef,
+		{
+			filter: columnsFilter,
+			push: columnsPush,
+			findIndex: columnsFindIndex,
+		},
+	] = useArray();
+
+	const context = useMemo(
+		() => ({
+			addColumn(column) {
+				if (columnsFindIndex((v) => v.uid === column.uid) === -1) {
+					columnsPush(column);
+				}
+			},
+			delColumn(column) {
+				columnsFilter((v) => v.uid !== column.uid);
+			},
+		}),
+		[]
+	);
 
 	const columns = useMemo(
 		() =>
@@ -149,14 +182,67 @@ export const XTable = ({ children, className, ...props }) => {
 		return null;
 	}, [fields]);
 
-	console.log(columnsRef);
 	console.log("columns", columns);
 	console.log("fields", fields);
 	console.log("rowspan", rowspan);
 	console.log("colspan", colspan);
 	console.log("groupKey", groupKey);
 
-	function genTHead() {
+	const genTHeadCellSlot = useCallback(
+		(column, data) => column.render?.({ column, data }) || column.header,
+		[]
+	);
+	const genTHeadCellSort = useCallback(
+		(column) => (
+			<XBtn
+				rightSection={
+					sort.current.key === column.field
+						? sort.current.descending
+							? "mdi-sort-descending"
+							: "mdi-sort-ascending"
+						: "mdi-sort"
+				}
+				flat
+				onClick={() => onSort(column.field)}
+			/>
+		),
+		[sort.current, onSort]
+	);
+	const genTHeadCellExpand = useCallback(
+		(column) => (
+			<XMarkupTable.Th
+				key={column.uid}
+				colSpan={column.colspan}
+				rowSpan={column.isColumns ? 1 : rowspan - column.parentLevel}
+				style={column.style}
+				role="columnheader"
+			></XMarkupTable.Th>
+		),
+		[]
+	);
+	const genTHeadCell = useCallback(
+		(column) => {
+			if (column.isGrouped) {
+				return genTHeadCellExpand(column);
+			}
+			return (
+				<XMarkupTable.Th
+					key={column.uid}
+					colSpan={column.colspan}
+					rowSpan={
+						column.isColumns ? 1 : rowspan - column.parentLevel
+					}
+					style={column.style}
+					role="columnheader"
+				>
+					{genTHeadCellSlot(column)}
+					{column.sortable ? genTHeadCellSort(column) : ""}
+				</XMarkupTable.Th>
+			);
+		},
+		[genTHeadCellExpand, genTHeadCellSlot, genTHeadCellSort]
+	);
+	const genTHead = useCallback(() => {
 		let rows = [];
 		(function recursive(columns, level) {
 			rows[level] = (rows[level] || []).concat(
@@ -183,58 +269,123 @@ export const XTable = ({ children, className, ...props }) => {
 				{row}
 			</XMarkupTable.Tr>
 		));
+	}, [columns, genTHeadCell]);
+
+	const nodes = useMemo(() => {
+		let nodes = convertNodes(values);
+		if (groupKey) {
+			nodes = groupBy(nodes, groupKey);
+		}
+		/*if (sort.current.key) {
+			nodes = sortBy(nodes, sort.current.key, sort.current.descending);
+		}*/
+		console.log(nodes);
+		return nodes;
+	}, [values, groupKey]);
+
+	const onToggle = useCallback((node) => {
+		node.expand = !node.expand;
+	}, []);
+
+	function genTBody() {
+		return nodes.map((node) => {
+			if (props.column?.isGrouped) {
+				return genTBodyRow(node, props.expand);
+			}
+			return genTBodyRow(node);
+		});
+	}
+	function genTBodyRow(node, expand = true) {
+		let rows = [];
+		let append = [];
+		(function recursive(node, fields) {
+			let row = [];
+			fields.forEach((column) => {
+				if (column.isGroup) {
+					//append = genTBodyGroup(node, column);
+					//if (!column.isGrouped) return;
+				} else if (column.isGrouped && node.nodes) {
+					append = genTBodyGrouped(node.nodes, node.expand);
+				}
+				row.push(genTBodyCell(node, column));
+			});
+			rows.push(
+				<XMarkupTable.Tr if={() => expand} key={node.index} role="row">
+					{row}
+				</XMarkupTable.Tr>
+			);
+		})(node, fields);
+		/*if (props.separate && append.length > 0) {
+		  append.push(genTBodyRowSeparate(node))
+		}*/
+		return rows.concat(append);
+	}
+	function genTBodyGrouped(nodes, expand) {
+		return nodes.map((node) => {
+			return genTBodyRow(node, expand);
+		});
 	}
 
-	function genTHeadCell(column) {
-		if (column.isGrouped) {
-			return genTHeadCellExpand(column);
+	function genTBodyCell(node, column) {
+		if (column.isGrouped && !isEmpty(node.nodes)) {
+			return genTBodyCellExpand(node, column);
+		} else if (
+			column.isGrouped &&
+			column.isGroup &&
+			node.data[column.field]
+		) {
+			return genTBodyCellExpand(node, column);
+		} else if (column.isGrouped) {
+			return <XMarkupTable.Td />;
 		}
 		return (
-			<XMarkupTable.Th
-				colspan={column.colspan}
-				rowspan={column.isParentHeader ? 1 : rowspan}
-				style={column.style}
-				role="columnheader"
+			<XMarkupTable.Td
+				key={column.field}
+				role="cell"
+				colSpan={column.colspan}
 			>
-				{genTHeadCellSlot(column)}
-				{column.sortable ? genTHeadCellSort(column) : ""}
-			</XMarkupTable.Th>
+				<div className="x-table-td-title">
+					{getSlot(column, "label")?.({ column, data: node.data }) ||
+						column.header}
+				</div>
+				<div className={`x-table-td-value text-${column.align}`}>
+					{(
+						getSlot(
+							column,
+							editable(node) === true ? "editor" : "body"
+						) || getSlot(column, "body")
+					)?.({
+						field: column.field,
+						header: column.header,
+						colspan: column.colspan,
+						data: node.data,
+					}) || node.data[column.field]}
+				</div>
+			</XMarkupTable.Td>
 		);
 	}
-	function genTHeadCellSlot(column) {
-		return column.render?.({ column }) || column.header;
-	}
-	function genTHeadCellSort(column) {
+	function genTBodyCellExpand(node, column) {
 		return (
-			<XBtn
-				rightSection={
-					sort.value.key === column.field
-						? sort.value.descending
-							? "mdi-sort-descending"
-							: "mdi-sort-ascending"
-						: "mdi-sort"
-				}
-				flat
-				onClick={() => onSort(column.field)}
-			/>
-		);
-	}
-	function genTHeadCellExpand(column) {
-		return (
-			<XMarkupTable.Th
-				colspan={column.colspan}
-				rowspan={column.isParentHeader ? 1 : rowspan}
-				style={column.style}
-				role="columnheader"
-			></XMarkupTable.Th>
+			<XMarkupTable.Td role="cell" colSpan={column.colspan}>
+				<div className={`x-table-td-value text-${column.align}`}>
+					<XBtn
+						round
+						rightSection={`mdi-${
+							node.expand ? "minus-box" : "plus-box"
+						}`}
+						onClick={() => onToggle(node)}
+					></XBtn>
+				</div>
+			</XMarkupTable.Td>
 		);
 	}
 
 	return (
 		<XTablerColumsProvider value={context}>
 			{children}
-			<XMarkupTable>
+			<XMarkupTable border rowBorder colBorder>
 				<XMarkupTable.Thead>{genTHead()}</XMarkupTable.Thead>
+				<XMarkupTable.Tbody>{genTBody()}</XMarkupTable.Tbody>
 			</XMarkupTable>
 		</XTablerColumsProvider>
 	);
