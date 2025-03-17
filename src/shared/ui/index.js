@@ -13,6 +13,7 @@ export * from "./main";
 export * from "./markup-table";
 export * from "./message";
 export * from "./messages";
+export * from "./pagination";
 export * from "./popover";
 export * from "./progress";
 export * from "./sidebar";

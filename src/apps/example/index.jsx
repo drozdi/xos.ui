@@ -11,6 +11,7 @@ import { PopoverExample } from "./popover";
 import { ProgressExample } from "./progress";
 import { SelectExample } from "./select";
 import { SpinnerExample } from "./spinner";
+import { TableExample } from "./table";
 import { TabsExample } from "./tabs";
 
 export * from "./accordion";
@@ -26,6 +27,7 @@ export * from "./popover";
 export * from "./progress";
 export * from "./select";
 export * from "./spinner";
+export * from "./table";
 export * from "./tabs";
 
 export const routers = [
@@ -113,6 +115,12 @@ export const routers = [
 		label: "XTabs",
 		path: "/tabs",
 		element: <TabsExample />,
+	},
+	{
+		icon: "mdi-table",
+		label: "XTable",
+		path: "/table",
+		element: <TableExample />,
 	},
 ];
 
