@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useCallback, useMemo, useRef } from "react";
+import { createElement as h, useCallback, useMemo, useRef } from "react";
 import { useArray, useToggle } from "../../hooks";
 import { isArray, isEmpty, isFunction } from "../../utils/is";
 import { XBtn } from "../btn";
@@ -182,30 +182,36 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 		return null;
 	}, [fields]);
 
-	console.log("columns", columns);
+	/*console.log("columns", columns);
 	console.log("fields", fields);
 	console.log("rowspan", rowspan);
 	console.log("colspan", colspan);
-	console.log("groupKey", groupKey);
+	console.log("groupKey", groupKey);//*/
 
 	const genTHeadCellSlot = useCallback(
-		(column, data) => column.render?.({ column, data }) || column.header,
+		(column) => column.render?.({ column }) || column.header,
 		[]
 	);
 	const genTHeadCellSort = useCallback(
-		(column) => (
-			<XBtn
-				rightSection={
-					sort.current.key === column.field
-						? sort.current.descending
-							? "mdi-sort-descending"
-							: "mdi-sort-ascending"
-						: "mdi-sort"
-				}
-				flat
-				onClick={() => onSort(column.field)}
-			/>
-		),
+		(column) => {
+			if (!column.sortable) {
+				return "";
+			}
+			return (
+				<XBtn
+					key={column.field}
+					rightSection={
+						sort.current.key === column.field
+							? sort.current.descending
+								? "mdi-sort-descending"
+								: "mdi-sort-ascending"
+							: "mdi-sort"
+					}
+					flat
+					onClick={() => onSort(column.field)}
+				/>
+			);
+		},
 		[sort.current, onSort]
 	);
 	const genTHeadCellExpand = useCallback(
@@ -214,11 +220,17 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 				key={column.uid}
 				colSpan={column.colspan}
 				rowSpan={column.isColumns ? 1 : rowspan - column.parentLevel}
-				style={column.style}
+				style={
+					column.style || {
+						width: 72,
+					}
+				}
 				role="columnheader"
-			></XMarkupTable.Th>
+			>
+				{genTHeadCellSlot(column)}
+			</XMarkupTable.Th>
 		),
-		[]
+		[rowspan, genTHeadCellSlot]
 	);
 	const genTHeadCell = useCallback(
 		(column) => {
@@ -236,7 +248,7 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 					role="columnheader"
 				>
 					{genTHeadCellSlot(column)}
-					{column.sortable ? genTHeadCellSort(column) : ""}
+					{genTHeadCellSort(column)}
 				</XMarkupTable.Th>
 			);
 		},
@@ -271,18 +283,17 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 		));
 	}, [columns, genTHeadCell]);
 
+	//
+	//
+	//
+
 	let nodes = convertNodes(values);
 	if (groupKey) {
 		nodes = groupBy(nodes, groupKey);
 	}
-
-	/*const nodes = useMemo(() => {
-		/*if (sort.current.key) {
-			nodes = sortBy(nodes, sort.current.key, sort.current.descending);
-		}*/
-	/*console.log(nodes);
-		return nodes;
-	}, [values, groupKey]);*/
+	if (sort.current.key) {
+		nodes = sortBy(nodes, sort.current.key, sort.current.descending);
+	}
 
 	const onToggle = useCallback((node) => {
 		node.expand?.[1]();
@@ -291,7 +302,7 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 	function genTBody() {
 		return nodes.map((node) => {
 			if (props.column?.isGrouped) {
-				return genTBodyRow(node, props.expand);
+				return genTBodyRow(node, [props.expand]);
 			}
 			return genTBodyRow(node);
 		});
@@ -303,8 +314,8 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 			let row = [];
 			fields.forEach((column) => {
 				if (column.isGroup) {
-					//append = genTBodyGroup(node, column);
-					//if (!column.isGrouped) return;
+					append = append.concat(genTBodyGroup(node, column));
+					if (!column.isGrouped) return;
 				} else if (column.isGrouped && node.nodes) {
 					append = genTBodyGrouped(node.nodes, node.expand);
 				}
@@ -320,15 +331,59 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 				</XMarkupTable.Tr>
 			);
 		})(node, fields);
-		/*if (props.separate && append.length > 0) {
-		  append.push(genTBodyRowSeparate(node))
-		}*/
+		if (props.separate && append.length > 0) {
+			append.push(genTBodyRowSeparate(node));
+		}
 		return rows.concat(append);
+	}
+	function genTBodyRowSeparate(node) {
+		return (
+			<XMarkupTable.Tr
+				key={node.index + "-s"}
+				if={() => node.expand[0]}
+				className="x-no-hover"
+				role="cell"
+			>
+				<XMarkupTable.Td colSpan={colspan}></XMarkupTable.Td>
+			</XMarkupTable.Tr>
+		);
 	}
 	function genTBodyGrouped(nodes, expand) {
 		return nodes.map((node) => {
 			return genTBodyRow(node, expand);
 		});
+	}
+	function genTBodyGroup(node, column) {
+		if (!node.data[column.field]) {
+			return [];
+		}
+		return h(
+			XTable,
+			{
+				...props,
+				key: column.uid,
+				if: () => node.expand[0] || false,
+				column: column,
+				sortKey: sort.current.key,
+				sortDesc: sort.current.descending,
+				expand: node.expand[0] || false,
+				values: node.data[column.field],
+				border: undefined,
+				children: undefined,
+			},
+			getSlot(
+				column,
+				"body"
+			)?.({
+				field: column.field,
+				header: column.header,
+				data: node.data,
+				index: node.index,
+				expand: node.expand,
+				isParent: node.isParent,
+				isChildren: node.isChildren,
+			}) || children
+		);
 	}
 
 	function genTBodyCell(node, column) {
@@ -341,7 +396,7 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 		) {
 			return genTBodyCellExpand(node, column);
 		} else if (column.isGrouped) {
-			return <XMarkupTable.Td />;
+			return <XMarkupTable.Td key={column.field}></XMarkupTable.Td>;
 		}
 		return (
 			<XMarkupTable.Td
@@ -371,7 +426,11 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 	}
 	function genTBodyCellExpand(node, column) {
 		return (
-			<XMarkupTable.Td role="cell" colSpan={column.colspan}>
+			<XMarkupTable.Td
+				key={column.field}
+				role="cell"
+				colSpan={column.colspan}
+			>
 				<div className={`x-table-td-value text-${column.align}`}>
 					<XBtn
 						round
@@ -379,16 +438,25 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 							node.expand[0] ? "minus-box" : "plus-box"
 						}`}
 						onClick={() => onToggle(node)}
-					></XBtn>
+					/>
 				</div>
 			</XMarkupTable.Td>
+		);
+	}
+
+	if (props.column) {
+		return (
+			<XTablerColumsProvider value={context}>
+				{children}
+				{genTBody()}
+			</XTablerColumsProvider>
 		);
 	}
 
 	return (
 		<XTablerColumsProvider value={context}>
 			{children}
-			<XMarkupTable border rowBorder colBorder>
+			<XMarkupTable layout="fixed" border rowBorder colBorder>
 				<XMarkupTable.Thead>{genTHead()}</XMarkupTable.Thead>
 				<XMarkupTable.Tbody>{genTBody()}</XMarkupTable.Tbody>
 			</XMarkupTable>

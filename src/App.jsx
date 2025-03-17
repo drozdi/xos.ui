@@ -20,26 +20,198 @@ function App() {
 	};
 
 	const elements = [
-		{ position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-		{ position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-		{ position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
-		{ position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
-		{ position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
-		{ position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-		{ position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-		{ position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
-		{ position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
-		{ position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
-		{ position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-		{ position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-		{ position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
-		{ position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
-		{ position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
-		{ position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-		{ position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-		{ position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
-		{ position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
-		{ position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
+		{
+			position: 6,
+			mass: 12.011,
+			symbol: "C",
+			name: "Carbon",
+			grouped: "1",
+			group: [
+				{
+					position: 6,
+					mass: 12.011,
+					symbol: "C",
+					name: "Carbon",
+				},
+				{
+					position: 7,
+					mass: 14.007,
+					symbol: "N",
+					name: "Nitrogen",
+				},
+				{
+					position: 39,
+					mass: 88.906,
+					symbol: "Y",
+					name: "Yttrium",
+				},
+				{
+					position: 56,
+					mass: 137.33,
+					symbol: "Ba",
+					name: "Barium",
+				},
+			],
+		},
+		{
+			position: 7,
+			mass: 14.007,
+			symbol: "N",
+			name: "Nitrogen",
+			grouped: "2",
+			group: [
+				{
+					position: 6,
+					mass: 12.011,
+					symbol: "C",
+					name: "Carbon",
+				},
+				{
+					position: 7,
+					mass: 14.007,
+					symbol: "N",
+					name: "Nitrogen",
+				},
+				{
+					position: 39,
+					mass: 88.906,
+					symbol: "Y",
+					name: "Yttrium",
+				},
+				{
+					position: 56,
+					mass: 137.33,
+					symbol: "Ba",
+					name: "Barium",
+				},
+			],
+		},
+		{
+			position: 39,
+			mass: 88.906,
+			symbol: "Y",
+			name: "Yttrium",
+			grouped: "3",
+		},
+		{
+			position: 56,
+			mass: 137.33,
+			symbol: "Ba",
+			name: "Barium",
+			grouped: "1",
+		},
+		{
+			position: 58,
+			mass: 140.12,
+			symbol: "Ce",
+			name: "Cerium",
+			grouped: "2",
+		},
+		{
+			position: 6,
+			mass: 12.011,
+			symbol: "C",
+			name: "Carbon",
+			grouped: "3",
+		},
+		{
+			position: 7,
+			mass: 14.007,
+			symbol: "N",
+			name: "Nitrogen",
+			grouped: "1",
+		},
+		{
+			position: 39,
+			mass: 88.906,
+			symbol: "Y",
+			name: "Yttrium",
+			grouped: "2",
+		},
+		{
+			position: 56,
+			mass: 137.33,
+			symbol: "Ba",
+			name: "Barium",
+			grouped: "3",
+		},
+		{
+			position: 58,
+			mass: 140.12,
+			symbol: "Ce",
+			name: "Cerium",
+			grouped: "1",
+		},
+		{
+			position: 6,
+			mass: 12.011,
+			symbol: "C",
+			name: "Carbon",
+			grouped: "2",
+		},
+		{
+			position: 7,
+			mass: 14.007,
+			symbol: "N",
+			name: "Nitrogen",
+			grouped: "3",
+		},
+		{
+			position: 39,
+			mass: 88.906,
+			symbol: "Y",
+			name: "Yttrium",
+			grouped: "1",
+		},
+		{
+			position: 56,
+			mass: 137.33,
+			symbol: "Ba",
+			name: "Barium",
+			grouped: "2",
+		},
+		{
+			position: 58,
+			mass: 140.12,
+			symbol: "Ce",
+			name: "Cerium",
+			grouped: "3",
+		},
+		{
+			position: 6,
+			mass: 12.011,
+			symbol: "C",
+			name: "Carbon",
+			grouped: "1",
+		},
+		{
+			position: 7,
+			mass: 14.007,
+			symbol: "N",
+			name: "Nitrogen",
+			grouped: "2",
+		},
+		{
+			position: 39,
+			mass: 88.906,
+			symbol: "Y",
+			name: "Yttrium",
+			grouped: "3",
+		},
+		{
+			position: 56,
+			mass: 137.33,
+			symbol: "Ba",
+			name: "Barium",
+			grouped: "1",
+		},
+		{
+			position: 58,
+			mass: 140.12,
+			symbol: "Ce",
+			name: "Cerium",
+			grouped: "2",
+		},
 	];
 
 	return (
@@ -56,16 +228,18 @@ function App() {
 
 					<hr className="my-3" />
 					<div className="max-w-5xl m-auto">
-						<XTable values={elements}>
+						<XTable values={elements} separate>
+							<XColumn
+								field="group"
+								header="Group"
+								isGroup
+								isGrouped
+							/>
 							<XColumn
 								field="position"
 								header="Element position"
 							/>
-							<XColumn
-								field="name"
-								header="Element name"
-								isGrouped
-							/>
+							<XColumn field="name" header="Element name" />
 							<XColumn field="symbol" header="Symbol" />
 							<XColumn field="mass" header="Atomic mass" />
 						</XTable>
