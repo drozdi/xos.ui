@@ -299,60 +299,12 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 		node.expand?.[1]();
 	}, []);
 
-	function genTBody() {
-		return nodes.map((node) => {
-			if (props.column?.isGrouped) {
-				return genTBodyRow(node, [props.expand]);
-			}
-			return genTBodyRow(node);
-		});
-	}
-	function genTBodyRow(node, expand = [true]) {
-		let rows = [];
-		let append = [];
-		(function recursive(node, fields) {
-			let row = [];
-			fields.forEach((column) => {
-				if (column.isGroup) {
-					append = append.concat(genTBodyGroup(node, column));
-					if (!column.isGrouped) return;
-				} else if (column.isGrouped && node.nodes) {
-					append = genTBodyGrouped(node.nodes, node.expand);
-				}
-				row.push(genTBodyCell(node, column));
-			});
-			rows.push(
-				<XMarkupTable.Tr
-					if={() => expand?.[0]}
-					key={node.index}
-					role="row"
-				>
-					{row}
-				</XMarkupTable.Tr>
-			);
-		})(node, fields);
-		if (props.separate && append.length > 0) {
-			append.push(genTBodyRowSeparate(node));
-		}
-		return rows.concat(append);
-	}
-	function genTBodyRowSeparate(node) {
-		return (
-			<XMarkupTable.Tr
-				key={node.index + "-s"}
-				if={() => node.expand[0]}
-				className="x-no-hover"
-				role="cell"
-			>
-				<XMarkupTable.Td colSpan={colspan}></XMarkupTable.Td>
-			</XMarkupTable.Tr>
-		);
-	}
 	function genTBodyGrouped(nodes, expand) {
 		return nodes.map((node) => {
 			return genTBodyRow(node, expand);
 		});
 	}
+
 	function genTBodyGroup(node, column) {
 		if (!node.data[column.field]) {
 			return [];
@@ -383,6 +335,26 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 				isParent: node.isParent,
 				isChildren: node.isChildren,
 			}) || children
+		);
+	}
+
+	function genTBodyCellExpand(node, column) {
+		return (
+			<XMarkupTable.Td
+				key={column.field}
+				role="cell"
+				colSpan={column.colspan}
+			>
+				<div className={`x-table-td-value text-${column.align}`}>
+					<XBtn
+						round
+						rightSection={`mdi-${
+							node.expand[0] ? "minus-box" : "plus-box"
+						}`}
+						onClick={() => onToggle(node)}
+					/>
+				</div>
+			</XMarkupTable.Td>
 		);
 	}
 
@@ -424,24 +396,57 @@ export const XTable = ({ children, className, values = [], ...props }) => {
 			</XMarkupTable.Td>
 		);
 	}
-	function genTBodyCellExpand(node, column) {
+
+	function genTBodyRowSeparate(node) {
 		return (
-			<XMarkupTable.Td
-				key={column.field}
+			<XMarkupTable.Tr
+				key={node.index + "-s"}
+				if={() => node.expand[0]}
+				className="x-no-hover"
 				role="cell"
-				colSpan={column.colspan}
 			>
-				<div className={`x-table-td-value text-${column.align}`}>
-					<XBtn
-						round
-						rightSection={`mdi-${
-							node.expand[0] ? "minus-box" : "plus-box"
-						}`}
-						onClick={() => onToggle(node)}
-					/>
-				</div>
-			</XMarkupTable.Td>
+				<XMarkupTable.Td colSpan={colspan}></XMarkupTable.Td>
+			</XMarkupTable.Tr>
 		);
+	}
+
+	function genTBodyRow(node, expand = [true]) {
+		let rows = [];
+		let append = [];
+		(function recursive(node, fields) {
+			let row = [];
+			fields.forEach((column) => {
+				if (column.isGroup) {
+					append = append.concat(genTBodyGroup(node, column));
+					if (!column.isGrouped) return;
+				} else if (column.isGrouped && node.nodes) {
+					append = genTBodyGrouped(node.nodes, node.expand);
+				}
+				row.push(genTBodyCell(node, column));
+			});
+			rows.push(
+				<XMarkupTable.Tr
+					if={() => expand?.[0]}
+					key={node.index}
+					role="row"
+				>
+					{row}
+				</XMarkupTable.Tr>
+			);
+		})(node, fields);
+		if (props.separate && append.length > 0) {
+			append.push(genTBodyRowSeparate(node));
+		}
+		return rows.concat(append);
+	}
+
+	function genTBody() {
+		return nodes.map((node) => {
+			if (props.column?.isGrouped) {
+				return genTBodyRow(node, [props.expand]);
+			}
+			return genTBodyRow(node);
+		});
 	}
 
 	if (props.column) {
