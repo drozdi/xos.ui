@@ -10,6 +10,7 @@ export * from "./layout";
 export * from "./link";
 export * from "./list";
 export * from "./main";
+export * from "./markup-table";
 export * from "./message";
 export * from "./messages";
 export * from "./popover";

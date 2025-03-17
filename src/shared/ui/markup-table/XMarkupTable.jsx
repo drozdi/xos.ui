@@ -59,13 +59,15 @@ XMarkupTable.propTypes = {
 };
 
 "tr td th thead tbody tfoot caption".split(/\s+/).forEach((name) => {
-	XMarkupTable[capitalize(name)] = ({ children, className, ...props }) => {
-		return render(name, {
-			...props,
-			className: classNames("x-table-" + name, className),
-			children,
-		});
-	};
+	XMarkupTable[capitalize(name)] = memo(
+		({ children, className, ...props }) => {
+			return render(name, {
+				...props,
+				className: classNames("x-table-" + name, className),
+				children,
+			});
+		}
+	);
 	XMarkupTable[capitalize(name)].displayName =
 		"XMarkupTable" + capitalize(name);
 });

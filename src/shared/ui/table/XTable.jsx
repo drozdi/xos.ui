@@ -3,7 +3,7 @@ import { createElement as h, useCallback, useMemo, useRef } from "react";
 import { useArray, useToggle } from "../../hooks";
 import { isArray, isEmpty, isFunction } from "../../utils/is";
 import { XBtn } from "../btn";
-import { XMarkupTable } from "./XMarkupTable";
+import { XMarkupTable } from "../markup-table";
 import { XTablerColumsProvider } from "./XTableColumsContext";
 
 function convertNodes(items) {
