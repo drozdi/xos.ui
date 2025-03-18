@@ -1,6 +1,13 @@
 import PropTypes from "prop-types";
 import { memo } from "react";
 import { XPaginationProvider } from "./XPaginationContext";
+import { XPaginationDots } from "./XPaginationDots";
+import {
+	XPaginationFirst,
+	XPaginationLast,
+	XPaginationNext,
+	XPaginationPrevious,
+} from "./XPaginationEdges";
 import "./style.css";
 
 export const XPagination = memo(function XPaginationFn({
@@ -18,16 +25,19 @@ export const XPagination = memo(function XPaginationFn({
 		siblings,
 		total,
 		current: undefined,
+		onNext: () => {},
+		onPrevious: () => {},
+		onFirst: () => {},
+		onLast: () => {},
 	};
 
 	return (
 		<XPaginationProvider value={ctx}>
 			<div className="x-pagination">
-				<button className="x-pagination-btn">1</button>
-				<button className="x-pagination-btn">2</button>
-				<button className="x-pagination-btn">3</button>
-				<button className="x-pagination-btn">4</button>
-				<button className="x-pagination-btn">5</button>
+				<button className="x-pagination-btn" disabled>
+					1
+				</button>
+				<XPaginationDots />
 				<button className="x-pagination-btn">6</button>
 				<button className="x-pagination-btn">7</button>
 				<button className="x-pagination-btn x-pagination-btn--active">
@@ -59,3 +69,11 @@ XPagination.propTypes = {
 	onNextPage: PropTypes.func,
 	onPreviousPage: PropTypes.func,
 };
+
+XPagination.displayName = "ui/XPagination";
+
+XPagination.Dots = XPaginationDots;
+XPagination.First = XPaginationFirst;
+XPagination.Last = XPaginationLast;
+XPagination.Next = XPaginationNext;
+XPagination.Previous = XPaginationPrevious;
