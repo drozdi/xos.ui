@@ -7,6 +7,7 @@ import { InputExample } from "./input";
 import { LinkExample } from "./link";
 import { ListExample } from "./list";
 import { MessageExample } from "./message";
+import { PaginationExample } from "./pagination";
 import { PopoverExample } from "./popover";
 import { ProgressExample } from "./progress";
 import { SelectExample } from "./select";
@@ -23,6 +24,7 @@ export * from "./input";
 export * from "./link";
 export * from "./list";
 export * from "./message";
+export * from "./pagination";
 export * from "./popover";
 export * from "./progress";
 export * from "./select";
@@ -121,6 +123,12 @@ export const routers = [
 		label: "XTable",
 		path: "/table",
 		element: <TableExample />,
+	},
+	{
+		icon: "mdi-format-page-break",
+		label: "XPagination",
+		path: "/pagination",
+		element: <PaginationExample />,
 	},
 ];
 

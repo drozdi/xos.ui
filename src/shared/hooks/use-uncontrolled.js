@@ -1,10 +1,20 @@
 import { useState } from "react";
 
-export function useUncontrolled({ initial, onChange = () => {} }) {
-	const [value, setValue] = useState(initial);
+export function useUncontrolled({
+	value,
+	defaultValue,
+	finalValue,
+	onChange = () => {},
+}) {
+	const [unValue, setValue] = useState(
+		defaultValue !== undefined ? defaultValue : finalValue
+	);
 	const handler = (...args) => {
 		setValue(...args);
 		onChange?.(...args);
 	};
-	return [value, handler];
+	if (value !== undefined) {
+		return [value, onChange, true];
+	}
+	return [unValue, handler, false];
 }

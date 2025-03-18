@@ -18,7 +18,12 @@ export function usePagination({
 }) {
 	const _total = Math.max(Math.trunc(total), 0);
 
-	const [activePage, setActivePage] = useUncontrolled({ initial, onChange });
+	const [activePage, setActivePage] = useUncontrolled({
+		value: page,
+		onChange,
+		defaultValue: initial,
+		finalValue: initial,
+	});
 
 	const setPage = (pageNumber) => {
 		if (pageNumber <= 0) {
@@ -80,7 +85,7 @@ export function usePagination({
 
 	return {
 		range: paginationRange,
-		active: activePage,
+		current: activePage,
 		setPage,
 		next,
 		previous,

@@ -1,5 +1,8 @@
+import classNames from "classnames";
 import PropTypes from "prop-types";
 import { memo } from "react";
+import { usePagination } from "../../hooks";
+import { createEventHandler } from "../../internal/events/create-event-handler";
 import { XPaginationProvider } from "./XPaginationContext";
 import { XPaginationDots } from "./XPaginationDots";
 import {
@@ -8,6 +11,7 @@ import {
 	XPaginationNext,
 	XPaginationPrevious,
 } from "./XPaginationEdges";
+import { XPaginationItems } from "./XPaginationItems";
 import "./style.css";
 
 export const XPagination = memo(function XPaginationFn({
@@ -15,41 +19,58 @@ export const XPagination = memo(function XPaginationFn({
 	disabled,
 	edges,
 	controls,
-	siblings = 2,
+	pages,
+	hideOne,
+	siblings = 1,
+	boundaries = 1,
+	defaultValue,
+	value,
 	total,
+	onChange,
+	onNext,
+	onPrevious,
+	onFirst,
+	onLast,
 }) {
-	const ctx = {
-		disabled,
-		edges,
-		controls,
-		siblings,
-		total,
-		current: undefined,
-		onNext: () => {},
-		onPrevious: () => {},
-		onFirst: () => {},
-		onLast: () => {},
-	};
+	const { range, setPage, next, previous, current, first, last } =
+		usePagination({
+			page: value,
+			initial: defaultValue,
+			onChange,
+			total,
+			siblings,
+			boundaries,
+		});
+
+	const handleNextPage = createEventHandler(onNext, next);
+	const handlePreviousPage = createEventHandler(onPrevious, previous);
+	const handleFirstPage = createEventHandler(onFirst, first);
+	const handleLastPage = createEventHandler(onLast, last);
+
+	if (total <= 0 || (hideOne && total === 1)) {
+		return null;
+	}
 
 	return (
-		<XPaginationProvider value={ctx}>
-			<div className="x-pagination">
-				<button className="x-pagination-btn" disabled>
-					1
-				</button>
-				<XPaginationDots />
-				<button className="x-pagination-btn">6</button>
-				<button className="x-pagination-btn">7</button>
-				<button className="x-pagination-btn x-pagination-btn--active">
-					8
-				</button>
-				<button className="x-pagination-btn">9</button>
-				<button className="x-pagination-btn">10</button>
-				<button className="x-pagination-btn">11</button>
-				<button className="x-pagination-btn">12</button>
-				<button className="x-pagination-btn">13</button>
-				<button className="x-pagination-btn">14</button>
-				<button className="x-pagination-btn">15</button>
+		<XPaginationProvider
+			value={{
+				disabled,
+				total,
+				current,
+				range,
+				onChange: setPage,
+				onNext: handleNextPage,
+				onPrevious: handlePreviousPage,
+				onFirst: handleFirstPage,
+				onLast: handleLastPage,
+			}}
+		>
+			<div className={classNames("x-pagination", className)}>
+				{edges && <XPaginationFirst />}
+				{controls && <XPaginationPrevious />}
+				{pages && <XPaginationItems />}
+				{controls && <XPaginationNext />}
+				{edges && <XPaginationLast />}
 			</div>
 		</XPaginationProvider>
 	);
@@ -58,9 +79,18 @@ export const XPagination = memo(function XPaginationFn({
 XPagination.propTypes = {
 	className: PropTypes.string,
 	disabled: PropTypes.bool,
+
 	edges: PropTypes.bool,
 	controls: PropTypes.bool,
+	pages: PropTypes.bool,
+
+	hideOne: PropTypes.bool,
+
 	siblings: PropTypes.number,
+	boundaries: PropTypes.number,
+
+	defaultValue: PropTypes.number,
+	value: PropTypes.number,
 	total: PropTypes.number,
 
 	onChange: PropTypes.func,
@@ -73,6 +103,7 @@ XPagination.propTypes = {
 XPagination.displayName = "ui/XPagination";
 
 XPagination.Dots = XPaginationDots;
+XPagination.Items = XPaginationItems;
 XPagination.First = XPaginationFirst;
 XPagination.Last = XPaginationLast;
 XPagination.Next = XPaginationNext;

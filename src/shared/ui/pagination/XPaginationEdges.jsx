@@ -5,10 +5,10 @@ import { useXPaginationContext } from "./XPaginationContext";
 import "./style.css";
 
 function createEdgeComponent({ icon, name, action, type }) {
-	let Component = function (props) {
+	let Component = (props) => {
 		const ctx = useXPaginationContext();
 		const disabled =
-			type === "next" ? ctx.active === ctx.total : ctx.active === 1;
+			type === "next" ? ctx.current === ctx.total : ctx.current === 1;
 		return (
 			<XPaginationBtn
 				{...props}
