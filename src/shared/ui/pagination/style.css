@@ -37,14 +37,14 @@
 }
 
 .x-pagination-btn:disabled {
-	@apply cursor-not-allowed opacity-60;
+	@apply cursor-not-allowed opacity-d;
 }
 .x-pagination-btn:not(:disabled) {
 	@apply active:translate-y-0.5;
 }
 .x-pagination-btn:not(:disabled, .x-pagination-btn--active) {
 	&:hover::after {
-		@apply opacity-20;
+		@apply opacity-h;
 	}
 }
 .x-pagination-btn--active {

@@ -68,6 +68,9 @@
 		minmax(min-content, auto);
 	--grid-row-window: minmax(min-content, auto) minmax(auto, 1fr)
 		minmax(min-content, auto);
+
+	--opacity-d: 0.6;
+	--opacity-h: 0.2;
 }
 
 .dark {

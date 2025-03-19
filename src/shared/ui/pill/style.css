@@ -1,0 +1,50 @@
+@reference "@style";
+
+.x-pill {
+	--pill-fs-xs: 10px;
+	--pill-fs-sm: 12px;
+	--pill-fs-md: 14px;
+	--pill-fs-lg: 16px;
+	--pill-fs-xl: 18px;
+
+	--pill-height-xs: 18px;
+	--pill-height-sm: 22px;
+	--pill-height-md: 25px;
+	--pill-height-lg: 28px;
+	--pill-height-xl: 32px;
+
+	--pill-fs: var(--pill-fs-md);
+	--pill-height: var(--pill-height-md);
+
+	@apply inline-flex flex-0 items-center max-w-full text-(length:--pill-fs) h-(--pill-height) leading-none text-nowrap py-0 bg-surface;
+}
+.x-pill .x-btn {
+	@apply -ml-3;
+}
+
+.x-pill-label {
+	@apply h-full overflow-hidden cursor-[inherit] text-ellipsis;
+}
+.x-pill--disabled {
+	@apply bg-surface/60;
+}
+
+.x-pill--xs {
+	--pill-fs: var(--pill-fs-xs);
+	--pill-height: var(--pill-height-xs);
+}
+.x-pill--sm {
+	--pill-fs: var(--pill-fs-sm);
+	--pill-height: var(--pill-height-sm);
+}
+.x-pill--lg {
+	--pill-fs: var(--pill-fs-lg);
+	--pill-height: var(--pill-height-lg);
+}
+.x-pill--xl {
+	--pill-fs: var(--pill-fs-xl);
+	--pill-height: var(--pill-height-xl);
+}
+
+.x-pill-group {
+}

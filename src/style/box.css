@@ -32,6 +32,10 @@
 .x-box--lg {
 	@apply px-4 py-3 gap-4 text-lg;
 }
+.x-box--xl {
+	@apply px-4 py-3 gap-4 text-xl;
+}
+
 .x-box--square {
 	@apply rounded-none;
 }
@@ -68,6 +72,9 @@
 		@apply -mr-2;
 	}
 	.x-box--lg & {
+		@apply -mr-4;
+	}
+	.x-box--xl & {
 		@apply -mr-4;
 	}
 }

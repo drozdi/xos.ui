@@ -5,7 +5,7 @@ import appsManager from "./entites/core/apps-manager";
 import { Layout } from "./features";
 import { WindowManager } from "./features/window-manager";
 import { ThemeProvider, ThemeProviderToggler } from "./shared/hooks/useTheme";
-import { XBtn, XMain } from "./shared/ui";
+import { XBtn, XMain, XPill } from "./shared/ui";
 import "./style/index.css";
 
 function App() {
@@ -31,7 +31,13 @@ function App() {
 						<XBtn onClick={onTicTacToe}>TicTacToe</XBtn>
 					</XBtn.Group>
 					<hr className="my-3" />
-					<div className="max-w-4xl m-auto"></div>
+					<div className="max-w-4xl m-auto">
+						<XPill.Group>
+							<XPill>asjdghj 1</XPill>
+							<XPill>asjdghj 2</XPill>
+							<XPill>asjdghj 3</XPill>
+						</XPill.Group>
+					</div>
 				</XMain>
 			</Layout>
 		</ThemeProvider>

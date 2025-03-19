@@ -117,7 +117,7 @@ Sections.propTypes = {
 	noWrap: PropTypes.bool,
 	dense: PropTypes.bool,
 	square: PropTypes.bool,
-	size: PropTypes.oneOf(["xs", "sm", "xl"]),
+	size: PropTypes.oneOf(["xs", "sm", "lg", "xl"]),
 	align: PropTypes.oneOf([
 		"start",
 		"center",

@@ -58,7 +58,7 @@ Box.propTypes = {
 	noWrap: PropTypes.bool,
 	noGap: PropTypes.bool,
 	noPadding: PropTypes.bool,
-	size: PropTypes.oneOf(["xs", "sm", "xl"]),
+	size: PropTypes.oneOf(["xs", "sm", "lg", "xl"]),
 	align: PropTypes.oneOf([
 		"start",
 		"center",
