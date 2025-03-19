@@ -79,6 +79,7 @@ Box.propTypes = {
 		"stretch",
 	]),
 };
+Box.displayName = "internal/Box";
 
 /**
  * Компонент для создания разделов.
@@ -123,6 +124,7 @@ Box.Section.propTypes = {
 	noGap: PropTypes.bool,
 	noWrap: PropTypes.bool,
 };
+Box.Section.displayName = "internal/BoxSection";
 
 /**
  * Компонент для создания заголовков.
@@ -161,6 +163,7 @@ Box.Header.propTypes = {
 	top: PropTypes.bool,
 	noWrap: PropTypes.bool,
 };
+Box.Header.displayName = "internal/BoxHeader";
 
 /**
  * Компонент для создания заголовков.
@@ -183,6 +186,7 @@ Box.Title = forwardRefWithAs(function Title({ className, ...props }, ref) {
 Box.Title.propTypes = {
 	className: PropTypes.string,
 };
+Box.Title.displayName = "internal/BoxTitle";
 
 /**
  * Компонент для создания подзаголовков.
@@ -206,3 +210,4 @@ Box.Subtitle = forwardRefWithAs(function Subtitle(
 Box.Subtitle.propTypes = {
 	className: PropTypes.string,
 };
+Box.Subtitle.displayName = "internal/BoxSubtitle";

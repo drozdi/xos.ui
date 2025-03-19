@@ -39,4 +39,4 @@ DisabledProvider.propTypes = {
 };
 
 // Устанавливаем displayName для удобства отладки
-DisabledProvider.displayName = "DisabledProvider";
+DisabledProvider.displayName = "internal/DisabledProvider";

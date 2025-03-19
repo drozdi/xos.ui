@@ -141,3 +141,5 @@ Sections.propTypes = {
 	leftSection: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 	rightSection: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
+
+Sections.displayName = "internal/Sections";

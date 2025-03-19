@@ -16,5 +16,29 @@
 	--x-badge-height: var(--x-badge-height-md);
 	--x-badge-fs: var(--x-badge-fs-md);
 
-	@apply h-(--x-badge-height) text-(length: --x-badge-fs);
+	@apply h-(--x-badge-height) text-(length:--x-badge-fs) cursor-default items-center justify-center w-fit uppercase truncate py-0;
 }
+
+.x-badge--xs {
+	--x-badge-fs: var(--x-badge-fs-xs);
+	--x-badge-height: var(--x-badge-height-xs);
+}
+.x-badge--sm {
+	--x-badge-fs: var(--x-badge-fs-sm);
+	--x-badge-height: var(--x-badge-height-sm);
+}
+.x-badge--lg {
+	--x-badge-fs: var(--x-badge-fs-lg);
+	--x-badge-height: var(--x-badge-height-lg);
+}
+.x-badge--xl {
+	--x-badge-fs: var(--x-badge-fs-xl);
+	--x-badge-height: var(--x-badge-height-xl);
+}
+
+/* 
+  border-radius: var(--badge-radius);
+  color: var(--badge-color);
+  background: var(--badge-bg);
+  border: var(--badge-bd);
+  */

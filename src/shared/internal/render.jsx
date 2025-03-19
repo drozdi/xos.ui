@@ -150,3 +150,5 @@ render.propTypes = {
 	props: PropTypes.object.isRequired,
 	state: PropTypes.object,
 };
+
+render.displayName = "internal/render";

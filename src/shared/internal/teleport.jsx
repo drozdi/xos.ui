@@ -95,4 +95,4 @@ Teleport.propTypes = {
 	id: PropTypes.string,
 };
 
-Teleport.displayName = "Teleport";
+Teleport.displayName = "internal/Teleport";

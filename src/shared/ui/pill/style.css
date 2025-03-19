@@ -1,22 +1,22 @@
 @reference "@style";
 
 .x-pill {
-	--pill-fs-xs: 10px;
-	--pill-fs-sm: 12px;
-	--pill-fs-md: 14px;
-	--pill-fs-lg: 16px;
-	--pill-fs-xl: 18px;
+	--x-pill-fs-xs: 10px;
+	--x-pill-fs-sm: 12px;
+	--x-pill-fs-md: 14px;
+	--x-pill-fs-lg: 16px;
+	--x-pill-fs-xl: 18px;
 
-	--pill-height-xs: 18px;
-	--pill-height-sm: 22px;
-	--pill-height-md: 25px;
-	--pill-height-lg: 28px;
-	--pill-height-xl: 32px;
+	--x-pill-height-xs: 18px;
+	--x-pill-height-sm: 22px;
+	--x-pill-height-md: 25px;
+	--x-pill-height-lg: 28px;
+	--x-pill-height-xl: 32px;
 
-	--pill-fs: var(--pill-fs-md);
-	--pill-height: var(--pill-height-md);
+	--x-pill-fs: var(--x-pill-fs-md);
+	--x-pill-height: var(--x-pill-height-md);
 
-	@apply inline-flex flex-0 items-center max-w-full text-(length:--pill-fs) h-(--pill-height) leading-none text-nowrap py-0 bg-surface;
+	@apply inline-flex flex-0 items-center max-w-full text-(length:--x-pill-fs) h-(--x-pill-height) leading-none text-nowrap py-0 bg-surface;
 }
 .x-pill .x-btn {
 	@apply -ml-3;
@@ -30,20 +30,20 @@
 }
 
 .x-pill--xs {
-	--pill-fs: var(--pill-fs-xs);
-	--pill-height: var(--pill-height-xs);
+	--x-pill-fs: var(--x-pill-fs-xs);
+	--x-pill-height: var(--x-pill-height-xs);
 }
 .x-pill--sm {
-	--pill-fs: var(--pill-fs-sm);
-	--pill-height: var(--pill-height-sm);
+	--x-pill-fs: var(--x-pill-fs-sm);
+	--x-pill-height: var(--x-pill-height-sm);
 }
 .x-pill--lg {
-	--pill-fs: var(--pill-fs-lg);
-	--pill-height: var(--pill-height-lg);
+	--x-pill-fs: var(--x-pill-fs-lg);
+	--x-pill-height: var(--x-pill-height-lg);
 }
 .x-pill--xl {
-	--pill-fs: var(--pill-fs-xl);
-	--pill-height: var(--pill-height-xl);
+	--x-pill-fs: var(--x-pill-fs-xl);
+	--x-pill-height: var(--x-pill-height-xl);
 }
 
 .x-pill-group {

@@ -5,7 +5,7 @@ import appsManager from "./entites/core/apps-manager";
 import { Layout } from "./features";
 import { WindowManager } from "./features/window-manager";
 import { ThemeProvider, ThemeProviderToggler } from "./shared/hooks/useTheme";
-import { XBtn, XMain, XPill } from "./shared/ui";
+import { XBadge, XBtn, XMain, XPill } from "./shared/ui";
 import "./style/index.css";
 
 function App() {
@@ -32,11 +32,15 @@ function App() {
 					</XBtn.Group>
 					<hr className="my-3" />
 					<div className="max-w-4xl m-auto">
-						<XPill.Group disabled>
+						<XPill.Group>
 							<XPill>asjdghj 1</XPill>
 							<XPill>asjdghj 2</XPill>
 							<XPill>asjdghj 3</XPill>
 						</XPill.Group>
+
+						<XBadge>asjdghj 1</XBadge>
+						<XBadge>asjdghj 2</XBadge>
+						<XBadge>asjdghj 3</XBadge>
 					</div>
 				</XMain>
 			</Layout>

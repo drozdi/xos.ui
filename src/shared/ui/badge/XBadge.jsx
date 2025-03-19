@@ -6,7 +6,7 @@ export function XBadge({ children, className, ...props }) {
 	return (
 		<Sections
 			{...props}
-			className={classNames("x-badge", className)}
+			className={classNames("x-badge items-center", className)}
 			bodyClass="x-badge-label"
 		>
 			{children}
@@ -14,12 +14,11 @@ export function XBadge({ children, className, ...props }) {
 	);
 }
 
-XBadge.displayName = "ui/XBadge";
-
 XBadge.propTypes = {
 	children: PropTypes.node,
 	className: PropTypes.string,
-	disabled: PropTypes.bool,
-	size: PropTypes.oneOf(["xs", "sm", "lg", "xl"]),
-	onRemove: PropTypes.func,
+	leftSection: PropTypes.node,
+	rightSection: PropTypes.node,
 };
+
+XBadge.displayName = "ui/XBadge";
