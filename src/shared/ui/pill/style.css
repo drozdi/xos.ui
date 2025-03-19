@@ -26,7 +26,7 @@
 	@apply h-full overflow-hidden cursor-[inherit] text-ellipsis;
 }
 .x-pill--disabled {
-	@apply bg-surface/60;
+	@apply bg-surface/60 cursor-not-allowed;
 }
 
 .x-pill--xs {

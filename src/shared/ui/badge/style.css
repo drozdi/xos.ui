@@ -1,0 +1,20 @@
+@reference "@style";
+
+.x-badge {
+	--x-badge-height-xs: 16px;
+	--x-badge-height-sm: 18px;
+	--x-badge-height-md: 20px;
+	--x-badge-height-lg: 26px;
+	--x-badge-height-xl: 32px;
+
+	--x-badge-fs-xs: 9px;
+	--x-badge-fs-sm: 10px;
+	--x-badge-fs-md: 11px;
+	--x-badge-fs-lg: 13px;
+	--x-badge-fs-xl: 16px;
+
+	--x-badge-height: var(--x-badge-height-md);
+	--x-badge-fs: var(--x-badge-fs-md);
+
+	@apply h-(--x-badge-height) text-(length: --x-badge-fs);
+}

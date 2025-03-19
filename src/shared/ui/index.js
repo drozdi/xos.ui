@@ -1,4 +1,5 @@
 export * from "./accordion";
+export * from "./badge";
 export * from "./btn";
 export * from "./card";
 export * from "./footer";

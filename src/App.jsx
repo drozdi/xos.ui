@@ -32,7 +32,7 @@ function App() {
 					</XBtn.Group>
 					<hr className="my-3" />
 					<div className="max-w-4xl m-auto">
-						<XPill.Group>
+						<XPill.Group disabled>
 							<XPill>asjdghj 1</XPill>
 							<XPill>asjdghj 2</XPill>
 							<XPill>asjdghj 3</XPill>
