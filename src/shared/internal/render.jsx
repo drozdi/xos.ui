@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import PropTypes from "prop-types";
 import {
 	cloneElement,
@@ -127,13 +128,19 @@ export function render(tag, props, state) {
 		let childPropsClassName = childProps?.className;
 		let childPropsStyle = childProps?.style;
 
-		let newClassName = isFunction(childPropsClassName)
-			? childPropsClassName(state, memoizedRest.className)
-			: childPropsClassName;
+		let newClassName = classNames(
+			isFunction(childPropsClassName)
+				? childPropsClassName(state, memoizedRest.className)
+				: childPropsClassName,
+			memoizedRest.className
+		);
 
-		let newStyle = isFunction(childPropsStyle)
-			? childPropsStyle(state, memoizedRest.style)
-			: childPropsStyle;
+		let newStyle = {
+			...(isFunction(childPropsStyle)
+				? childPropsStyle(state, memoizedRest.style)
+				: childPropsStyle),
+			...memoizedRest.style,
+		};
 
 		return cloneElement(resolvedChildren, {
 			...memoizedRest,

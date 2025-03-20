@@ -29,22 +29,5 @@
 	@apply bg-surface/60 cursor-not-allowed;
 }
 
-.x-pill--xs {
-	--x-pill-fs: var(--x-pill-fs-xs);
-	--x-pill-height: var(--x-pill-height-xs);
-}
-.x-pill--sm {
-	--x-pill-fs: var(--x-pill-fs-sm);
-	--x-pill-height: var(--x-pill-height-sm);
-}
-.x-pill--lg {
-	--x-pill-fs: var(--x-pill-fs-lg);
-	--x-pill-height: var(--x-pill-height-lg);
-}
-.x-pill--xl {
-	--x-pill-fs: var(--x-pill-fs-xl);
-	--x-pill-height: var(--x-pill-height-xl);
-}
-
 .x-pill-group {
 }

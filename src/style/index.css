@@ -71,6 +71,43 @@
 
 	--opacity-d: 0.6;
 	--opacity-h: 0.2;
+
+	--text-h1: 2.5rem; /* 40px */
+	--text-h1--line-height: calc(1 / var(--text-h1));
+	--text-h2: 2rem; /* 32px */
+	--text-h2--line-height: calc(1 / var(--text-h2));
+	--text-h3: 1.75rem; /* 28px */
+	--text-h3--line-height: calc(1 / var(--text-h3));
+	--text-h4: 1.5rem; /* 24px */
+	--text-h4--line-height: calc(1 / var(--text-h4));
+	--text-h5: 1.25rem; /* 20px */
+	--text-h5--line-height: calc(1 / var(--text-h5));
+	--text-h6: 1rem; /* 16px */
+	--text-h6--line-height: calc(1 / var(--text-h6));
+
+	--space-xs: calc(var(--spacing) * 1); /* 4px */
+	--space-sm: calc(var(--spacing) * 2); /* 8px */
+	--space-md: calc(var(--spacing) * 3); /* 12px */
+	--space-lg: calc(var(--spacing) * 4); /* 16px */
+	--space-xl: calc(var(--spacing) * 5); /* 18px */
+
+	--gap-xs: var(--space-xs);
+	--gap-sm: var(--space-sm);
+	--gap-md: var(--space-md);
+	--gap-lg: var(--space-lg);
+	--gap-xl: var(--space-xl);
+
+	--margin-xs: var(--space-xs);
+	--margin-sm: var(--space-sm);
+	--margin-md: var(--space-md);
+	--margin-lg: var(--space-lg);
+	--margin-xl: var(--space-xl);
+
+	--padding-xs: var(--space-xs);
+	--padding-sm: var(--space-sm);
+	--padding-md: var(--space-md);
+	--padding-lg: var(--space-lg);
+	--padding-xl: var(--space-xl);
 }
 
 .dark {
@@ -121,6 +158,24 @@
 	* {
 		scrollbar-color: var(--scrollbar-color);
 		scrollbar-width: thin;
+	}
+	h1 {
+		@apply text-h1;
+	}
+	h2 {
+		@apply text-h2;
+	}
+	h3 {
+		@apply text-h3;
+	}
+	h4 {
+		@apply text-h4;
+	}
+	h5 {
+		@apply text-h5;
+	}
+	h6 {
+		@apply text-h6;
 	}
 	*::-moz-selection,
 	*::selection {
