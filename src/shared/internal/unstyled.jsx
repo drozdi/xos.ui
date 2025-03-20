@@ -1,7 +1,47 @@
 import PropTypes from "prop-types";
-import { Fragment } from "react";
+import { Fragment, useRef, useState } from "react";
+import { useWindowEvent } from "../hooks";
 import { isFunction, isString } from "../utils/is";
 import { render } from "./render";
+
+/*--breakpoint-sm: 24rem;
+	--breakpoint-sm: 40rem;
+    --breakpoint-md: 48rem;
+    --breakpoint-lg: 64rem;
+    --breakpoint-xl: 80rem;
+    --breakpoint-2xl: 96rem;*/
+
+/**
+ * Определяет значение параметра на основе текущего breakpoint.
+ *
+ * @param {Object} responsiveValue - Объект с responsive-значениями (например, { base: 'sm', sm: 'lg' }).
+ * @returns {string} Актуальное значение параметра.
+ */
+function getResponsiveValue(responsiveValue) {
+	if (!responsiveValue || typeof responsiveValue !== "object") {
+		return responsiveValue;
+	}
+
+	const breakpoints = [
+		{ key: "xl", query: "(min-width: 1280px)" },
+		{ key: "lg", query: "(min-width: 1024px)" },
+		{ key: "md", query: "(min-width: 768px)" },
+		{ key: "sm", query: "(min-width: 640px)" },
+		{ key: "xs", query: "(min-width: 384px)" },
+		{ key: "base", query: "" }, // Базовое значение
+	];
+
+	for (let { key, query } of breakpoints) {
+		if (
+			responsiveValue[key] &&
+			(key === "base" || window.matchMedia(query).matches)
+		) {
+			return responsiveValue[key];
+		}
+	}
+
+	return responsiveValue.base; // Возвращаем базовое значение, если ничего не найдено
+}
 
 /**
  * Генерирует стили на основе вариантов.
@@ -23,14 +63,16 @@ function variantStyles(name, vars = {}, props = {}) {
 	const style = {};
 
 	for (let prop in props) {
-		if (!vars[prop]) {
+		if (!vars[prop] || !props[prop]) {
 			continue;
 		}
-		if (!props[prop]) {
-			continue;
-		}
-		(vars[prop] ?? []).forEach((key) => {
-			style[`--${name}-${key}`] = `var(--${name}-${key}-${props[prop]})`;
+		const value = getResponsiveValue(props[prop]);
+		const keys = isString(vars[prop])
+			? vars[prop].split(/\s+/)
+			: vars[prop];
+
+		keys.forEach((key) => {
+			style[`--${name}-${key}`] = `var(--${name}-${key}-${value})`;
 		});
 		delete props[prop];
 	}
@@ -49,15 +91,23 @@ function variantStyles(name, vars = {}, props = {}) {
  * @returns {JSX.Element} Элемент div с заданными стилями.
  */
 export function Unstyled({ name, vars = {}, style, ...props }) {
-	const computedStyle = isFunction(style)
-		? (...args) => ({
-				...style(...args),
-				...variantStyles(name, vars, props),
-		  })
-		: {
-				...style,
-				...variantStyles(name, vars, props),
-		  };
+	const [computedStyle, setComputedStyle] = useState({});
+
+	const updateStyles = useRef(() => {
+		const newStyles = isFunction(style)
+			? {
+					...style(),
+					...variantStyles(name, vars, props),
+			  }
+			: {
+					...style,
+					...variantStyles(name, vars, props),
+			  };
+		setComputedStyle(newStyles);
+	});
+
+	useWindowEvent("resize", updateStyles.current);
+
 	return render("div", {
 		as: Fragment,
 		...props,

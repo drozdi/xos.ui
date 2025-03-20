@@ -12,3 +12,5 @@ export * from "./use-state-proxy";
 export * from "./use-timeout";
 export * from "./use-toggle";
 export * from "./use-uncontrolled";
+export * from "./use-window-event";
+export * from "./use-window-scroll";

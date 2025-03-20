@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useWindowEvent } from "../use-window-event";
+import { useWindowEvent } from "./use-window-event";
 
 function getScrollPosition() {
 	return typeof window !== "undefined"
