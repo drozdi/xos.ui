@@ -1,15 +1,8 @@
 import PropTypes from "prop-types";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { useWindowEvent } from "../hooks";
 import { isFunction, isString } from "../utils/is";
 import { render } from "./render";
-
-/*--breakpoint-sm: 24rem;
-	--breakpoint-sm: 40rem;
-    --breakpoint-md: 48rem;
-    --breakpoint-lg: 64rem;
-    --breakpoint-xl: 80rem;
-    --breakpoint-2xl: 96rem;*/
 
 /**
  * Определяет значение параметра на основе текущего breakpoint.
@@ -93,7 +86,7 @@ function variantStyles(name, vars = {}, props = {}) {
 export function Unstyled({ name, vars = {}, style, ...props }) {
 	const [computedStyle, setComputedStyle] = useState({});
 
-	const updateStyles = useRef(() => {
+	const updateStyles = useCallback(() => {
 		const newStyles = isFunction(style)
 			? {
 					...style(),
@@ -104,9 +97,9 @@ export function Unstyled({ name, vars = {}, style, ...props }) {
 					...variantStyles(name, vars, props),
 			  };
 		setComputedStyle(newStyles);
-	});
+	}, [name, vars, style, props]);
 
-	useWindowEvent("resize", updateStyles.current);
+	useWindowEvent("resize", updateStyles);
 
 	return render("div", {
 		as: Fragment,
