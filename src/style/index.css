@@ -184,6 +184,7 @@
 	}
 }
 
+@import "./flex.css";
 @import "./box.css";
 @import "./x-bg.css";
 @import "./border.css";

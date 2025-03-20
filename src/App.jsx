@@ -5,6 +5,7 @@ import appsManager from "./entites/core/apps-manager";
 import { Layout } from "./features";
 import { WindowManager } from "./features/window-manager";
 import { ThemeProvider, ThemeProviderToggler } from "./shared/hooks/useTheme";
+import { Flex } from "./shared/internal/flex";
 import { XBadge, XBtn, XMain, XPill } from "./shared/ui";
 import "./style/index.css";
 
@@ -41,6 +42,11 @@ function App() {
 						<XBadge>asjdghj 1</XBadge>
 						<XBadge>asjdghj 2</XBadge>
 						<XBadge>asjdghj 3</XBadge>
+						<Flex align="center" justify="center">
+							<div className="size-36 bg-red-500">
+								<div className="size-12 bg-blue-600"></div>
+							</div>
+						</Flex>
 					</div>
 				</XMain>
 			</Layout>

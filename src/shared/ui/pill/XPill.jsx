@@ -47,38 +47,6 @@ export function XPill({ children, className, size, disabled, onRemove }) {
 			</Sections>
 		</Unstyled>
 	);
-
-	return (
-		<Sections
-			as="span"
-			className={classNames(
-				"x-pill",
-				{
-					"x-pill--disabled": _disabled,
-					[`x-pill--${_size}`]: _size,
-				},
-				className
-			)}
-			bodyClass="x-pill-label"
-			rightSection={
-				onRemove && (
-					<XBtn
-						flat
-						size="xs"
-						onClick={(event) => {
-							event.preventDefault();
-							event.stopPropagation();
-							onRemove?.(event);
-						}}
-						disabled={_disabled}
-						leftSection="mdi-close"
-					/>
-				)
-			}
-		>
-			{children}
-		</Sections>
-	);
 }
 
 XPill.displayName = "ui/XPill";

@@ -1,0 +1,37 @@
+.x-flex {
+	--x-flex-direction-row: row;
+	--x-flex-direction-col: column;
+
+	--x-flex-align-start: flex-start;
+	--x-flex-align-center: center;
+	--x-flex-align-end: flex-end;
+	--x-flex-align-baseline: baseline;
+	--x-flex-align-stretch: stretch;
+	--x-flex-align-stretch: normal;
+	--x-flex-align-between: space-between;
+
+	--x-flex-justify-start: flex-start;
+	--x-flex-justify-end: flex-end;
+	--x-flex-justify-center: center;
+	--x-flex-justify-between: space-between;
+	--x-flex-justify-around: space-around;
+	--x-flex-justify-evenly: space-evenly;
+	--x-flex-justify-stretch: stretch;
+	--x-flex-justify-baseline: baseline;
+	--x-flex-justify-normal: normal;
+
+	--x-flex-wrap-wrap: wrap;
+	--x-flex-wrap-nowrap: nowrap;
+	--x-flex-wrap-nowrap: reverse;
+
+	--x-flex-direction: var(--x-flex-direction-row);
+	--x-flex-align: var(--x-flex-align-start);
+	--x-flex-justify: var(--x-flex-justify-start);
+	--x-flex-wrap: var(--x-flex-wrap-nowrap);
+
+	display: flex;
+	flex-direction: var(--x-flex-direction, row);
+	align-items: var(--x-flex-align, flex-start);
+	justify-content: var(--x-flex-justify, flex-start);
+	flex-wrap: var(--x-flex-wrap, nowrap);
+}

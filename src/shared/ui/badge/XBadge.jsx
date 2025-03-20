@@ -1,22 +1,30 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { Sections } from "../../internal/sections";
+import { Unstyled } from "../../internal/unstyled";
 import "./style.css";
-export function XBadge({ children, className, ...props }) {
+
+const vars = {
+	size: "fs height",
+};
+export function XBadge({ children, className, size, ...props }) {
 	return (
-		<Sections
-			{...props}
-			className={classNames("x-badge items-center", className)}
-			bodyClass="x-badge-label"
-		>
-			{children}
-		</Sections>
+		<Unstyled name="x-badge" vars={vars} size={size}>
+			<Sections
+				{...props}
+				className={classNames("x-badge items-center", className)}
+				bodyClass="x-badge-label"
+			>
+				{children}
+			</Sections>
+		</Unstyled>
 	);
 }
 
 XBadge.propTypes = {
 	children: PropTypes.node,
 	className: PropTypes.string,
+	size: PropTypes.oneOf(["xs", "sm", "lg", "xl"]),
 	leftSection: PropTypes.node,
 	rightSection: PropTypes.node,
 };
