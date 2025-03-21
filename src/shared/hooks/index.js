@@ -1,5 +1,6 @@
 export * from "./use-array";
 export * from "./use-breakpoint";
+export * from "./use-disclosure";
 export * from "./use-force-update";
 export * from "./use-fork-ref";
 export * from "./use-id";

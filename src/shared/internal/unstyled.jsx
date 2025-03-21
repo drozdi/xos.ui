@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { useWindowEvent } from "../hooks";
 import { isFunction, isString } from "../utils/is";
 import { render } from "./render";
@@ -98,7 +98,9 @@ export function Unstyled({ name, vars = {}, style, ...props }) {
 			  };
 		setComputedStyle(newStyles);
 	}, [name, vars, style, props]);
-
+	useEffect(() => {
+		updateStyles();
+	}, []);
 	useWindowEvent("resize", updateStyles);
 
 	return render("div", {

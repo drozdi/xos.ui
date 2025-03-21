@@ -1,5 +1,11 @@
 import { useCallback, useState } from "react";
 
+/**
+ *
+ * @param {*} initial
+ * @param {*} param1
+ * @returns
+ */
 export function useDisclosure(initial = false, { onOpen, onClose } = {}) {
 	const [opened, setOpened] = useState(initial);
 

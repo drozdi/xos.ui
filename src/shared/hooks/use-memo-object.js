@@ -1,5 +1,10 @@
 import { useMemo } from "react";
 
+/**
+ *
+ * @param {*} object
+ * @returns
+ */
 export function useMemoObject(object) {
 	const deps = Object.values(object);
 	return useMemo(() => object, deps);
