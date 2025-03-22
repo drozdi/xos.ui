@@ -1,3 +1,10 @@
+/**
+ * Функция getPreviousIndex возвращает индекс предыдущего элемента, который не отключен.
+ * @param {number} current - Текущий индекс.
+ * @param {Array} elements - Массив элементов.
+ * @param {boolean} loop - Флаг, указывающий на то, нужно ли зацикливать поиск.
+ * @returns {number} - Индекс предыдущего элемента, который не отключен.
+ */
 function getPreviousIndex(current, elements, loop) {
 	for (let i = current - 1; i >= 0; i -= 1) {
 		if (!elements[i].disabled) {
@@ -16,6 +23,13 @@ function getPreviousIndex(current, elements, loop) {
 	return current;
 }
 
+/**
+ * Функция getNextIndex возвращает индекс следующего элемента, который не отключен.
+ * @param {number} current - Текущий индекс.
+ * @param {Array} elements - Массив элементов.
+ * @param {boolean} loop - Флаг, указывающий на то, нужно ли зацикливать поиск.
+ * @returns {number} - Индекс следующего элемента, который не отключен.
+ */
 function getNextIndex(current, elements, loop) {
 	for (let i = current + 1; i < elements.length; i += 1) {
 		if (!elements[i].disabled) {
@@ -34,6 +48,17 @@ function getNextIndex(current, elements, loop) {
 	return current;
 }
 
+/**
+ * Функция scopedKeydownHandler создает обработчик нажатия клавиш, который обрабатывает навигацию по элементам.
+ * @param {Object} options - Параметры обработчика.
+ * @param {string} options.parentSelector - Селектор родительского элемента.
+ * @param {string} options.siblingSelector - Селектор элементов-братьев.
+ * @param {Function} options.onKeyDown - Обработчик нажатия клавиш.
+ * @param {boolean} [options.loop=true] - Флаг, указывающий на то, нужно ли зацикливать навигацию.
+ * @param {boolean} [options.activateOnFocus=false] - Флаг, указывающий на то, нужно ли активировать элемент при фокусе.
+ * @param {Array} options.orientation - Ориентация навигации.
+ * @returns {Function} - Обработчик нажатия клавиш.
+ */
 export function scopedKeydownHandler({
 	parentSelector,
 	siblingSelector,
@@ -47,15 +72,16 @@ export function scopedKeydownHandler({
 		const { target } = event;
 
 		const elements = Array.from(
-			target.closest(parentSelector).querySelectorAll(siblingSelector) || [],
+			target.closest(parentSelector).querySelectorAll(siblingSelector) ||
+				[]
 		);
 		const current = elements.findIndex((el) => target === el);
 		const nextIndex = getNextIndex(current, elements, loop);
 		const previousIndex = getPreviousIndex(current, elements, loop);
 
 		switch (event.code) {
-			case 'ArrowLeft': {
-				if (orientation.includes('y')) {
+			case "ArrowLeft": {
+				if (orientation.includes("y")) {
 					event.stopPropagation();
 					event.preventDefault();
 					elements[previousIndex].focus();
@@ -63,8 +89,8 @@ export function scopedKeydownHandler({
 				}
 				break;
 			}
-			case 'ArrowRight': {
-				if (orientation.includes('y')) {
+			case "ArrowRight": {
+				if (orientation.includes("y")) {
 					event.stopPropagation();
 					event.preventDefault();
 					elements[nextIndex].focus();
@@ -72,8 +98,8 @@ export function scopedKeydownHandler({
 				}
 				break;
 			}
-			case 'ArrowDown': {
-				if (orientation.includes('x')) {
+			case "ArrowDown": {
+				if (orientation.includes("x")) {
 					event.stopPropagation();
 					event.preventDefault();
 					elements[nextIndex].focus();
@@ -81,8 +107,8 @@ export function scopedKeydownHandler({
 				}
 				break;
 			}
-			case 'ArrowUp': {
-				if (orientation.includes('x')) {
+			case "ArrowUp": {
+				if (orientation.includes("x")) {
 					event.stopPropagation();
 					event.preventDefault();
 					elements[previousIndex].focus();
@@ -90,13 +116,13 @@ export function scopedKeydownHandler({
 				}
 				break;
 			}
-			case 'Home': {
+			case "Home": {
 				event.stopPropagation();
 				event.preventDefault();
 				!elements[0].disabled && elements[0].focus();
 				break;
 			}
-			case 'End': {
+			case "End": {
 				event.stopPropagation();
 				event.preventDefault();
 				const last = elements.length - 1;

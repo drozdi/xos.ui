@@ -20,9 +20,11 @@ const RenderContext = createContext({
 });
 
 /**
- * Провайдер с проверкой пропсов
- * @param {*} props - Пропсы для провайдера
- * @returns
+ * Компонент RenderProvider
+ * @param {object} props - свойства
+ * @param {React.ReactNode} props.children - дочерние элементы
+ * @param {object} props.contextValues - значения контекста
+ * @returns {React.ReactElement} элемент RenderProvider
  */
 export function RenderProvider({ children, ...contextValues }) {
 	return (
@@ -35,19 +37,18 @@ RenderProvider.propTypes = {
 	children: PropTypes.node.isRequired,
 	render: PropTypes.func, // Добавляем проверку типа для функции render
 };
-
 /**
- * Хук для использования контекста рендеринга
- * @returns {*} - Контекст рендеринга
+ * Хук useRenderContext возвращает контекст рендера.
+ * @returns {Object} - Контекст рендера.
  */
 export function useRenderContext() {
 	return useContext(RenderContext);
 }
 
 /**
- * Функция для обвертки ref и as
- * @param {*} component - Компонент, который нужно обернуть
- * @returns {*} - Обернутый компонент
+ * Функция forwardRefWithAs создает компонент с привязкой ссылки и возможностью указания типа элемента.
+ * @param {Function} component - Компонент, который нужно обернуть.
+ * @returns {Function} - Обернутый компонент.
  */
 export function forwardRefWithAs(component) {
 	const ForwardedComponent = Object.assign(forwardRef(component), {
@@ -63,22 +64,21 @@ export function forwardRefWithAs(component) {
 }
 
 /**
- * Функция для применения контекста к пропсам
- * @param props - Пропсы компонента
- * @returns {*} - Пропсы с учетом контекста
- * */
+ * Функция applyContextToProps применяет контекст к свойствам компонента.
+ * @param {Object} props - Свойства компонента.
+ * @returns {Object} - Объект с объединенными свойствами контекста и компонента.
+ */
 function applyContextToProps(props) {
 	const { render = ({ as }) => as, ...contextValues } = useRenderContext();
 	return { ...contextValues, ...props, as: render(props), render: undefined };
 }
 
 /**
- * Основная функция рендеринга с улучшениями
- *
- * @param {*} tag - Тег или компонент, который нужно отрендерить
- * @param {*} props - Пропсы для компонента
- * @param {*} state - Состояние компонента
- * @returns {ReactElement} - Результат рендеринга
+ * Функция render создает элемент с заданными свойствами и состоянием.
+ * @param {string|Function} tag - Тег или функция для создания элемента.
+ * @param {Object} props - Свойства элемента.
+ * @param {Object} state - Состояние элемента.
+ * @returns {React.ReactElement} - Элемент с заданными свойствами и состоянием.
  */
 export function render(tag, props, state) {
 	let {

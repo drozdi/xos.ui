@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { debounce } from "../utils/debounce"; // Или любая другая библиотека для дебаунсинга
 
+/**
+ * Функция useResizeObserver создает обработчик для отслеживания изменения размера элемента.
+ * @param {Object} [options] - Объект с опциями.
+ * @param {Function} [options.onResize] - Функция, которая будет вызвана при изменении размера элемента.
+ * @param {number} [options.debounceTime=100] - Время задержки перед вызовом функции onResize.
+ * @returns {Object} - Объект, содержащий ссылку на элемент и текущие размеры элемента.
+ */
 export function useResizeObserver({ onResize, debounceTime = 100 } = {}) {
 	const [{ width, height }, setSize] = useState({ width: 0, height: 0 });
 	const ref = useRef(null);

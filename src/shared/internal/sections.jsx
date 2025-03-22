@@ -8,8 +8,8 @@ import { forwardRefWithAs, render } from "./render";
 /**
  * Функция для преобразования строки в компонент Section
  *
- * @param {string | JSX.Element} section - Секция
- * @returns {null | JSX.Element} Преобразованная секция
+ * @param {string | React.ReactElement} section - Секция
+ * @returns {null | React.ReactElement} Преобразованная секция
  */
 const processSection = (section) => {
 	return useMemo(() => {
@@ -25,29 +25,27 @@ const processSection = (section) => {
 };
 
 /**
- * Компонент для создания гибкой структуры с возможностью размещения элементов в колонки.
- *
- * @param {Object} props - Параметры компонента.
- * @param {string | Function} props.className - Классы для компонента.
- * @param {string | Function} props.bodyClass - Классы для тела компонента.
- * @param {boolean} props.noPadding - Флаг, указывающий на отсутствие внутренних отступов.
- * @param {boolean} props.col - Флаг, указывающий на отображение компонента в виде колонки.
- * @param {boolean} props.col - Флаг, указывающий на отображение содержимого компонента в виде строки.
- * @param {boolean} props.noWrap - Флаг, указывающий на отсутствие обертки для элементов.
- * @param {boolean} props.dense - Флаг, указывающий на плотное расположение элементов.
- * @param {boolean} props.square - Флаг, указывающий на квадратную форму компонента.
- * @param {string} props.size - Размер компонента.
- * @param {string} props.align - Выравнивание элементов внутри компонента.
- * @param {string} props.justify - Выравнивание элементов по горизонтали внутри компонента.
- * @param {any} props.leftSection - Левая секция компонента.
- * @param {any} props.rightSection - Правая секция компонента.
- * @param {any} props.children - Дочерние элементы компонента.
- * @param {any} props.as - HTML-элемент, который будет использоваться для отображения компонента.
- * @param {any} props.leftSection - Левая секция компонента.
- * @param {any} props.rightSection - Правая секция компонента.
- * @param {any} ref - Референс компонента.
- * @returns {JSX.Element} Элемент div с заданной структурой и стилями.
- */
+* Компонент для создания гибкой структуры с возможностью размещения элементов в колонки.
+
+* @type {React.ForwardRefExoticComponent}
+* @param {object} props - свойства
+* @param {string|Function} [props.className] - классы
+* @param {string} [props.bodyClass] - классы для тела
+* @param {boolean} [props.noPadding] - флаг для отключения отступов
+* @param {boolean} [props.col] - флаг для вертикального расположения элементов
+* @param {boolean} [props.row] - флаг для горизонтального расположения элементов
+* @param {boolean} [props.noWrap] - флаг для отключения переноса элементов на новую строку
+* @param {boolean} [props.dense] - флаг для плотного расположения элементов
+* @param {boolean} [props.square] - флаг для квадратного расположения элементов
+* @param {string} [props.size] - размер элементов
+* @param {string} [props.align] - выравнивание элементов по вертикали
+* @param {string} [props.justify] - выравнивание элементов по горизонтали
+* @param {React.ReactNode} [props.children] - дочерние элементы
+* @param {string|React.ReactElement} [props.leftSection] - левый раздел
+* @param {string|React.ReactElement} [props.rightSection] - правый раздел
+* @param {React.Ref} ref - ссылка
+* @returns {React.ReactElement} элемент Sections
+*/
 export const Sections = forwardRefWithAs(function Box(
 	{
 		className,

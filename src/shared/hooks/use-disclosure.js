@@ -1,10 +1,12 @@
 import { useCallback, useState } from "react";
 
 /**
- *
- * @param {*} initial
- * @param {*} param1
- * @returns
+ * Функция useDisclosure создает состояние и обработчики для управления открытием и закрытием компонента.
+ * @param {boolean} [initial=false] - Начальное значение состояния.
+ * @param {Object} [options] - Объект с опциями.
+ * @param {Function} [options.onOpen] - Функция, которая будет вызвана при открытии компонента.
+ * @param {Function} [options.onClose] - Функция, которая будет вызвана при закрытии компонента.
+ * @returns {Array} - Массив, содержащий текущее значение состояния и объект с обработчиками для открытия, закрытия и переключения состояния.
  */
 export function useDisclosure(initial = false, { onOpen, onClose } = {}) {
 	const [opened, setOpened] = useState(initial);

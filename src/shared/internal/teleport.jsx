@@ -58,7 +58,7 @@ export const Teleport = forwardRef(function Teleport(
 	const [mounted, setMounted] = useState(false);
 	const nodeRef = useRef(null);
 
-	useLayoutEffect(() => {
+	useRenderEffect(() => {
 		setMounted(true);
 
 		nodeRef.current = !target

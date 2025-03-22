@@ -5,10 +5,9 @@ import { isFunction, isString } from "../utils/is";
 import { render } from "./render";
 
 /**
- * Определяет значение параметра на основе текущего breakpoint.
- *
- * @param {Object} responsiveValue - Объект с responsive-значениями (например, { base: 'sm', sm: 'lg' }).
- * @returns {string} Актуальное значение параметра.
+ * Функция getResponsiveValue возвращает значение, соответствующее текущему размеру экрана.
+ * @param {Object} responsiveValue - Объект с значениями для разных размеров экрана.
+ * @returns {*} - Значение, соответствующее текущему размеру экрана.
  */
 function getResponsiveValue(responsiveValue) {
 	if (!responsiveValue || typeof responsiveValue !== "object") {
@@ -37,12 +36,11 @@ function getResponsiveValue(responsiveValue) {
 }
 
 /**
- * Генерирует стили на основе вариантов.
- *
- * @param {string} name - Префикс для CSS-переменных.
- * @param {Object} vars - Объект с вариантами стилей.
- * @param {Object} props - Пропсы компонента.
- * @returns {Object} Объект стилей.
+ * Функция variantStyles создает стили для варианта компонента.
+ * @param {string} name - Имя варианта.
+ * @param {Object} [vars={}] - Объект с переменными для варианта.
+ * @param {Object} [props={}] - Объект с свойствами для варианта.
+ * @returns {Object} - Объект со стилями для варианта.
  */
 function variantStyles(name, vars = {}, props = {}) {
 	if (!name) {
@@ -81,7 +79,7 @@ function variantStyles(name, vars = {}, props = {}) {
  * @param {Object} [props.vars] - Варианты стилей.
  * @param {Object|Function} [props.style] - Стили или функция для генерации стилей.
  * @param {any} ref - Референс компонента.
- * @returns {JSX.Element} Элемент div с заданными стилями.
+ * @returns {React.ReactElement} Элемент div с заданными стилями.
  */
 export function Unstyled({ name, vars = {}, style, ...props }) {
 	const [computedStyle, setComputedStyle] = useState({});
@@ -98,9 +96,11 @@ export function Unstyled({ name, vars = {}, style, ...props }) {
 			  };
 		setComputedStyle(newStyles);
 	}, [name, vars, style, props]);
+
 	useEffect(() => {
 		updateStyles();
 	}, []);
+
 	useWindowEvent("resize", updateStyles);
 
 	return render("div", {

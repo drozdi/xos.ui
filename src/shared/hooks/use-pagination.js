@@ -1,13 +1,34 @@
 import { useMemo } from "react";
 import { useUncontrolled } from "./use-uncontrolled";
 
+/**
+ * Функция range создает массив чисел в указанном диапазоне.
+ * @param {number} start - Начальное значение диапазона.
+ * @param {number} end - Конечное значение диапазона.
+ * @returns {Array} - Массив чисел в указанном диапазоне.
+ */
 function range(start, end) {
 	const length = end - start + 1;
 	return Array.from({ length }, (_, index) => index + start);
 }
 
+/**
+ * Константа DOTS используется для обозначения точек в пагинации.
+ * @type {string}
+ */
 export const DOTS = "dots";
 
+/**
+ * Функция usePagination используется для создания пагинации.
+ * @param {Object} options - Объект с параметрами.
+ * @param {number} options.total - Общее количество страниц.
+ * @param {number} [options.siblings=1] - Количество соседних страниц.
+ * @param {number} [options.boundaries=1] - Количество страниц на границах.
+ * @param {number} [options.page] - Текущая страница.
+ * @param {number} [options.initial=1] - Начальная страница.
+ * @param {Function} [options.onChange] - Функция, которая будет вызываться при изменении страницы.
+ * @returns {Object} - Объект, содержащий диапазон страниц, текущую страницу и функции для управления страницами.
+ */
 export function usePagination({
 	total,
 	siblings = 1,
