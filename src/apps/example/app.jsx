@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import appsManager from "../../entites/core/apps-manager";
 import { History, Layout, Window } from "../../features";
 import { useApp } from "../../features/app";
 import { Box } from "../../shared/internal/box";
@@ -72,13 +71,6 @@ export function AppExample({ ...props }) {
 	);
 }
 
-AppExample.displayName = "./example/AppExample";
+AppExample.displayName = "apps/example/app";
 
-appsManager.append(
-	{ displayName: "./example/AppExample" },
-	{
-		pathName: "example-app",
-		wmGroup: "example-app",
-		wmSort: 1,
-	}
-);
+export default AppExample;

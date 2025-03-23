@@ -1,5 +1,5 @@
-import appsManager from "../../entites/core/apps-manager";
 import { Window } from "../../features";
+import { useApp } from "../../features/app";
 import { Box } from "../../shared/internal/box";
 import { XBtn } from "../../shared/ui";
 import { Field, Information } from "./components";
@@ -19,7 +19,8 @@ const WIN_COMBINATIONS = [
 
 export function AppTicTacToe() {
 	const { isEnd, field, setPlayer, draw, endGame, restart } = store();
-
+	const $app = useApp();
+	$app.on("reload", () => restart());
 	const checkWinner = () => {
 		if (isEnd) {
 			return;
@@ -41,7 +42,7 @@ export function AppTicTacToe() {
 	checkWinner();
 
 	return (
-		<Window title="Крестик Нолик" icons="collapse close">
+		<Window title="Крестик Нолик" draggable icons="reload collapse close">
 			<Box col className="tic-tao-toe">
 				<Box.Section row side className="text-2xl">
 					<Box.Section>
@@ -65,13 +66,6 @@ export function AppTicTacToe() {
 	);
 }
 
-AppTicTacToe.displayName = "./tic-tac-toe/AppTicTacToe";
+AppTicTacToe.displayName = "apps/tic-tac-toe/app";
 
-appsManager.append(
-	{ displayName: "./tic-tac-toe/AppTicTacToe" },
-	{
-		pathName: "tic-tac-toe-app",
-		wmGroup: "tic-tac-toe-app",
-		wmSort: 1,
-	}
-);
+export default AppTicTacToe;

@@ -147,7 +147,7 @@ export const Window = memo(
 			$sm.useStateObject("state", {});
 
 		const _active = useMemo(
-			() => isActive({ uid }) ?? active,
+			() => isActive?.({ uid }) ?? active,
 			[isActive, active]
 		);
 
@@ -179,7 +179,15 @@ export const Window = memo(
 				if (!canDo("collapse")) {
 					return;
 				}
-				updateState((v) => ({ isCollapse: !v.isCollapse }));
+				updateState((v) => {
+					if (!v.isCollapse) {
+						wmDisable?.();
+					}
+					return {
+						isCollapse: !v.isCollapse,
+						active: !v.isCollapse ? false : v.active,
+					};
+				});
 			},
 			[canDo, updateState]
 		);
@@ -204,53 +212,30 @@ export const Window = memo(
 			[canDo, emit, onReload]
 		);
 
-		const onActive = useCallback(() => {
-			if (!active) {
-				setZIndex?.(zIndex + 2);
-				setPosition((v) => ({ ...v, zIndex }));
-				wmActive?.({ uid });
-			}
-			updateState({ active: true, isCollapse: false });
-		}, [
-			updateState,
-			setPosition,
-			setZIndex,
-			active,
-			uid,
-			zIndex,
-			wmActive,
-		]);
+		const onActive = useCallback(
+			(event) => {
+				event?.stopPropagation?.();
+				if (!active) {
+					setZIndex?.(zIndex + 2);
+					setPosition((v) => ({ ...v, zIndex }));
+					wmActive?.({ uid });
+					emit("focus", event);
+					emit("activated", event);
+					updateState({ active: true, isCollapse: false });
+				}
+			},
+			[updateState, setPosition, setZIndex, active, uid, zIndex, wmActive]
+		);
 		const onDeActive = useCallback(
 			(event) => {
 				if (active && !nodeRef.current?.contains(event.target)) {
 					isActive({ uid }) && wmDisable();
 					updateState({ active: false });
+					emit("blur", event);
+					emit("deactivated", event);
 				}
 			},
 			[nodeRef, active, uid, isActive, updateState, wmDisable]
-		);
-		const onFocus = useCallback(
-			(event) => {
-				//event?.stopPropagation();
-				emit("focus", event);
-				if ($app) {
-					emit("activated", event);
-				} else {
-					onActive(event);
-				}
-			},
-			[emit, onActive, $app]
-		);
-		const onBlur = useCallback(
-			(event) => {
-				emit("blur", event);
-				if ($app) {
-					emit("deactivated", event);
-				} else {
-					onDeActive(event);
-				}
-			},
-			[emit, onDeActive, $app]
 		);
 
 		const win = useMemo(
@@ -389,8 +374,8 @@ export const Window = memo(
 				get title() {
 					return title;
 				},
-				focus: onFocus,
-				blur: onBlur,
+				focus: onActive,
+				blur: onDeActive,
 			}),
 			[
 				uid,
@@ -407,8 +392,8 @@ export const Window = memo(
 				parent,
 				updateState,
 				setPosition,
-				onBlur,
-				onFocus,
+				onDeActive,
+				onActive,
 			]
 		);
 
@@ -523,19 +508,22 @@ export const Window = memo(
 		useImperativeHandle(ref, () => win);
 
 		useEffect(() => {
-			document.documentElement.addEventListener("click", onBlur);
+			document.documentElement.addEventListener("click", onDeActive);
 			return () => {
-				document.documentElement.removeEventListener("click", onBlur);
+				document.documentElement.removeEventListener(
+					"click",
+					onDeActive
+				);
 			};
-		}, [onBlur]);
+		}, [onDeActive]);
 
 		useEffect(() => {
 			$sm.active = true;
 			win.z = zIndex = Math.max(zIndex, position.zIndex);
 			setZIndex(zIndex);
-			wmAdd(win);
+			wmAdd?.(win);
 
-			active && wmActive(win);
+			active && wmActive?.(win);
 
 			$sm.first(() => {
 				if (w) win.w = w;
@@ -545,20 +533,20 @@ export const Window = memo(
 			});
 
 			return () => {
-				wmDisable();
-				wmDel(win);
+				wmDisable?.();
+				wmDel?.(win);
 				$sm.remove();
 			};
 		}, []);
 
 		useEffect(() => {
 			$app?.register(win);
-			$app?.on("activated", onActive);
-			$app?.on("deactivated", onDeActive);
+			//$app?.on("activated", onActive);
+			//$app?.on("deactivated", onDeActive);
 			return () => {
-				$app?.off("activated", onActive);
-				$app?.off("deactivated", onDeActive);
-				$app?.unRegister(win);
+				//$app?.off("activated", onActive);
+				//$app?.off("deactivated", onDeActive);
+				//$app?.unRegister(win);
 			};
 		}, []);
 
@@ -609,7 +597,7 @@ export const Window = memo(
 							})}
 							style={style}
 							ref={nodeRef}
-							onClick={onFocus}
+							onClick={onActive}
 						>
 							<Box
 								className="xWindow-bar"

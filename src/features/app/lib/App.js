@@ -4,20 +4,23 @@ import { HistoryStore } from "./History";
 import { Storage } from "./Storage";
 
 export class App extends EventBus {
-	constructor(smKey) {
+	constructor({ smKey }) {
 		super();
 		this.root = null;
 		this.smKey = smKey;
+		this.isActive = false;
+		this.pathName = {};
 		this.__history = {
 			current: null,
 		};
+		this.__config = {};
 		this.__instance = {};
-		this.on("close", () => {
-			this.unmount();
-		});
 		"remove close reload".split(/\s+/).forEach((evt) => {
 			this[evt] = (...args) => this.emit(evt, ...args);
 		});
+	}
+	get win() {
+		return this.__instance.window;
 	}
 	register(instance) {
 		if (instance?.__) {
@@ -28,9 +31,6 @@ export class App extends EventBus {
 		if (instance?.__) {
 			delete this.__instance[instance.__];
 		}
-	}
-	get win() {
-		return this.__instance.window;
 	}
 	default(config = {}) {
 		this.__config = config;
@@ -77,16 +77,11 @@ export class App extends EventBus {
 		return Storage(type, this.smKey);
 	}
 	active(...args) {
+		this.isActive = true;
 		this.emit("activated", ...args);
 	}
 	deActive(...args) {
+		this.isActive = false;
 		this.emit("deactivated", ...args);
-	}
-	unmount() {
-		const container = this.root?._internalRoot.containerInfo;
-		this.root?.unmount();
-		if (container) {
-			container.remove();
-		}
 	}
 }

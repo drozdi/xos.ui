@@ -1,6 +1,7 @@
-import { AppCalculator } from "./apps/calculator/AppCalculator";
-import { AppExample } from "./apps/example/app";
-import { AppTicTacToe } from "./apps/tic-tac-toe/AppTicTacToe";
+import { useEffect } from "react";
+import "./apps/calculator/core";
+import "./apps/example/core";
+import "./apps/tic-tac-toe/core";
 import appsManager from "./entites/core/apps-manager";
 import { Layout } from "./features";
 import { WindowManager } from "./features/window-manager";
@@ -10,15 +11,18 @@ import { XBadge, XBtn, XMain, XPill } from "./shared/ui";
 import "./style/index.css";
 
 function App() {
-	const onExample = () => {
-		appsManager.createApp(AppExample, {});
-	};
 	const onCalculator = () => {
-		appsManager.createApp(AppCalculator, {});
+		appsManager.createApp("apps/calculator/app", {});
+	};
+	const onExample = () => {
+		appsManager.createApp("apps/example/app", {});
 	};
 	const onTicTacToe = () => {
-		appsManager.createApp(AppTicTacToe, {});
+		appsManager.createApp("apps/tic-tac-toe/app", {});
 	};
+	useEffect(() => {
+		appsManager.reloadApps();
+	}, []);
 
 	return (
 		<ThemeProvider>

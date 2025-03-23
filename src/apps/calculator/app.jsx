@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import appsManager from "../../entites/core/apps-manager";
 import { Window } from "../../features";
 import { useApp } from "../../features/app";
 import { useStateObject } from "../../shared/hooks";
 import { Box } from "../../shared/internal/box";
 import { XBtn } from "../../shared/ui";
+
+import { isObject } from "../../shared/utils/is";
 
 const zeroDivisionError = "Can't divide with 0";
 const matrix = [
@@ -138,19 +139,21 @@ export function AppCalculator() {
 	};
 
 	const handleClickButton = (num) => {
-		num === "C" || expr2 === zeroDivisionError
-			? handleClickReset(num !== "C" ? num : "0")
-			: num === "+-"
-			? handleClickInvert()
-			: num === "="
-			? handleClickEqual()
-			: num === "%"
-			? handleClickPercent()
-			: "+-*/".split("").includes(num)
-			? handleClickSign(num)
-			: num === "."
-			? handleClickComa()
-			: handleClickNum(num);
+		if (num === "C" || expr2 === zeroDivisionError) {
+			handleClickReset(num !== "C" ? num : "0");
+		} else if (num === "+-") {
+			handleClickInvert();
+		} else if (num === "=") {
+			handleClickEqual();
+		} else if (num === "%") {
+			handleClickPercent();
+		} else if ("+-*/".includes(num)) {
+			handleClickSign(num);
+		} else if (".,".includes(num)) {
+			handleClickComa();
+		} else {
+			handleClickNum(num);
+		}
 	};
 
 	const title = useMemo(() => {
@@ -170,19 +173,49 @@ export function AppCalculator() {
 		return `${expr1} ${sign}`;
 	}, [expr1, prev, sign]);
 
+	const onKeyPress = (event) => {
+		console.log(event);
+		event.stopPropagation();
+		event.preventDefault();
+		const key = event.key;
+
+		if (key === "Enter") {
+			handleClickButton("=");
+		} else if (key === "Backspace") {
+			handleClickButton("C");
+		} else if ("0123456789+-*/,.%".includes(key)) {
+			handleClickButton(key);
+		}
+	};
+
 	useEffect(() => {
-		$app?.on("activated", () => {
+		const handleKeyPress = (event) => onKeyPress(event);
+
+		const onActivated = () => {
 			console.log("activated");
-		});
-		$app?.on("deactivated", () => {
-			console.log("deactivated");
-		});
-		console.log($app);
-		return () => {
-			$app?.off("activated");
-			$app?.off("deactivated");
+			document.addEventListener("keydown", handleKeyPress);
 		};
-	}, []);
+
+		const onDeactivated = () => {
+			console.log("deactivated");
+			document.removeEventListener("keydown", handleKeyPress);
+		};
+
+		// Подписываемся на события активации и деактивации
+		$app?.on("activated", onActivated);
+		$app?.on("deactivated", onDeactivated);
+
+		// Инициализация: если приложение уже активно, добавляем обработчик
+		if ($app?.isActive) {
+			onActivated();
+		}
+
+		return () => {
+			$app?.emit("deactivated");
+			$app?.off("activated", onActivated);
+			$app?.off("deactivated", onDeactivated);
+		};
+	}, [expr1, expr2, prev, sign, $app]);
 
 	return (
 		<Window
@@ -205,25 +238,35 @@ export function AppCalculator() {
 				</Box.Section>
 				{matrix.map((lines, index) => (
 					<XBtn.Group grow pills key={index}>
-						{lines.map((num, index) => (
-							<XBtn
-								key={index}
-								className={
-									num === "="
-										? "w-[calc(50%+6*var(--spacing))]"
-										: "w-1/4"
-								}
-								color={
-									index === 3 || num === "="
-										? "accent"
-										: "info"
-								}
-								onClick={() => handleClickButton(`${num}`)}
-								disabled={disabled.includes(num)}
-							>
-								{num}
-							</XBtn>
-						))}
+						{lines.map((num, index) => {
+							const key = {
+								span: 1,
+								...(isObject(num)
+									? num
+									: {
+											value: num,
+									  }),
+							};
+							return (
+								<XBtn
+									key={index}
+									className={
+										num === "="
+											? "w-[calc(50%+6*var(--spacing))]"
+											: "w-1/4"
+									}
+									color={
+										index === 3 || num === "="
+											? "accent"
+											: "info"
+									}
+									onClick={() => handleClickButton(`${num}`)}
+									disabled={disabled.includes(num)}
+								>
+									{num}
+								</XBtn>
+							);
+						})}
 					</XBtn.Group>
 				))}
 			</Box>
@@ -231,13 +274,6 @@ export function AppCalculator() {
 	);
 }
 
-AppCalculator.displayName = "./calculator/AppCalculator";
+AppCalculator.displayName = "apps/calculator/app";
 
-appsManager.append(
-	{ displayName: "./calculator/AppCalculator" },
-	{
-		pathName: "calculator-app",
-		wmGroup: "calculator-app",
-		wmSort: 1,
-	}
-);
+export default AppCalculator;
