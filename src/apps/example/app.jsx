@@ -13,13 +13,13 @@ import {
 import { routers } from "./index";
 
 export function AppExample({ ...props }) {
-	console.log(props);
+	//console.log(props);
 	const [view, setView] = useState("");
 	const $app = useApp();
 	const $history = $app.history((history) => {
 		setView(routers.find((item) => item.path === history)?.element);
 	});
-	console.log($app);
+	//console.log($app);
 	useEffect(() => {
 		if ($history.isEmpty()) {
 			$history.add("/");

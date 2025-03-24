@@ -174,7 +174,7 @@ export function AppCalculator() {
 	}, [expr1, prev, sign]);
 
 	const onKeyPress = (event) => {
-		console.log(event);
+		//console.log(event);
 		event.stopPropagation();
 		event.preventDefault();
 		const key = event.key;
@@ -192,12 +192,12 @@ export function AppCalculator() {
 		const handleKeyPress = (event) => onKeyPress(event);
 
 		const onActivated = () => {
-			console.log("activated");
+			//console.log("activated");
 			document.addEventListener("keydown", handleKeyPress);
 		};
 
 		const onDeactivated = () => {
-			console.log("deactivated");
+			//console.log("deactivated");
 			document.removeEventListener("keydown", handleKeyPress);
 		};
 

@@ -143,12 +143,14 @@ export const Window = memo(
 			zIndex: z,
 		});
 		//??? error DevTools
-		const [{ isFullscreen, isCollapse, active }, updateState] =
-			$sm.useStateObject("state", {});
+		const [
+			{ isFullscreen, isCollapse, isActive: stateActive },
+			updateState,
+		] = $sm.useStateObject("state", {});
 
-		const _active = useMemo(
-			() => isActive?.({ uid }) ?? active,
-			[isActive, active]
+		const active = useMemo(
+			() => isActive?.({ uid }) ?? stateActive,
+			[isActive, uid, stateActive]
 		);
 
 		const emit = useCallback(
@@ -167,12 +169,15 @@ export const Window = memo(
 				if (!canDo("fullscreen") || !resizable) {
 					return;
 				}
-				updateState((v) => ({
-					isCollapse: false,
-					isFullscreen: !v.isFullscreen,
-				}));
+				updateState((v) => {
+					onFullscreen?.(!v.isFullscreen);
+					return {
+						isCollapse: false,
+						isFullscreen: !v.isFullscreen,
+					};
+				});
 			},
-			[canDo, updateState, resizable]
+			[canDo, updateState, resizable, onFullscreen]
 		);
 		const handlerCollapse = useCallback(
 			(event) => {
@@ -183,21 +188,22 @@ export const Window = memo(
 					if (!v.isCollapse) {
 						wmDisable?.();
 					}
+					onCollapse?.(!v.isCollapse);
 					return {
 						isCollapse: !v.isCollapse,
-						active: !v.isCollapse ? false : v.active,
+						isActive: !v.isCollapse ? false : v.isActive,
 					};
 				});
 			},
-			[canDo, updateState]
+			[canDo, updateState, onCollapse]
 		);
 		const handlerClose = useCallback(
 			(event) => {
 				if (!canDo("close")) {
 					return false;
 				}
-				onClose?.(event);
 				emit("close", event);
+				onClose?.(event);
 			},
 			[canDo, emit, onClose]
 		);
@@ -214,14 +220,15 @@ export const Window = memo(
 
 		const onActive = useCallback(
 			(event) => {
-				event?.stopPropagation?.();
 				if (!active) {
-					setZIndex?.(zIndex + 2);
-					setPosition((v) => ({ ...v, zIndex }));
-					wmActive?.({ uid });
-					emit("focus", event);
-					emit("activated", event);
-					updateState({ active: true, isCollapse: false });
+					setTimeout(() => {
+						setZIndex?.(zIndex + 2);
+						setPosition((v) => ({ ...v, zIndex }));
+						wmActive?.({ uid });
+						updateState({ isActive: true, isCollapse: false });
+						emit("focus", event);
+						emit("activated", event);
+					}, 0);
 				}
 			},
 			[updateState, setPosition, setZIndex, active, uid, zIndex, wmActive]
@@ -229,13 +236,13 @@ export const Window = memo(
 		const onDeActive = useCallback(
 			(event) => {
 				if (active && !nodeRef.current?.contains(event.target)) {
-					isActive({ uid }) && wmDisable();
-					updateState({ active: false });
+					wmDisable();
 					emit("blur", event);
 					emit("deactivated", event);
 				}
+				updateState({ isActive: false });
 			},
-			[nodeRef, active, uid, isActive, updateState, wmDisable]
+			[nodeRef, active, uid, updateState, wmDisable, title]
 		);
 
 		const win = useMemo(
@@ -363,7 +370,7 @@ export const Window = memo(
 					return active;
 				},
 				set active(val) {
-					updateState({ active: val });
+					updateState({ isActive: val });
 				},
 				get content() {
 					return contentRef.current;
@@ -546,7 +553,7 @@ export const Window = memo(
 			return () => {
 				//$app?.off("activated", onActive);
 				//$app?.off("deactivated", onDeActive);
-				//$app?.unRegister(win);
+				$app?.unRegister(win);
 			};
 		}, []);
 

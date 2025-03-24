@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import appsManager from "../../../entites/core/apps-manager";
 import { EventBus } from "../../../shared/utils/EventBus";
 import { HistoryStore } from "./History";
 import { Storage } from "./Storage";
@@ -9,7 +10,8 @@ export class App extends EventBus {
 		this.root = null;
 		this.smKey = smKey;
 		this.isActive = false;
-		this.pathName = {};
+		this.pathName = null;
+		this.element = null;
 		this.__history = {
 			current: null,
 		};
@@ -83,5 +85,17 @@ export class App extends EventBus {
 	deActive(...args) {
 		this.isActive = false;
 		this.emit("deactivated", ...args);
+	}
+
+	// Монтирование приложения
+	mount() {
+		appsManager.mountRoot(this);
+		this.active();
+	}
+
+	// Демонтирование приложения
+	unMount() {
+		this.deActive();
+		appsManager.unMountRoot(this);
 	}
 }

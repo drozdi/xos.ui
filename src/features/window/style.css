@@ -94,7 +94,7 @@
 }
 .xWindow--active {
 	&:after {
-		@apply border-t-primary;
+		@apply border-t-red-500;
 	}
 }
 
