@@ -80,9 +80,8 @@ const appsManager = {
 				});
 				mount && this.mountRoot(this.runs[pathName]);
 			} else {
-				this.runs[pathName].active();
+				this.get$App(this.runs[pathName])?.active();
 			}
-
 			return this.runs[pathName];
 		} catch (error) {
 			console.error("Error building app:", error);
