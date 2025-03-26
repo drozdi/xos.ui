@@ -98,29 +98,6 @@ export const Window = memo(
 		},
 		ref
 	) {
-		/*const {
-			parent = document.body,
-			aspectFactor,
-			children,
-			className,
-			x,
-			y,
-			z,
-			w,
-			h,
-			title,
-			icons = "close",
-			//icons = "reload collapse fullscreen close",
-			onFullscreen,
-			onCollapse,
-			onReload,
-			onClose,
-			resizable,
-			draggable,
-			wmGroup,
-			wmSort = 0,
-		} = useProps(props);*/
-
 		const uid = useId();
 		const $app = useApp();
 		const $sm = $app.sm("WINDOW");
@@ -154,58 +131,43 @@ export const Window = memo(
 
 		const canDo = useCallback((type) => icons.includes(type), [icons]);
 
-		const handlerFullscreen = useCallback(
-			(event) => {
-				if (!canDo("fullscreen") || !resizable) {
-					return;
-				}
-				updateState((v) => {
-					onFullscreen?.(!v.isFullscreen);
-					return {
-						isCollapse: false,
-						isFullscreen: !v.isFullscreen,
-					};
-				});
-			},
-			[canDo, updateState, resizable, onFullscreen]
-		);
-		const handlerCollapse = useCallback(
-			(event) => {
-				if (!canDo("collapse")) {
-					return;
-				}
-				updateState((v) => {
-					if (!v.isCollapse) {
-						wm.disable?.();
-					}
-					onCollapse?.(!v.isCollapse);
-					return {
-						isCollapse: !v.isCollapse,
-						isActive: !v.isCollapse ? false : v.isActive,
-					};
-				});
-			},
-			[canDo, updateState, onCollapse]
-		);
+		// Обработчик полного экрана
+		const handlerFullscreen = useCallback(() => {
+			if (!resizable) return;
+			const newState = !isFullscreen;
+			updateState({ isFullscreen: newState, isCollapse: false });
+			onFullscreen?.(newState);
+		}, [isFullscreen, resizable, onFullscreen]);
+
+		// Обработчик свернуть экрана
+		const handlerCollapse = useCallback(() => {
+			const newState = !isCollapse;
+			updateState({
+				isCollapse: newState,
+				isActive: newState ? false : isActive,
+			});
+			if (newState) {
+				wm?.disable?.();
+			}
+			onCollapse?.(newState);
+		}, [isCollapse, isActive, onCollapse]);
+
+		// Обработчик закрыть экрана
 		const handlerClose = useCallback(
 			(event) => {
-				if (!canDo("close")) {
-					return false;
-				}
 				emit("close", event);
 				onClose?.(event);
 			},
-			[canDo, emit, onClose]
+			[onClose]
 		);
+
+		// Обработчик обновить
 		const handlerReload = useCallback(
 			(event) => {
-				if (!canDo("reload")) {
-					return false;
-				}
 				emit("reload", event);
 				onReload?.(event);
 			},
-			[canDo, emit, onReload]
+			[onReload]
 		);
 
 		const onActive = useCallback(
