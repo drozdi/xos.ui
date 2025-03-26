@@ -1,4 +1,5 @@
 @reference "@style";
+
 .xWindow {
 	@apply absolute m-0 p-0 border border-color bg-surface w-96 h-96 grid grid-rows-(--grid-row-window) transition-none;
 }
@@ -87,7 +88,6 @@
 	&:after {
 		content: " ";
 		@apply block h-0 absolute top-0 border-8 border-b-0 border-transparent border-t-info/50;
-		@apply block h-0 absolute top-0;
 		left: calc(var(--x-window-line-offset) + 1px);
 		right: calc(var(--x-window-line-offset) + 1px);
 	}
