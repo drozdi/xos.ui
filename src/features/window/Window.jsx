@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import {
+	cloneElement,
+	forwardRef,
 	memo,
 	useCallback,
 	useEffect,
@@ -129,10 +131,8 @@ export const Window = memo(
 		const nodeRef = useRef();
 		const contentRef = useRef();
 
-		const canDo = useCallback((type) => icons.includes(type), [icons]);
-
 		// Обработчик полного экрана
-		const handlerFullscreen = useCallback(() => {
+		const handleFullscreen = useCallback(() => {
 			if (!resizable) return;
 			const newState = !isFullscreen;
 			updateState({ isFullscreen: newState, isCollapse: false });
@@ -140,7 +140,7 @@ export const Window = memo(
 		}, [isFullscreen, resizable, onFullscreen]);
 
 		// Обработчик свернуть экрана
-		const handlerCollapse = useCallback(() => {
+		const handleCollapse = useCallback(() => {
 			const newState = !isCollapse;
 			updateState({
 				isCollapse: newState,
@@ -153,7 +153,7 @@ export const Window = memo(
 		}, [isCollapse, isActive, onCollapse]);
 
 		// Обработчик закрыть экрана
-		const handlerClose = useCallback(
+		const handleClose = useCallback(
 			(event) => {
 				emit("close", event);
 				onClose?.(event);
@@ -162,13 +162,34 @@ export const Window = memo(
 		);
 
 		// Обработчик обновить
-		const handlerReload = useCallback(
+		const handleReload = useCallback(
 			(event) => {
 				emit("reload", event);
 				onReload?.(event);
 			},
 			[onReload]
 		);
+
+		// Обработчик размера окна
+		const handleResize = useCallback((e, { handle, size }) => {
+			setPosition((v) => ({
+				...v,
+				...changeHandle[handle](
+					v,
+					v.width - size.width,
+					v.height - size.height
+				),
+			}));
+		}, []);
+
+		// Обработчик перетаскивания окна
+		const handleDrag = useCallback((e, { deltaX, deltaY }) => {
+			setPosition((v) => ({
+				...v,
+				top: v.top + deltaY,
+				left: v.left + deltaX,
+			}));
+		}, []);
 
 		const onActive = useCallback(
 			(event) => {
@@ -375,106 +396,6 @@ export const Window = memo(
 				: position;
 		}, [isFullscreen, isCollapse, position]);
 
-		const mixIcons = useMemo(
-			() => (
-				<Box.Section
-					top
-					side
-					row
-					noPadding
-					as={XBtn.Group}
-					className="xWindow-drag-no"
-					color="dark"
-					size="sm"
-					flat
-					square
-				>
-					{(icons || "").split(/\s+/).map((type) => {
-						if (type === "close") {
-							return (
-								<XBtn
-									key={type}
-									className={
-										"bg-red-700/60 hover:bg-red-700/40"
-									}
-									leftSection="mdi-close"
-									title="Закрыть"
-									onClick={handlerClose}
-								/>
-							);
-						} else if (type === "reload") {
-							return (
-								<XBtn
-									key={type}
-									leftSection="mdi-reload"
-									title="Обновить"
-									onClick={handlerReload}
-								/>
-							);
-						} else if (type === "fullscreen" && resizable) {
-							return (
-								<XBtn
-									onClick={handlerFullscreen}
-									key={type}
-									leftSection={
-										isFullscreen
-											? "mdi-fullscreen-exit"
-											: "mdi-fullscreen"
-									}
-									title={
-										isFullscreen
-											? "Свернуть в окно"
-											: "Развернуть"
-									}
-								/>
-							);
-						} else if (type === "collapse") {
-							return (
-								<XBtn
-									onClick={handlerCollapse}
-									key={type}
-									leftSection="mdi-window-minimize"
-									title="Свернуть"
-								/>
-							);
-						}
-						return null;
-					})}
-				</Box.Section>
-			),
-			[
-				icons,
-				resizable,
-				isFullscreen,
-				handlerFullscreen,
-				handlerCollapse,
-				handlerClose,
-				handlerReload,
-			]
-		);
-
-		const onResizeMove = useCallback((e, { handle, size }) => {
-			setPosition((v) => ({
-				...v,
-				...changeHandle[handle](
-					v,
-					v.width - size.width,
-					v.height - size.height
-				),
-			}));
-		}, []);
-		const onDragMove = useCallback(
-			(e, { deltaX, deltaY }) => {
-				!isFullscreen &&
-					setPosition((v) => ({
-						...v,
-						top: v.top + deltaY,
-						left: v.left + deltaX,
-					}));
-			},
-			[isFullscreen]
-		);
-
 		useImperativeHandle(ref, () => win);
 
 		useEffect(() => {
@@ -536,7 +457,7 @@ export const Window = memo(
 			<WindowProvider value={win}>
 				<DraggableCore
 					disabled={!draggable || isFullscreen}
-					onDrag={onDragMove}
+					onDrag={handleDrag}
 					handle=".xWindow-bar"
 					cancel=".xWindow-res, .xWindow-drag-no"
 					nodeRef={nodeRef}
@@ -548,7 +469,7 @@ export const Window = memo(
 						}}
 						width={position.width}
 						height={position.height}
-						onResize={onResizeMove}
+						onResize={handleResize}
 						resizeHandles={[
 							"s",
 							"w",
@@ -584,14 +505,22 @@ export const Window = memo(
 							<Box
 								className="xWindow-bar"
 								justify="between"
-								onDoubleClick={handlerFullscreen}
+								onDoubleClick={handleFullscreen}
 							>
 								{title && (
 									<Box.Section side className="xWindow-title">
 										{title}
 									</Box.Section>
 								)}
-								{mixIcons}
+								<WindowIcons
+									icons={icons}
+									isFullscreen={isFullscreen}
+									onFullscreen={handleFullscreen}
+									onCollapse={handleCollapse}
+									onClose={handleClose}
+									onReload={handleReload}
+									resizable={resizable}
+								/>
 							</Box>
 
 							<div className="xWindow-content" ref={contentRef}>
@@ -625,4 +554,144 @@ Window.propTypes = {
 	draggable: PropTypes.bool,
 	wmGroup: PropTypes.string,
 	wmSort: PropTypes.number,
+};
+
+const WindowIcons = memo(
+	({
+		icons,
+		isFullscreen,
+		onFullscreen = () => {},
+		onCollapse = () => {},
+		onClose = () => {},
+		onReload = () => {},
+		resizable,
+	}) => (
+		<Box.Section
+			top
+			side
+			row
+			noPadding
+			as={XBtn.Group}
+			className="xWindow-drag-no"
+			color="dark"
+			size="sm"
+			flat
+			square
+		>
+			{icons.split(/\s+/).map((type) => {
+				switch (type) {
+					case "close":
+						return (
+							<XBtn
+								key={type}
+								className="bg-red-700/60"
+								leftSection="mdi-close"
+								title="Закрыть"
+								onClick={onClose}
+							/>
+						);
+					case "reload":
+						return (
+							<XBtn
+								key={type}
+								leftSection="mdi-reload"
+								title="Обновить"
+								onClick={onReload}
+							/>
+						);
+					case "fullscreen":
+						return (
+							resizable && (
+								<XBtn
+									key={type}
+									onClick={onFullscreen}
+									leftSection={
+										isFullscreen
+											? "mdi-fullscreen-exit"
+											: "mdi-fullscreen"
+									}
+									title={
+										isFullscreen
+											? "Свернуть в окно"
+											: "Развернуть"
+									}
+								/>
+							)
+						);
+					case "collapse":
+						return (
+							<XBtn
+								key={type}
+								onClick={onCollapse}
+								leftSection="mdi-window-minimize"
+								title="Свернуть"
+							/>
+						);
+					default:
+						return null;
+				}
+			})}
+		</Box.Section>
+	)
+);
+WindowIcons.displayName = "./features/WindowIcons";
+WindowIcons.propTypes = {
+	icons: PropTypes.string,
+	resizable: PropTypes.bool,
+	isFullscreen: PropTypes.bool,
+	onFullscreen: PropTypes.func,
+	onCollapse: PropTypes.func,
+	onClose: PropTypes.func,
+	onReload: PropTypes.func,
+};
+
+const ResizableWrapper = memo(
+	forwardRef(({ width, height, onResize, disabled, children }, ref) => (
+		<Resizable
+			width={width}
+			height={height}
+			onResize={onResize}
+			draggableOpts={{ disabled }}
+			resizeHandles={
+				!disabled ? ["s", "w", "e", "n", "sw", "nw", "se", "ne"] : []
+			}
+			handle={(axis, ref) => (
+				<div className={`xWindow-res xWindow-res--${axis}`} ref={ref} />
+			)}
+		>
+			{cloneElement(children, { ref })}
+		</Resizable>
+	))
+);
+ResizableWrapper.displayName = "./features/ResizableWrapper";
+ResizableWrapper.propTypes = {
+	width: PropTypes.number,
+	height: PropTypes.number,
+	onResize: PropTypes.func,
+	disabled: PropTypes.bool,
+	children: PropTypes.node,
+};
+
+const DraggableWrapper = memo(({ disabled, onDrag, children }) => {
+	console.log(disabled);
+	const ref = useRef();
+	return (
+		<DraggableCore
+			disabled={disabled}
+			onDrag={onDrag}
+			handle=".xWindow-bar"
+			cancel=".xWindow-res, .xWindow-drag-no"
+			nodeRef={ref}
+		>
+			{cloneElement(children, { ref })}
+		</DraggableCore>
+	);
+});
+
+DraggableWrapper.displayName = "./features/ResizableWrapper";
+DraggableWrapper.propTypes = {
+	disabled: PropTypes.bool,
+	onDrag: PropTypes.func,
+	isFullscreen: PropTypes.bool,
+	children: PropTypes.node,
 };
