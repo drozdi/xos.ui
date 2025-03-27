@@ -431,7 +431,7 @@ export const Window = memo(
 		}, []);
 
 		useEffect(() => {
-			const onActive = (event) => {
+			/*const onActive = (event) => {
 				setTimeout(() => {
 					wm.setZIndex?.(wm.zIndex + 2);
 					wm.active?.({ uid });
@@ -442,7 +442,7 @@ export const Window = memo(
 				if (active && !nodeRef.current?.contains(event.target)) {
 					wm.disable();
 				}
-			};
+			};*/
 			$app?.register(win);
 			//$app?.on("activated", onActive);
 			//$app?.on("deactivated", onDeActive);
@@ -673,7 +673,6 @@ ResizableWrapper.propTypes = {
 };
 
 const DraggableWrapper = memo(({ disabled, onDrag, children }) => {
-	console.log(disabled);
 	const ref = useRef();
 	return (
 		<DraggableCore
@@ -692,6 +691,5 @@ DraggableWrapper.displayName = "./features/ResizableWrapper";
 DraggableWrapper.propTypes = {
 	disabled: PropTypes.bool,
 	onDrag: PropTypes.func,
-	isFullscreen: PropTypes.bool,
 	children: PropTypes.node,
 };
