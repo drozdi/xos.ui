@@ -2,7 +2,6 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import {
 	cloneElement,
-	forwardRef,
 	memo,
 	useCallback,
 	useEffect,
@@ -453,82 +452,97 @@ export const Window = memo(
 			};
 		}, []);
 
-		return (
-			<WindowProvider value={win}>
+		const mixinDraggable = useCallback(
+			(child, disabled) => (
 				<DraggableCore
-					disabled={!draggable || isFullscreen}
+					disabled={disabled}
 					onDrag={handleDrag}
 					handle=".xWindow-bar"
 					cancel=".xWindow-res, .xWindow-drag-no"
 					nodeRef={nodeRef}
 				>
-					<Resizable
-						draggableOpts={{
-							disabled:
-								!resizable && (isFullscreen || isCollapse),
-						}}
-						width={position.width}
-						height={position.height}
-						onResize={handleResize}
-						resizeHandles={[
-							"s",
-							"w",
-							"e",
-							"n",
-							"sw",
-							"nw",
-							"se",
-							"ne",
-						]}
-						handle={(handleAxis, ref) => (
-							<div
-								className={`xWindow-res xWindow-res--${handleAxis}`}
-								ref={ref}
-							/>
-						)}
-					>
-						<div
-							id={uid}
-							className={classNames("xWindow", className, {
-								"xWindow--active": active,
-								"xWindow--resizable":
-									resizable && !isFullscreen && !isCollapse,
-								"xWindow--draggable":
-									draggable && !isFullscreen,
-								"xWindow--fullscreen": isFullscreen,
-								"xWindow--collapse": isCollapse,
-							})}
-							style={style}
-							ref={nodeRef}
-							onClick={onActive}
-						>
-							<Box
-								className="xWindow-bar"
-								justify="between"
-								onDoubleClick={handleFullscreen}
-							>
-								{title && (
-									<Box.Section side className="xWindow-title">
-										{title}
-									</Box.Section>
-								)}
-								<WindowIcons
-									icons={icons}
-									isFullscreen={isFullscreen}
-									onFullscreen={handleFullscreen}
-									onCollapse={handleCollapse}
-									onClose={handleClose}
-									onReload={handleReload}
-									resizable={resizable}
-								/>
-							</Box>
-
-							<div className="xWindow-content" ref={contentRef}>
-								{children}
-							</div>
-						</div>
-					</Resizable>
+					{child}
 				</DraggableCore>
+			),
+			[handleDrag]
+		);
+
+		const mixinResizable = useCallback(
+			(child, disabled) => (
+				<Resizable
+					width={position.width}
+					height={position.height}
+					onResize={handleResize}
+					draggableOpts={{ disabled }}
+					resizeHandles={
+						!disabled
+							? ["s", "w", "e", "n", "sw", "nw", "se", "ne"]
+							: []
+					}
+					handle={(axis, ref) => (
+						<div
+							className={`xWindow-res xWindow-res--${axis}`}
+							ref={ref}
+						/>
+					)}
+				>
+					{child}
+				</Resizable>
+			),
+			[handleResize, position.width, position.height]
+		);
+
+		const newChild = (
+			<div
+				id={uid}
+				className={classNames("xWindow", className, {
+					"xWindow--active": active,
+					"xWindow--resizable":
+						resizable && !isFullscreen && !isCollapse,
+					"xWindow--draggable": draggable && !isFullscreen,
+					"xWindow--fullscreen": isFullscreen,
+					"xWindow--collapse": isCollapse,
+				})}
+				style={style}
+				onClick={onActive}
+				ref={nodeRef}
+			>
+				<Box
+					className="xWindow-bar"
+					justify="between"
+					onDoubleClick={handleFullscreen}
+				>
+					{title && (
+						<Box.Section side className="xWindow-title">
+							{title}
+						</Box.Section>
+					)}
+					<WindowIcons
+						icons={icons}
+						isFullscreen={isFullscreen}
+						onFullscreen={handleFullscreen}
+						onCollapse={handleCollapse}
+						onClose={handleClose}
+						onReload={handleReload}
+						resizable={resizable}
+					/>
+				</Box>
+
+				<div className="xWindow-content" ref={contentRef}>
+					{children}
+				</div>
+			</div>
+		);
+
+		return (
+			<WindowProvider value={win}>
+				{mixinDraggable(
+					mixinResizable(
+						newChild,
+						!resizable && isFullscreen && isCollapse
+					),
+					!draggable || isFullscreen
+				)}
 			</WindowProvider>
 		); //*/
 	})
@@ -646,7 +660,7 @@ WindowIcons.propTypes = {
 };
 
 const ResizableWrapper = memo(
-	forwardRef(({ width, height, onResize, disabled, children }, ref) => (
+	({ width, height, onResize, disabled, children }) => (
 		<Resizable
 			width={width}
 			height={height}
@@ -659,9 +673,9 @@ const ResizableWrapper = memo(
 				<div className={`xWindow-res xWindow-res--${axis}`} ref={ref} />
 			)}
 		>
-			{cloneElement(children, { ref })}
+			{children}
 		</Resizable>
-	))
+	)
 );
 ResizableWrapper.displayName = "./features/ResizableWrapper";
 ResizableWrapper.propTypes = {
@@ -687,9 +701,10 @@ const DraggableWrapper = memo(({ disabled, onDrag, children }) => {
 	);
 });
 
-DraggableWrapper.displayName = "./features/ResizableWrapper";
+DraggableWrapper.displayName = "./features/DraggableWrapper";
 DraggableWrapper.propTypes = {
 	disabled: PropTypes.bool,
 	onDrag: PropTypes.func,
 	children: PropTypes.node,
+	nodeRef: PropTypes.any,
 };
