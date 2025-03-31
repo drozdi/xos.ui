@@ -539,7 +539,7 @@ export const Window = memo(
 				{mixinDraggable(
 					mixinResizable(
 						newChild,
-						!resizable && isFullscreen && isCollapse
+						!resizable || isFullscreen || isCollapse
 					),
 					!draggable || isFullscreen
 				)}
@@ -659,6 +659,7 @@ WindowIcons.propTypes = {
 	onReload: PropTypes.func,
 };
 
+// думать
 const ResizableWrapper = memo(
 	({ width, height, onResize, disabled, children }) => (
 		<Resizable
