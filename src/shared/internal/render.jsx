@@ -81,6 +81,7 @@ function applyContextToProps(props) {
  * @returns {React.ReactElement} - Элемент с заданными свойствами и состоянием.
  */
 export function render(tag, props, state) {
+	console.log(props);
 	let {
 		as: Component = tag,
 		children,
@@ -124,7 +125,7 @@ export function render(tag, props, state) {
 	let resolvedChildren = isFunction(children) ? children(state) : children;
 
 	if (Component === Fragment) {
-		let childProps = resolvedChildren.props;
+		let childProps = resolvedChildren?.props ?? {};
 		let childPropsClassName = childProps?.className;
 		let childPropsStyle = childProps?.style;
 

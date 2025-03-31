@@ -1,8 +1,17 @@
 import PropTypes from "prop-types";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import { useWindowEvent } from "../hooks";
+import { forwardRef, Fragment, useCallback, useEffect, useRef } from "react";
+import { setRef, useWindowEvent } from "../hooks";
 import { isFunction, isString } from "../utils/is";
 import { render } from "./render";
+
+const breakpoints = [
+	{ key: "xl", query: "(min-width: 1280px)" },
+	{ key: "lg", query: "(min-width: 1024px)" },
+	{ key: "md", query: "(min-width: 768px)" },
+	{ key: "sm", query: "(min-width: 640px)" },
+	{ key: "xs", query: "(min-width: 384px)" },
+	{ key: "base", query: "" }, // Базовое значение
+];
 
 /**
  * Функция getResponsiveValue возвращает значение, соответствующее текущему размеру экрана.
@@ -13,15 +22,6 @@ function getResponsiveValue(responsiveValue) {
 	if (!responsiveValue || typeof responsiveValue !== "object") {
 		return responsiveValue;
 	}
-
-	const breakpoints = [
-		{ key: "xl", query: "(min-width: 1280px)" },
-		{ key: "lg", query: "(min-width: 1024px)" },
-		{ key: "md", query: "(min-width: 768px)" },
-		{ key: "sm", query: "(min-width: 640px)" },
-		{ key: "xs", query: "(min-width: 384px)" },
-		{ key: "base", query: "" }, // Базовое значение
-	];
 
 	for (let { key, query } of breakpoints) {
 		if (
@@ -81,8 +81,87 @@ function variantStyles(name, vars = {}, props = {}) {
  * @param {any} ref - Референс компонента.
  * @returns {React.ReactElement} Элемент div с заданными стилями.
  */
-export function Unstyled({ name, vars = {}, style, ...props }) {
-	const [computedStyle, setComputedStyle] = useState({});
+export const Unstyled = forwardRef(
+	({ name, vars = {}, style, ...props }, outerRef) => {
+		const elementRef = useRef(null);
+		const styleCache = useRef({});
+		const propsCache = useRef({});
+
+		/**
+		 * Генерирует CSS переменные для вариантов стилей
+		 */
+		const getVariantStyles = useCallback(() => {
+			if (!name) return {};
+
+			const newStyles = {};
+			const currentProps = propsCache.current;
+
+			for (const prop in currentProps) {
+				if (!vars[prop] || !currentProps[prop]) continue;
+
+				const value = getResponsiveValue(currentProps[prop]);
+				const keys = Array.isArray(vars[prop])
+					? vars[prop]
+					: vars[prop].split(/\s+/);
+
+				keys.forEach((key) => {
+					newStyles[
+						`--${name}-${key}`
+					] = `var(--${name}-${key}-${value})`;
+				});
+				delete propsCache.current[prop];
+			}
+
+			return newStyles;
+		}, [name, vars]);
+
+		/**
+		 * Обновляет стили элемента
+		 */
+		const updateStyles = useCallback(() => {
+			if (!elementRef.current) return;
+
+			const baseStyles = isFunction(style) ? style() : style || {};
+			const variantStyles = getVariantStyles();
+
+			const newStyles = { ...baseStyles, ...variantStyles };
+
+			// Применяем стили только если они изменились
+			if (
+				JSON.stringify(newStyles) !== JSON.stringify(styleCache.current)
+			) {
+				Object.assign(elementRef.current.style, newStyles);
+				styleCache.current = newStyles;
+			}
+		}, [style, getVariantStyles]);
+
+		// Объединяем внешний и внутренний ref
+		useEffect(() => {
+			setRef(outerRef, elementRef.current);
+		}, [outerRef]);
+
+		// Кэшируем props для избежания лишних обновлений
+		useEffect(() => {
+			propsCache.current = props ?? {};
+		}, [props]);
+
+		// Первоначальное применение стилей и подписка на resize
+		useEffect(() => {
+			updateStyles();
+		}, [updateStyles]);
+
+		useWindowEvent("resize", updateStyles);
+
+		console.log(propsCache, elementRef);
+
+		return render("div", {
+			as: Fragment,
+			ref: elementRef,
+			...propsCache.current,
+			// style не передается напрямую, так как применяется через ref
+		});
+
+		/*const [computedStyle, setComputedStyle] = useState({});
 
 	const updateStyles = useCallback(() => {
 		const newStyles = isFunction(style)
@@ -107,8 +186,9 @@ export function Unstyled({ name, vars = {}, style, ...props }) {
 		as: Fragment,
 		...props,
 		style: computedStyle,
-	});
-}
+	});*/
+	}
+);
 
 // Проверка типов для пропсов
 Unstyled.propTypes = {
