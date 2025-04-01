@@ -81,7 +81,6 @@ function applyContextToProps(props) {
  * @returns {React.ReactElement} - Элемент с заданными свойствами и состоянием.
  */
 export function render(tag, props, state) {
-	console.log(props);
 	let {
 		as: Component = tag,
 		children,
