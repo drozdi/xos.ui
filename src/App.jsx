@@ -7,6 +7,7 @@ import { Layout } from "./features";
 import { WindowManager } from "./features/window-manager";
 import { ThemeProvider, ThemeProviderToggler } from "./shared/hooks/useTheme";
 import { Flex } from "./shared/internal/flex";
+import { Unstyled } from "./shared/internal/unstyled";
 import { XBadge, XBtn, XMain, XPill } from "./shared/ui";
 import "./style/index.css";
 
@@ -28,14 +29,15 @@ function App() {
 	useEffect(() => {
 		appsManager.reloadApps();
 		console.log(ref);
+		setTimeout(() => {
+			setProps({
+				align: "start",
+				justify: "start",
+			});
+			console.log(props);
+		}, 5000);
 	}, []);
-	setTimeout(() => {
-		setProps({
-			align: "start",
-			justify: "start",
-		});
-		console.log(props);
-	}, 5000);
+
 	return (
 		<ThemeProvider>
 			<Layout container overlay toggle view="hhh lpr lff">
@@ -69,6 +71,13 @@ function App() {
 								<div className="size-12 bg-blue-600"></div>
 							</div>
 						</Flex>
+						{false && (
+							<Unstyled ref={ref}>
+								<div className="size-36 bg-red-500">
+									<div className="size-12 bg-blue-600"></div>
+								</div>
+							</Unstyled>
+						)}
 					</div>
 				</XMain>
 			</Layout>
