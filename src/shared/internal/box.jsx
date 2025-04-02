@@ -1,6 +1,12 @@
 import classNames from "classnames";
 import { PropTypes } from "prop-types";
+import { Flex } from "./flex";
 import { forwardRefWithAs, render } from "./render";
+import { Unstyled } from "./unstyled";
+
+const BOX_VARS = Object.freeze({
+	size: "fs lh",
+});
 
 /**
  * Компонент для создания гибкой структуры с возможностью размещения элементов в колонки.
@@ -20,6 +26,7 @@ import { forwardRefWithAs, render } from "./render";
  */
 export const Box = forwardRefWithAs(function Box(
 	{
+		children,
 		className,
 		col,
 		noWrap,
@@ -33,7 +40,31 @@ export const Box = forwardRefWithAs(function Box(
 	},
 	ref
 ) {
-	return render("div", {
+	const t = false && <Unstyled />;
+	const f = false && <Flex />;
+	console.log(props);
+	return (
+		<Flex
+			as="div"
+			{...props}
+			ref={ref}
+			className={classNames(
+				"x-box",
+				{
+					"x-box--col": col,
+					"x-box--no-wrap": noWrap,
+					"x-box--square": square,
+					"x-box--no-padding": noPadding,
+					"x-box--no-gap": noGap,
+					[`x-box--${size}`]: size,
+				},
+				className
+			)}
+		>
+			{children}
+		</Flex>
+	);
+	/*return render("div", {
 		...props,
 		className: classNames(
 			"x-box",
@@ -50,7 +81,7 @@ export const Box = forwardRefWithAs(function Box(
 			className
 		),
 		ref,
-	});
+	}); //*/
 });
 Box.propTypes = {
 	className: PropTypes.string,

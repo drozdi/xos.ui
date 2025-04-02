@@ -1,4 +1,19 @@
 .x-box {
+	--x-box-fs-xs: var(--text-xs);
+	--x-box-fs-sm: var(--text-sm);
+	--x-box-fs-md: var(--text-base);
+	--x-box-fs-lg: var(--text-lg);
+	--x-box-fs-xl: var(--text-xl);
+
+	--x-box-lh-xs: var(--text-xs--line-height);
+	--x-box-lh-sm: var(--text-sm--line-height);
+	--x-box-lh-md: var(--text-base--line-height);
+	--x-box-lh-lg: var(--text-lg--line-height);
+	--x-box-lh-xl: var(--text-xl--line-height);
+
+	--x-box-fs: var(--x-box-fs-md);
+	--x-box-lh: var(--x-box-lh-md);
+
 	@apply rounded;
 }
 

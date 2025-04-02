@@ -8,7 +8,7 @@ import {
 	useRef,
 } from "react";
 import { setRef, useWindowEvent } from "../hooks";
-import { isArray, isFunction } from "../utils/is";
+import { isArray, isFunction, isNumber } from "../utils/is";
 import { render } from "./render";
 
 const BREAKPOINTS = Object.freeze([
@@ -83,17 +83,23 @@ export const Unstyled = forwardRef(
 			if (!element) return;
 
 			const baseStyles = isFunction(style) ? style() : style || {};
+
 			const variantStyles = getVariantStyles();
 			const newStyles = { ...baseStyles, ...variantStyles };
 			const currentStyles = styleCache.current;
 
 			// Оптимизированное применение стилей
 			let hasChanges = false;
-
+			console.log(newStyles);
 			// Проверка изменений и новых свойств
 			for (const key in newStyles) {
 				if (newStyles[key] !== currentStyles[key]) {
-					element.style.setProperty(key, newStyles[key]);
+					element.style.setProperty(
+						key,
+						isNumber(newStyles[key])
+							? newStyles[key] + "px"
+							: newStyles[key]
+					);
 					hasChanges = true;
 				}
 			}

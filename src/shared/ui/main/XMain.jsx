@@ -27,6 +27,21 @@ export const XMain = memo(
 
 		const isLayout = !!ctx;
 		return (
+			<main
+				{...props}
+				ref={handleRef}
+				className={classNames(
+					"x-main x-layout-main x-main-content",
+					{
+						"x-layout-content": isLayout,
+					},
+					className
+				)}
+			>
+				{children}
+			</main>
+		);
+		return (
 			<Box
 				as="section"
 				square
