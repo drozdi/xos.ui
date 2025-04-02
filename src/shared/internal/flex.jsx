@@ -1,26 +1,56 @@
 import PropTypes from "prop-types";
+import { forwardRef, useMemo } from "react";
 import { Unstyled } from "./unstyled";
-const vars = {
+
+// Замораживаем объект для предотвращения случайных изменений
+const FLEX_VARS = Object.freeze({
 	justify: "justify",
 	align: "align",
 	dir: "direction",
 	wrap: "wrap",
-};
-export function Flex({ children, ...props }) {
-	return (
-		<Unstyled name="x-flex" className="x-flex" vars={vars} {...props}>
-			{children}
-		</Unstyled>
-	);
-}
+});
+
+// Создаем общий тип для responsive-пропсов
+const responsivePropType = PropTypes.oneOfType([
+	PropTypes.string,
+	PropTypes.shape({
+		xl: PropTypes.string,
+		lg: PropTypes.string,
+		md: PropTypes.string,
+		sm: PropTypes.string,
+		xs: PropTypes.string,
+		base: PropTypes.string,
+	}),
+]);
+
+export const Flex = forwardRef(
+	({ children, className = "", ...props }, ref) => {
+		const combinedClassName = useMemo(
+			() => `x-flex ${className}`.trim(),
+			[className]
+		);
+		return (
+			<Unstyled
+				name="x-flex"
+				className={combinedClassName}
+				vars={FLEX_VARS}
+				ref={ref}
+				{...props}
+			>
+				{children}
+			</Unstyled>
+		);
+	}
+);
 
 // Проверка типов для пропсов
 Flex.propTypes = {
 	children: PropTypes.node,
-	justify: PropTypes.string,
-	align: PropTypes.string,
-	dir: PropTypes.string,
-	wrap: PropTypes.string,
+	className: PropTypes.string,
+	justify: responsivePropType,
+	align: responsivePropType,
+	dir: responsivePropType,
+	wrap: responsivePropType,
 };
 
 // Устанавливаем displayName для удобства отладки
