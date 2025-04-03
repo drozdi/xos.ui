@@ -15,9 +15,9 @@ import "./style/index.css";
 function App() {
 	const ref = useRef(null);
 	const [props, setProps] = useState({
-		align: "center",
-		justify: "center",
-		style: { height: 200 },
+		//align: "center",
+		//justify: "center",
+		//style: { height: 200 },
 	});
 	const onCalculator = () => {
 		appsManager.createApp("apps/calculator/app", {});
@@ -32,7 +32,7 @@ function App() {
 		appsManager.reloadApps();
 		//console.log(ref);
 		setTimeout(() => {
-			setProps({
+			/*setProps({
 				align: "start",
 				justify: "start",
 				style: { height: 199 },
@@ -48,7 +48,7 @@ function App() {
 					<ThemeProviderToggler slot="header"></ThemeProviderToggler>
 					<WindowManager slot="footer"></WindowManager>
 					<XMain id="parent_win" className="p-3">
-						{false && (
+						{true && (
 							<XBtn.Group pills color="info">
 								<XBtn onClick={onExample}>Exammple</XBtn>
 								<XBtn onClick={onCalculator}>Calculator</XBtn>
@@ -88,22 +88,20 @@ function App() {
 					</XMain>
 				</Layout>
 			)}
-			<div className="py-16 w-128 m-auto">
-				<Box {...props} className="bg-dark">
-					<Box.Section side>
-						<XIcon>mdi-home</XIcon>
-					</Box.Section>
-					<Box.Section side className="bg-bgmb5">
-						asdasd
-					</Box.Section>
-					<Box.Section side className="bg-bgmb3">
-						sdfsdf
-					</Box.Section>
-					<Box.Section side>
-						<XIcon>mdi-close</XIcon>
-					</Box.Section>
-				</Box>
-			</div>
+			{true && (
+				<div className="py-16 w-128 m-auto">
+					<Box {...props} className="bg-dark" style={{ height: 200 }}>
+						<Box.Section side>
+							<XIcon>mdi-home</XIcon>
+						</Box.Section>
+						<Box.Section className="bg-bgmb5">asdasd</Box.Section>
+						<Box.Section className="bg-bgmb3">sdfsdf</Box.Section>
+						<Box.Section side>
+							<XIcon>mdi-close</XIcon>
+						</Box.Section>
+					</Box>
+				</div>
+			)}
 		</ThemeProvider>
 	);
 }

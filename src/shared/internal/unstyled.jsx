@@ -94,8 +94,7 @@ export const Unstyled = forwardRef(
 
 			// Проверка изменений и новых свойств
 			for (const key in newStyles) {
-				if (newStyles[key] !== currentStyles[key]) {
-					console.log("setProperty", key);
+				if (newStyles[key]) {
 					element.style.setProperty(
 						key,
 						isNumber(newStyles[key])
@@ -109,7 +108,6 @@ export const Unstyled = forwardRef(
 			// Проверка удаленных свойств
 			for (const key in currentStyles) {
 				if (!(key in newStyles)) {
-					console.log("removeProperty", key);
 					element.style.removeProperty(key);
 					hasChanges = true;
 				}

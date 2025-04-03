@@ -40,12 +40,8 @@ export function HomeExample() {
 						<Box.Section side>
 							<XIcon>mdi-home</XIcon>
 						</Box.Section>
-						<Box.Section side className="bg-bgmb5">
-							asdasd
-						</Box.Section>
-						<Box.Section side className="bg-bgmb3">
-							sdfsdf
-						</Box.Section>
+						<Box.Section className="bg-bgmb5">asdasd</Box.Section>
+						<Box.Section className="bg-bgmb3">sdfsdf</Box.Section>
 						<Box.Section side>
 							<XIcon>mdi-close</XIcon>
 						</Box.Section>

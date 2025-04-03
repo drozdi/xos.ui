@@ -7,7 +7,7 @@
 	--x-flex-align-end: flex-end;
 	--x-flex-align-baseline: baseline;
 	--x-flex-align-stretch: stretch;
-	--x-flex-align-stretch: normal;
+	--x-flex-align-normal: normal;
 	--x-flex-align-between: space-between;
 
 	--x-flex-justify-start: flex-start;
@@ -25,8 +25,8 @@
 	--x-flex-wrap-nowrap: reverse;
 
 	--x-flex-direction: var(--x-flex-direction-row);
-	--x-flex-align: var(--x-flex-align-start);
-	--x-flex-justify: var(--x-flex-justify-start);
+	--x-flex-align: var(--x-flex-align-normal, normal);
+	--x-flex-justify: var(--x-flex-justify-normal, normal);
 	--x-flex-wrap: var(--x-flex-wrap-nowrap);
 
 	display: flex;
