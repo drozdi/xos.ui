@@ -41,7 +41,6 @@ let ii = 0;
 
 export const Unstyled = forwardRef(
 	({ name, vars = {}, style, ...props }, outerRef) => {
-		console.log(ii++);
 		const elementRef = useRef(null);
 		const styleCache = useRef({});
 		const propsCache = useRef({});
@@ -88,12 +87,15 @@ export const Unstyled = forwardRef(
 			const newStyles = { ...baseStyles, ...variantStyles };
 			const currentStyles = styleCache.current;
 
+			console.log("newStyles", newStyles);
+
 			// Оптимизированное применение стилей
 			let hasChanges = false;
-			console.log(newStyles);
+
 			// Проверка изменений и новых свойств
 			for (const key in newStyles) {
 				if (newStyles[key] !== currentStyles[key]) {
+					console.log("setProperty", key);
 					element.style.setProperty(
 						key,
 						isNumber(newStyles[key])
@@ -107,6 +109,7 @@ export const Unstyled = forwardRef(
 			// Проверка удаленных свойств
 			for (const key in currentStyles) {
 				if (!(key in newStyles)) {
+					console.log("removeProperty", key);
 					element.style.removeProperty(key);
 					hasChanges = true;
 				}

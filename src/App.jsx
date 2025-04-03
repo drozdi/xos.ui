@@ -17,6 +17,7 @@ function App() {
 	const [props, setProps] = useState({
 		align: "center",
 		justify: "center",
+		style: { height: 200 },
 	});
 	const onCalculator = () => {
 		appsManager.createApp("apps/calculator/app", {});
@@ -31,10 +32,11 @@ function App() {
 		appsManager.reloadApps();
 		//console.log(ref);
 		setTimeout(() => {
-			/*setProps({
+			setProps({
 				align: "start",
 				justify: "start",
-			});*/
+				style: { height: 199 },
+			}); //*/
 			//console.log(props);
 		}, 5000);
 	}, []);
@@ -87,7 +89,7 @@ function App() {
 				</Layout>
 			)}
 			<div className="py-16 w-128 m-auto">
-				<Box className="bg-dark" style={{ height: 200 }}>
+				<Box {...props} className="bg-dark">
 					<Box.Section side>
 						<XIcon>mdi-home</XIcon>
 					</Box.Section>

@@ -100,7 +100,7 @@ export function render(tag, props, state) {
 
 	const memoizedRest = useMemo(() => {
 		const result = { ...rest };
-		["className", "style"].forEach((key) => {
+		for (const key of ["className", "style"]) {
 			if (key in rest && rest[key] && isFunction(rest[key])) {
 				if (Component.render) {
 					result[key] = (arg) =>
@@ -109,7 +109,7 @@ export function render(tag, props, state) {
 					result[key] = rest[key]?.(state || {}, rest);
 				}
 			}
-		});
+		}
 
 		if (
 			result["aria-labelledby"] &&

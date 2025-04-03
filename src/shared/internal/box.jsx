@@ -34,8 +34,6 @@ export const Box = forwardRefWithAs(function Box(
 		size,
 		square,
 		noPadding,
-		align,
-		justify,
 		...props
 	},
 	ref
@@ -90,25 +88,6 @@ Box.propTypes = {
 	noGap: PropTypes.bool,
 	noPadding: PropTypes.bool,
 	size: PropTypes.oneOf(["xs", "sm", "lg", "xl"]),
-	align: PropTypes.oneOf([
-		"start",
-		"center",
-		"end",
-		"stretch",
-		"baseline",
-		"normal",
-	]),
-	justify: PropTypes.oneOf([
-		"start",
-		"center",
-		"end",
-		"between",
-		"around",
-		"evenly",
-		"normal",
-		"baseline",
-		"stretch",
-	]),
 };
 Box.displayName = "internal/Box";
 
