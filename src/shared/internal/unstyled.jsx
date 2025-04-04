@@ -87,8 +87,6 @@ export const Unstyled = forwardRef(
 			const newStyles = { ...baseStyles, ...variantStyles };
 			const currentStyles = styleCache.current;
 
-			console.log("newStyles", newStyles);
-
 			// Оптимизированное применение стилей
 			let hasChanges = false;
 

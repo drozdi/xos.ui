@@ -15,9 +15,8 @@ import "./style/index.css";
 function App() {
 	const ref = useRef(null);
 	const [props, setProps] = useState({
-		//align: "center",
-		//justify: "center",
-		//style: { height: 200 },
+		align: "center",
+		justify: "center",
 	});
 	const onCalculator = () => {
 		appsManager.createApp("apps/calculator/app", {});
@@ -32,10 +31,9 @@ function App() {
 		appsManager.reloadApps();
 		//console.log(ref);
 		setTimeout(() => {
-			/*setProps({
+			setProps({
 				align: "start",
 				justify: "start",
-				style: { height: 199 },
 			}); //*/
 			//console.log(props);
 		}, 5000);
