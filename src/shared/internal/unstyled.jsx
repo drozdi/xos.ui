@@ -8,7 +8,7 @@ import {
 	useRef,
 } from "react";
 import { setRef, useWindowEvent } from "../hooks";
-import { isArray, isFunction, isNumber } from "../utils/is";
+import { isArray, isFunction, isNullOrUndefined, isNumber } from "../utils/is";
 import { render } from "./render";
 
 const BREAKPOINTS = Object.freeze([
@@ -37,7 +37,15 @@ const getResponsiveValue = (responsiveValue) => {
 	return responsiveValue.base;
 };
 
-let ii = 0;
+const getSize = (prefix = "", value = null) => {
+	if (isNullOrUndefined(value)) {
+		return "";
+	}
+	if (isNumber(value)) {
+		return `calc(var(--spacing)*${value})`;
+	}
+	return `${prefix}-(${value})`;
+};
 
 export const Unstyled = forwardRef(
 	({ name, vars = {}, style, ...props }, outerRef) => {
