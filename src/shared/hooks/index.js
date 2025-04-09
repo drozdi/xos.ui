@@ -1,6 +1,7 @@
 export * from "./use-array";
 export * from "./use-breakpoint";
 export * from "./use-disclosure";
+export * from "./use-element-resize-observer";
 export * from "./use-force-update";
 export * from "./use-fork-ref";
 export * from "./use-id";
@@ -14,4 +15,5 @@ export * from "./use-timeout";
 export * from "./use-toggle";
 export * from "./use-uncontrolled";
 export * from "./use-window-event";
+export * from "./use-window-resize-observer";
 export * from "./use-window-scroll";

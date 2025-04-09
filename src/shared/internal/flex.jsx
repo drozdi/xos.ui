@@ -29,7 +29,7 @@ export const Flex = forwardRef(
 			() => `x-flex ${className}`.trim(),
 			[className]
 		);
-		console.log(props);
+		//console.log(props);
 		return (
 			<Unstyled
 				name="x-flex"

@@ -2,14 +2,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { debounce } from "../utils/debounce"; // Или любая другая библиотека для дебаунсинга
 
 /**
- * Функция useResizeObserver создает обработчик для отслеживания изменения размера элемента.
+ * Функция useElementResizeObserver создает обработчик для отслеживания изменения размера элемента.
  * @param {Object} [options] - Объект с опциями.
+ * @param {HTMLElement} [options.element=null] - Элемент, который нужно отслеживать.
  * @param {Function} [options.onResize] - Функция, которая будет вызвана при изменении размера элемента.
- * @param {number} [options.debounceTime=100] - Время задержки перед вызовом функции onResize.
+ * @param {number} [options.debounceTime=200] - Время задержки перед вызовом функции onResize.
  * @param {string} [options.boxModel="content-box"] - Модель размера контейнера ("content-box" или "border-box").
  * @returns {Object} - Объект, содержащий ссылку на элемент и текущие размеры элемента.
  */
-export function useResizeObserver({
+export function useElementResizeObserver({
+	element = null,
 	onResize,
 	debounceTime = 200,
 	boxModel = "content-box",
@@ -22,12 +24,12 @@ export function useResizeObserver({
 		bottom: 0,
 		right: 0,
 	});
-	const ref = useRef(null);
+	const ref = useRef(element);
 	const observerRef = useRef();
 	const latestSizeRef = useRef();
 
-	const debouncedResize = useCallback(
-		debounce((entries) => {
+	const handleResize = useCallback(
+		(entries) => {
 			const entry = entries[0];
 			if (!entry) return;
 			console.log(entry);
@@ -58,8 +60,13 @@ export function useResizeObserver({
 				setSize(newSize);
 				onResize?.(rect);
 			}
-		}, debounceTime),
-		[onResize, boxModel, debounceTime]
+		},
+		[onResize, boxModel]
+	);
+
+	const debouncedResize = useCallback(
+		debounce(handleResize, debounceTime ?? 200),
+		[debounceTime]
 	);
 
 	useEffect(() => {

@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "./apps/calculator/core";
 import "./apps/example/core";
 import "./apps/tic-tac-toe/core";
 import appsManager from "./entites/core/apps-manager";
 import { Layout } from "./features";
 import { WindowManager } from "./features/window-manager";
+import { useElementResizeObserver } from "./shared/hooks";
 import { ThemeProvider, ThemeProviderToggler } from "./shared/hooks/useTheme";
 import { Box } from "./shared/internal/box";
 import { Flex } from "./shared/internal/flex";
@@ -13,7 +14,9 @@ import { XBadge, XBtn, XIcon, XMain, XPill } from "./shared/ui";
 import "./style/index.css";
 
 function App() {
-	const ref = useRef(null);
+	const { ref, ...rest } = useElementResizeObserver({
+		boxModel: "border-box",
+	});
 	const [props, setProps] = useState({
 		align: "center",
 		justify: "center",
@@ -38,7 +41,7 @@ function App() {
 			//console.log(props);
 		}, 5000);
 	}, []);
-
+	console.log(rest);
 	return (
 		<ThemeProvider>
 			{false && (
@@ -87,8 +90,13 @@ function App() {
 				</Layout>
 			)}
 			{true && (
-				<div className="py-16 w-128 m-auto">
-					<Box {...props} className="bg-dark" style={{ height: 200 }}>
+				<div className="py-16 max-w-128 m-auto">
+					<Box
+						ref={ref}
+						{...props}
+						className="bg-dark"
+						style={{ height: 200 }}
+					>
 						<Box.Section side>
 							<XIcon>mdi-home</XIcon>
 						</Box.Section>
