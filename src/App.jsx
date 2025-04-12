@@ -41,6 +41,7 @@ function App() {
 			//console.log(props);
 		}, 5000);
 	}, []);
+	console.log(ref);
 	console.log(rest);
 	return (
 		<ThemeProvider>
@@ -91,12 +92,7 @@ function App() {
 			)}
 			{true && (
 				<div className="py-16 max-w-128 m-auto">
-					<Box
-						ref={ref}
-						{...props}
-						className="bg-dark"
-						style={{ height: 200 }}
-					>
+					<Box {...props} className="bg-dark" style={{ height: 200 }}>
 						<Box.Section side>
 							<XIcon>mdi-home</XIcon>
 						</Box.Section>

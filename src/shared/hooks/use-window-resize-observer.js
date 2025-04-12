@@ -1,6 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { debounce } from "../utils/debounce"; // Или любая другая библиотека для дебаунсинга
 
+/**
+ * Возвращает объект, содержащий размеры и позицию окна.
+ *
+ * @returns {Object} Объект с свойствами top, left, width, height, right и bottom.
+ * @returns {number} returns.top - Позиция окна сверху, всегда 0.
+ * @returns {number} returns.left - Позиция окна слева, всегда 0.
+ * @returns {number} returns.width - Ширина окна.
+ * @returns {number} returns.height - Высота окна.
+ * @returns {number} returns.right - Позиция окна справа, совпадает с шириной.
+ * @returns {number} returns.bottom - Позиция окна снизу, совпадает с высотой.
+ */
 function measure() {
 	return {
 		top: 0,
@@ -11,6 +22,7 @@ function measure() {
 		bottom: window.innerHeight,
 	};
 }
+
 /**
  * Функция useWindowResizeObserver создает обработчик для отслеживания изменения размера окна.
  * @param {Object} [options] - Объект с опциями.

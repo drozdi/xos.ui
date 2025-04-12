@@ -2,16 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { debounce } from "../utils/debounce"; // Или любая другая библиотека для дебаунсинга
 
 /**
- * Функция useElementResizeObserver создает обработчик для отслеживания изменения размера элемента.
+ * Функция useResizeObserver создает обработчик для отслеживания изменения размера элемента.
  * @param {Object} [options] - Объект с опциями.
- * @param {HTMLElement} [options.element=null] - Элемент, который нужно отслеживать.
  * @param {Function} [options.onResize] - Функция, которая будет вызвана при изменении размера элемента.
- * @param {number} [options.debounceTime=200] - Время задержки перед вызовом функции onResize.
+ * @param {number} [options.debounceTime=100] - Время задержки перед вызовом функции onResize.
  * @param {string} [options.boxModel="content-box"] - Модель размера контейнера ("content-box" или "border-box").
  * @returns {Object} - Объект, содержащий ссылку на элемент и текущие размеры элемента.
  */
-export function useElementResizeObserver({
-	element = null,
+export function useResizeObserver({
 	onResize,
 	debounceTime = 200,
 	boxModel = "content-box",
@@ -24,15 +22,15 @@ export function useElementResizeObserver({
 		bottom: 0,
 		right: 0,
 	});
-	const ref = useRef(element);
+	const ref = useRef(null);
 	const observerRef = useRef();
 	const latestSizeRef = useRef();
 
-	const handleResize = useCallback(
-		([entry]) => {
-			if (!entry) {
-				return;
-			}
+	const debouncedResize = useCallback(
+		debounce((entries) => {
+			const entry = entries[0];
+			if (!entry) return;
+			console.log(entry);
 
 			const rect = entry.contentRect;
 			const newSize = {
@@ -60,20 +58,14 @@ export function useElementResizeObserver({
 				setSize(newSize);
 				onResize?.(rect);
 			}
-		},
-		[onResize, boxModel]
-	);
-
-	const debouncedResize = useCallback(
-		debounce(handleResize, debounceTime ?? 200),
-		[debounceTime]
+		}, debounceTime),
+		[onResize, boxModel, debounceTime]
 	);
 
 	useEffect(() => {
 		if (!ref.current) {
 			return;
 		}
-
 		observerRef.current = new ResizeObserver(debouncedResize);
 		observerRef.current.observe(ref.current);
 
