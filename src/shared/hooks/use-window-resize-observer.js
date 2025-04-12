@@ -31,6 +31,7 @@ function measure() {
  * @returns {Object} - Объект текущие размеры окна.
  */
 export function useWindowResizeObserver({ onResize, debounceTime = 200 } = {}) {
+	console.log("useWindowResizeObserver");
 	const [size, setSize] = useState(measure());
 	const lastSizeRef = useRef(size);
 	const resizeListenerRef = useRef();

@@ -16,16 +16,20 @@ export function useResizeObserver({
 	debounceTime = 200,
 	boxModel = "content-box",
 } = {}) {
-	// Автоматический выбор источника наблюдения
-	return element
-		? useElementResizeObserver({
-				element,
-				onResize,
-				debounceTime,
-				boxModel,
-		  })
-		: useWindowResizeObserver({
-				onResize,
-				debounceTime,
-		  });
+	console.log(element);
+
+	// Если элемент есть → следим за ним, иначе → следим за окном
+	const elementObserver = useElementResizeObserver({
+		element,
+		onResize,
+		debounceTime,
+		boxModel,
+	});
+
+	const windowObserver = useWindowResizeObserver({
+		onResize,
+		debounceTime,
+	});
+
+	return element ? elementObserver : windowObserver;
 }
