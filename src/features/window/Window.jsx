@@ -13,6 +13,7 @@ import { DraggableCore } from "react-draggable";
 import { Resizable } from "react-resizable";
 import { useId } from "../../shared/hooks/use-id";
 import { Box } from "../../shared/internal/box";
+import { useResizeObserver } from "../../shared/internal/context";
 import { forwardRefWithAs } from "../../shared/internal/render";
 import { XBtn } from "../../shared/ui/btn/XBtn";
 import { isString } from "../../shared/utils//is";
@@ -112,6 +113,7 @@ export const Window = memo(
 			height: h,
 			zIndex: z,
 		});
+		const { ref: nodeRef } = useResizeObserver();
 		//??? error DevTools
 		const [{ isFullscreen, isCollapse, isActive }, updateState] =
 			$sm.useStateObject("state", {});
@@ -127,7 +129,6 @@ export const Window = memo(
 			},
 			[$app]
 		);
-		const nodeRef = useRef();
 		const contentRef = useRef();
 
 		// Обработчик полного экрана

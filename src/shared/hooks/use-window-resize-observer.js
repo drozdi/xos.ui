@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { debounce } from "../utils/debounce"; // Или любая другая библиотека для дебаунсинга
 
 /**
- * Возвращает объект, содержащий размеры и позицию окна.
+ * Получает текущие размеры окна браузера
  *
  * @returns {Object} Объект с свойствами top, left, width, height, right и bottom.
  * @returns {number} returns.top - Позиция окна сверху, всегда 0.
@@ -12,7 +12,17 @@ import { debounce } from "../utils/debounce"; // Или любая другая 
  * @returns {number} returns.right - Позиция окна справа, совпадает с шириной.
  * @returns {number} returns.bottom - Позиция окна снизу, совпадает с высотой.
  */
-function measure() {
+function getWindowSize() {
+	if (typeof window === "undefined") {
+		return {
+			width: 0,
+			height: 0,
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0,
+		};
+	}
 	return {
 		top: 0,
 		left: 0,
@@ -31,13 +41,12 @@ function measure() {
  * @returns {Object} - Объект текущие размеры окна.
  */
 export function useWindowResizeObserver({ onResize, debounceTime = 200 } = {}) {
-	console.log("useWindowResizeObserver");
-	const [size, setSize] = useState(measure());
+	const [size, setSize] = useState(getWindowSize());
 	const lastSizeRef = useRef(size);
 	const resizeListenerRef = useRef();
 
 	const handleResize = useCallback(() => {
-		const newSize = measure();
+		const newSize = getWindowSize();
 
 		if (JSON.stringify(newSize) !== JSON.stringify(lastSizeRef.current)) {
 			lastSizeRef.current = newSize;

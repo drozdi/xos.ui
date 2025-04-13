@@ -5,9 +5,8 @@ import "./apps/tic-tac-toe/core";
 import appsManager from "./entites/core/apps-manager";
 import { Layout } from "./features";
 import { WindowManager } from "./features/window-manager";
-import { useResizeObserver } from "./shared/hooks";
-import { ThemeProvider, ThemeProviderToggler } from "./shared/hooks/useTheme";
 import { Box } from "./shared/internal/box";
+import { ThemeProvider, ThemeToggler } from "./shared/internal/context";
 import { Flex } from "./shared/internal/flex";
 import { Unstyled } from "./shared/internal/unstyled";
 import { XBadge, XBtn, XIcon, XMain, XPill } from "./shared/ui";
@@ -15,10 +14,6 @@ import "./style/index.css";
 
 function App() {
 	const ref = useRef();
-	const rest = useResizeObserver({
-		element: ref.current ?? null,
-		boxModel: "border-box",
-	});
 	const [props, setProps] = useState({
 		align: "center",
 		justify: "center",
@@ -43,13 +38,12 @@ function App() {
 			//console.log(props);
 		}, 2000);
 	}, []);
-	console.log(ref);
-	console.log(rest);
+
 	return (
 		<ThemeProvider>
-			{false && (
+			{true && (
 				<Layout container overlay toggle view="hhh lpr lff">
-					<ThemeProviderToggler slot="header"></ThemeProviderToggler>
+					<ThemeToggler slot="header"></ThemeToggler>
 					<WindowManager slot="footer"></WindowManager>
 					<XMain id="parent_win" className="p-3">
 						{true && (
@@ -88,28 +82,29 @@ function App() {
 									</div>
 								</Unstyled>
 							)}
+							{false && (
+								<Box
+									{...props}
+									className="bg-dark"
+									style={{ height: 200 }}
+								>
+									<Box.Section side>
+										<XIcon>mdi-home</XIcon>
+									</Box.Section>
+									<Box.Section className="bg-bgmb5">
+										asdasd
+									</Box.Section>
+									<Box.Section className="bg-bgmb3">
+										sdfsdf
+									</Box.Section>
+									<Box.Section side>
+										<XIcon>mdi-close</XIcon>
+									</Box.Section>
+								</Box>
+							)}
 						</div>
 					</XMain>
 				</Layout>
-			)}
-			{true && (
-				<div className="py-16 max-w-128 m-auto">
-					<Box
-						ref={ref}
-						{...props}
-						className="bg-dark"
-						style={{ height: 200 }}
-					>
-						<Box.Section side>
-							<XIcon>mdi-home</XIcon>
-						</Box.Section>
-						<Box.Section className="bg-bgmb5">asdasd</Box.Section>
-						<Box.Section className="bg-bgmb3">sdfsdf</Box.Section>
-						<Box.Section side>
-							<XIcon>mdi-close</XIcon>
-						</Box.Section>
-					</Box>
-				</div>
 			)}
 		</ThemeProvider>
 	);

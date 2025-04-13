@@ -79,6 +79,7 @@ export function ResizeObserverProvider({
 				...newSize,
 				isObservingElement,
 			};
+			console.log("newSize", newSize);
 			if (
 				JSON.stringify(sizeWithMeta) !==
 				JSON.stringify(latestSizeRef.current)
@@ -152,7 +153,27 @@ export function ResizeObserverProvider({
 	}, [debouncedResize, handleResize]);
 
 	return (
-		<ResizeObserverContext.Provider value={{ ...size, ref: parentRef }}>
+		<ResizeObserverContext.Provider
+			value={{
+				...size,
+				ref: parentRef,
+				getSize() {
+					return [
+						latestSizeRef.current.width,
+						latestSizeRef.current.height,
+					];
+				},
+				getPosition() {
+					return [
+						latestSizeRef.current.left,
+						latestSizeRef.current.top,
+					];
+				},
+				etSnapshot() {
+					return latestSizeRef.current;
+				},
+			}}
+		>
 			{children}
 		</ResizeObserverContext.Provider>
 	);

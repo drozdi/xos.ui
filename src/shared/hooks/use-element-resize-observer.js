@@ -16,7 +16,6 @@ export function useElementResizeObserver({
 	debounceTime = 200,
 	boxModel = "content-box",
 } = {}) {
-	console.log("useElementResizeObserver");
 	const [size, setSize] = useState({
 		width: 0,
 		height: 0,

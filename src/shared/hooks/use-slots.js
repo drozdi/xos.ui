@@ -10,6 +10,11 @@ useCallback;
 
 import { isArray, isFunction, isString } from "../utils/is";
 
+/**
+ * Хук useSlots возвращает объект с функциями для работы со слотами.
+ * @param {React.ReactNode} children - Дочерние элементы.
+ * @returns {Object} - Объект с функциями для работы со слотами.
+ */
 export function useSlots(children) {
 	const slots = useMemo(() => {
 		let tmpChildren = children;

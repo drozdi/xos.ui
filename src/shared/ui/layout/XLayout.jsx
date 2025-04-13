@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useImperativeHandle, useMemo, useRef } from "react";
-import { useResizeObserver } from "../../hooks";
+import { useElementResizeObserver } from "../../hooks";
 import { forwardRefWithAs } from "../../internal/render";
 import "./style.css";
 import { XLayoutProvider } from "./XLayoutContext";
@@ -13,7 +13,7 @@ export const XLayout = forwardRefWithAs(function XLayoutFn(
 		ref: containerRef,
 		width,
 		height,
-	} = useResizeObserver({
+	} = useElementResizeObserver({
 		onResize,
 	});
 	const instances = useRef({});
@@ -78,9 +78,5 @@ export const XLayout = forwardRefWithAs(function XLayoutFn(
 		);
 	}
 
-	return (
-		<>
-			<XLayoutProvider value={ctx}>{layout}</XLayoutProvider>
-		</>
-	);
+	return <XLayoutProvider value={ctx}>{layout}</XLayoutProvider>;
 });
