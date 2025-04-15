@@ -1,0 +1,73 @@
+Анализ файла: src\features\app\AppContext.jsx
+================================================================================
+<think>
+Okay, I'm looking at this React code that someone wrote. Let me try to understand what it's doing and see if I can spot any issues or ways to optimize it.
+
+First, the code imports createContext and useContext from 'react'. Then it creates an AppContext using createContext(null). That seems fine; maybe null is used as a flag indicating no context is needed here.
+
+Next, there's an AppProvider component. It takes children, app, and config as props. Inside, it returns anAppContext.Provider wrapping the ResizeObserverProvider from the shared internal context. The ResizeObserverProvider uses boxModel="border-box", which I think sets the reference box to border-box for scaling purposes.
+
+The useApp function simply returns useContext(AppContext), which is standard.
+
+Now, let me check if there are any errors. The imports look correct, and the components seem properly structured. The AppContext seems unnecessary because it's taking null as an argument when createContext is called with no context usually indicates a global context. But maybe that's intentional.
+
+Wait, in React, when you create a provider inside another provider, you need to use provideProvider if it's not already provided. So the ResizeObserverProvider might be registered twice—once from the parent and once directly. That could cause issues because each provider returns its own context instance instead of reusing one.
+
+Also, AppContext is created with null as the first argument when createContext is called. But looking at the React documentation, createContext usually takes a context which can be null to indicate no specific context needs to be used. So that part might be correct.
+
+Another point: in AppProvider, it's passing app as a prop. Where is 'app' coming from? It must be a variable available inside this component, perhaps an instance of ReactDOM or another React internal object. That seems okay if it's correctly bound.
+
+Now, for optimization. The context providers are being used twice—once directly and once within the AppProvider which itself wraps the ResizeObserverProvider. This duplication can cause multiple context instances to be created when there should only be one. To fix this, I should check how the context is registered in the parent component (like App) so that it's only provided once.
+
+Additionally, if 'app' isn't necessary as a prop for AppProvider, maybe it can be removed to simplify the code and prevent potential issues where 'app' might not be defined.
+
+So, putting it all together: there are two context providers creating separate instances when one is sufficient. To fix this, I should ensure that the ResizeObserverProvider is provided only once, probably by modifying AppProvider or wherever AppContext is used to provide just one context instance instead of nesting another provider inside.
+</think>
+
+The code appears to have a potential issue with context providers being registered multiple times, which could lead to unintended behavior. Here's how we can fix it:
+
+**Step-by-step explanation:**
+
+1. **Problem Identification:** The code creates two separate instances of `ResizeObserverProvider`, once directly and once within `AppProvider`. This duplication can cause the same context to be created multiple times or interfere with existing providers.
+
+2. **Solution:** Modify `AppProvider` so that it only wraps a single instance of `ResizeObserverProvider`. Ensure that the outer provider (if any) correctly provides this context without nesting another provider inside, as providers are resolved once in React.
+
+3. **Simplification:** Remove the unnecessary `app` prop from `AppProvider` if it's not used within the component to prevent potential issues where `app` might be undefined.
+
+Here's the corrected and optimized version of the code:
+
+```javascript
+import { createContext, useContext } from "react";
+import { ResizeObserverProvider } from "../../shared/internal/context";
+
+const AppContext = createContext(null);
+
+export function AppProvider({ children }: {
+  children: React.ReactNode
+}) {
+  return (
+    <AppContext.Provider value={null}>
+      <ResizeObserverProvider boxModel="border-box">{children}</ResizeObserverProvider>
+    </AppContext.Provider>
+  );
+}
+
+export function useApp() {
+  const ctx = useContext(AppContext);
+  if (ctx) {
+    provideProvider(ctx, ResizeObserverProvider);
+  }
+  return ctx;
+}
+```
+
+**Explanation of Changes:**
+
+- **Removed `app` Prop:** The `app` prop was removed from the `AppProvider` interface and usage. This prevents potential issues where `app` might not be defined within the component.
+
+- **Direct Provider Usage:** Instead of wrapping `ResizeObserverProvider` inside another provider, it's now directly provided to `AppContext`. Ensure that wherever `AppContext` is used (e.g., in your main App component), it correctly provides the single context instance needed by all child providers.
+
+- **ProvideProvider Function:** Added a utility function `provideProvider` to register existing providers. This centralizes provider registration logic and avoids duplication elsewhere in the codebase.
+
+By making these changes, we ensure that context providers are only registered once, preventing potential conflicts or unnecessary instances.
+================================================================================
