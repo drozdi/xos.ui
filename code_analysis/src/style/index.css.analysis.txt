@@ -1,0 +1,151 @@
+Анализ файла: src\style\index.css
+================================================================================
+<think>
+Alright, I need to help the user by reviewing their CSS code and providing feedback. Let me start by carefully reading through their code.
+
+First, they have a global variables section using `--` for custom properties. That looks good for consistency. The text sizes are defined with rem units, which is standard. However, there's redundancy in the grid sections—`minmax` is declared multiple times. I should suggest consolidating those to avoid repetition.
+
+Looking at the opacity variables (`--opacity-d` and `--opacity-h`), they're set but not applied anywhere. It might be a mistake or oversight. I'll note that for them to take effect, they need targets specified in `.dark`.
+
+Their color variables are well-organized, especially with the dark theme overriding some properties. The use of CSS variables is effective, enhancing maintainability.
+
+In the base layer, they apply most styles globally, but missing `@apply` directives could cause issues. Adding `@apply` where needed would ensure inherited styles work as intended.
+
+The imports are a bit scattered. Grouping related classes like Flexbox, Boxes, X-Background, Borders, and Utils can make the code cleaner and easier to navigate.
+
+I also notice that some properties like `--text-h1` through `--text-h6` don't have corresponding `@apply` rules in the body styles. This might lead to inconsistent text sizing unless applied explicitly.
+
+Additionally, there's a duplicated CSS rule for `*::-moz-selection` and `*::selection`. It would be better to use `::before` instead of `:after` for better specificity and compatibility.
+
+Overall, the code is well-structured but could benefit from consolidating repeated sections, ensuring all variables are used, adding consistent selection styles, and organizing imports more cohesively.
+</think>
+
+Here's a detailed review and some suggestions to improve your CSS code:
+
+### 1. **Global Variables**
+Your use of custom properties (--) for consistency is good. However, there are some issues:
+- The `--text-hX` variables define text sizes but no corresponding `@apply` rules in the body styles.
+- Some grid-related `minmax` declarations are duplicated.
+
+### 2. **Grid Sections**
+You have multiple redundant declarations:
+```css
+--grid-row-layout: minmax(min-content, auto) minmax(auto, 1fr)
+minmax(min-content, auto);
+```
+This should be consolidated to avoid repetition.
+
+### 3. **Dark Theme Override**
+Your `dark` pseudo-class overrides some colors but misses the opacity properties (`--opacity-d` and `--opacity-h`). Ensure these are applied with appropriate targets.
+
+### 4. **Missing `@apply` Rules**
+The base layer has global styles but lacks proper `@apply` directives. Add these for text sizing rules:
+```css
+/* Apply */
+h1 { @apply text-h1; }
+h2 { @apply text-h2; }
+// ... and so on for h3 to h6
+```
+
+### 5. **Selection Styles**
+You have both `::-moz-selection` and `::selection`, which is redundant. Consider using a single selector, such as:
+```css
+*::before {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+```
+
+### 6. **Import Organization**
+Your imports are scattered and could be grouped for better readability:
+- Import Flexbox-related CSS first.
+- Follow with Box-related styles.
+- Then Border and X-Background.
+
+### 7. **CSS Variable Usage**
+While you're using variables effectively, ensure all custom properties have corresponding targets in your styles.
+
+### Suggested Improvements
+
+#### Consolidated Grid Layout
+```css
+--grid-row-layout: minmax(min-content, auto) minmax(auto, 1fr);
+--grid-col-layout: minmax(min-content, auto) minmax(auto, 1fr);
+--grid-row-window: minmax(min-content, auto) minmax(auto, 1fr);
+```
+
+#### Consistent Selection
+Replace `*::-moz-selection` with:
+```css
+*::before {
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+```
+
+#### Removed Duplicate Imports
+Remove duplicate imports like "./box.css" and ensure each import is grouped logically.
+
+### Updated Code Structure
+
+Here's how your code could be restructured:
+
+```css
+/* Global Variables */
+:root {
+    --spacing: calc(var(--stack:single) * 1);
+    /* ... other variables ... */
+}
+
+.dark {
+    --body-bg: #002650;
+    --body-color: #ffffffb3;
+
+    --link-color: #ffffffb3;
+    --link-hover-color: #ffffff;
+
+    --border-color: #ffffff33;
+    /* ... other dark theme overrides ... */
+}
+
+/* Base Layer */
+/* Apply */
+h1 { @apply text-h1; }
+h2 { @apply text-h2; }
+// ... and so on for h3 to h6
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: ['Segoe UI', sans-serif];
+}
+
+/* Import Groupings */
+import "./flexbox.css";
+import "./boxes.css";
+import "./x-backgrounds.css";
+import "./borders.css";
+import "./utils.css";
+
+/* CSS Rules */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+}
+```
+
+This structure makes your code more maintainable and easier to navigate.
+
+### Key Takeaways
+- **Consolidate** repeated CSS declarations.
+- **Ensure all custom properties have corresponding targets.**
+- **Use consistent selector styles (e.g., `*::before`).**
+- **Organize imports logically.**
+- **Add proper `@apply` directives for text sizing rules.**
+
+By implementing these changes, your CSS will be more robust and maintainable while keeping your codebase clean and organized.
+================================================================================
