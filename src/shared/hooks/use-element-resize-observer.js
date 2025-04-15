@@ -52,6 +52,7 @@ export function useElementResizeObserver({
 				}
 			}
 
+			// Проверяем, изменились ли размеры элемента и вызываем функцию onResize, если это так
 			if (
 				JSON.stringify(newSize) !==
 				JSON.stringify(latestSizeRef.current)
