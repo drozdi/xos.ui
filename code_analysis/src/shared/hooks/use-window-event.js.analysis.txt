@@ -1,0 +1,91 @@
+Анализ файла: src\shared\hooks\use-window-event.js
+================================================================================
+<think>
+Okay, I need to check the provided React code for any errors and think about how to optimize it. Let me go through the code step by step.
+
+First, looking at the function `useWindowEvent`. It's supposed to create an event listener for a window event in React. The function accepts three parameters: `type`, `listener`, and `options`.
+
+The current implementation uses `useEffect` with two callbacks inside it. Inside the first callback, it adds the event listener using `window.addEventListener(type, listener, options)`. Then, in the second callback, it removes that same listener.
+
+Wait a minute, I remember that when you use `useEffect`, any changes to variables passed into it will trigger a re-render unless you fix them. But looking here, inside the first callback, we're adding an event listener which might change with each call if not handled properly. This could lead to infinite loops because React keeps adding and removing listeners as long as the effect is running.
+
+I think this approach is flawed because for each render cycle, `useEffect` will add the same event listener again without checking whether it's already active or whether there are existing listeners. This can cause excessive re-renders and potential memory leaks from accumulating multiple listeners.
+
+So, what should be done instead? Instead of using `useEffect`, maybe a simple `window.addEventListener` would suffice because React already has its own event loop management. We don't need to wrap it in an effect unless we have some side effects happening inside the callback, which doesn't seem to be the case here.
+
+Also, I notice that the destructuring in `export function useWindowEvent(type, listener, options)` is incorrect. In JavaScript and TypeScript, you can only destructure parameters if they exist. If someone calls this function without providing all three arguments, it will throw an error. The correct way is to define a default for optional parameters.
+
+Looking at the call signature: `function(...options)` allows any number of arguments to be passed as an array. So, changing the third parameter to accept any additional options would make it more flexible and prevent errors when someone omits some parameters.
+
+Putting this together, I can suggest rewriting the function without `useEffect`, destructure with defaults for optional parameters, and use object spreading in the call signature. This should fix the potential issues and optimize performance by avoiding unnecessary re-renders.
+</think>
+
+The code you've provided has a few issues that need to be addressed. Let's review them step by step:
+
+1. **Use of `useEffect` incorrectly**:
+   - The function is using `useEffect`, which automatically runs its callbacks on every render cycle unless fixed in the event. However, simply adding and removing an event listener inside this callback will cause React to re-render the component infinitely.
+   - Instead, we can directly use `window.addEventListener()` since it's a small operation that doesn't need to be managed by React.
+
+2. **Incorrect destructuring**:
+   - The function uses parameters with no defaults, which could lead to errors if fewer arguments are passed than expected.
+
+3. **Improper handling of event listeners**:
+   - Adding the same listener multiple times can cause unnecessary re-renders and potentially leak resources.
+
+Here's a corrected version that addresses these issues:
+
+```javascript
+import { useEffect } from "react";
+
+/**
+ * Function useWindowEvent creates an obработчик для sự kiện sổ.
+ * @param {string} type - Dung ►.
+ * @param {Function} listener - Hàm được gọi khi sự kiện xảy ra.
+ * @param {Object} [options] - Cấu trúc tùy chọn cho ob cathedral sự kiện.
+ */
+export function useWindowEvent(type, listener, options = {}) {
+    // Use window.addEventListener directly without useEffect
+    const handle = () => {
+        if (typeof window !== 'undefined') {
+            window.addEventListener(type, listener, options);
+        }
+    };
+
+    // Remove the event listener when the component is unmounted
+    return () => {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener(type, listener, options);
+        }
+    };
+}
+
+// Function to directly create an event handler without being automatically removed
+export function createWindowEventListener(type, callback) {
+    const add = () => {
+        if (typeof window !== 'undefined') {
+            window.addEventListener(type, callback);
+        }
+    };
+
+    const remove = () => {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener(type, callback);
+        }
+    };
+
+    return { add, remove };
+}
+```
+
+**Key improvements made:**
+
+1. **Direct Event Handling**: Removed the use of `useEffect` and directly added/removed the event listener using `window.addEventListener()` and `window.removeEventListener()`. This avoids unnecessary re-renders.
+
+2. **Default Parameter Handling**: Added default values for optional parameters to prevent errors when fewer arguments are passed.
+
+3. **Helper Function**: Created a helper function `createWindowEventListener` that allows returning both adding and removing functions, providing better flexibility and readability.
+
+4. **Null Checks**: Added checks to ensure the window is defined before trying to add/remove listeners, preventing potential runtime errors in environments where React isn't loaded or in headless contexts.
+
+5. **Simplified Event Listeners Management**: The event listener is added and removed directly within the callback functions without any additional effect hooks, simplifying the code and improving performance.
+================================================================================

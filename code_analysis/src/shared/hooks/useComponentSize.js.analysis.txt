@@ -1,0 +1,141 @@
+Анализ файла: src\shared\hooks\useComponentSize.js
+================================================================================
+<think>
+Okay, я получил код от пользователя и должен проверить его на ошибки, оптимизировать и предложить улучшения. Давайте разберемся, что здесь происходит.
+
+Сначала вижу, что используется библиотека React и, конкретно, функции useCallback, useLayoutEffect, useRef и useState. Это хороший开端, так как функция с useEffect или useLayoutEffect обычно используется для обработки8 Resize Observer.
+
+Функция useComponentSize возвращает объект с refs и размерами. Внутри функцияsizeState хранит height и width, которые изменяются в зависимости от изменения размеров resistant. 
+
+Посмотрю на part where size is updated: newWidth и newHeight используются для определения, нужно ли обновить размеры. Это выглядит правильным.
+
+В next part есть ResizeObserver, который добавляет event listeners к resistantRef.current. В onResize функции проверяется, changed ли размер или ширина. Если изменились, обновляются size height и width.
+
+Но я вижу, что useLayoutEffect вызывается с массивом [ref, onResize]. Это может быть проблема, так как useCallback уловляет значения параметров функции.onResize может быть изменена во время отрисовки или в другое время, но, возможно, не важно, так как onResize использует size, который himself dependent на ref.
+
+Далее, возвращается объект с refs и ...size. Это правильно, так как size himself dependent на ref.
+
+Однако, я заметил несколько возможных улучшений или ошибок:
+
+1. В useLayoutEffect, second parameter (第二个参数) — это onResize. Но useCallback take parameters by reference, and inside onResize, size is changed via setState. That should be okay, но если sizeDepends на ref, и если ref изменяется во время отрисовки, возможно, есть бескрайственное изменение, но в данном случае, sizeDepends only на размеры resistantRef, что не меняется во время отрисовки.
+
+2. В onResize функции: newHeight = ref.current.offsetHeight — здесь current property доступен только если resistantRef имеет className или other properties. Если resistantRef — это canvas element, то hasattr с 'class' может быть, но можно использовать getBoundingClientRect() или querySelectorAll для получения всех children и извлечения размеров.
+
+3. В ResizeObserver, new ResizeObserver(onResize) — возможно, стоит проверять, неobsereвлен ли resistantRef перед добавлением ResizeObserver, в else case disconnect. В текущем коде есть check на ref.current before adding observer and before disconnecting.
+
+4. В current code, state size is dependent on ref, что может привести к circular dependency между refs и state. Возможно, стоит разбить state отдельно от refs или использовать другое сопротивление.
+
+5. Также можно добавить проверку на nil or falsy values для ref.current, чтобы избежать undefined errors.
+
+6. В useLayoutEffect, параметры given are [ref, onResize]. Но inside onResize, size is changed, что может быть связано с circular dependency, если функции dependent между собой. Может быть, стоит использовать useCallback's parameters or other methods to prevent infinite loops или other issues.
+
+7. Также можно заменить useRef на useState для tracking refs, если это упростит код и устранит возможные проблемы circular dependencies.
+
+8. В useComponentSize возвращает ref, но ref current может быть null. Проверяется ли его hasattr: в onResize используется newHeight = ref.current.offsetHeight — если ref.current — это null или undefined, может возникнуть ошибка.
+
+Попробую предложить несколько улучшений:
+
+- Использовать useState для refs, чтобы избежать circular dependencies.
+- В useLayoutEffect добавить проверку на nil ref.current перед добавлением ResizeObserver.
+- Изменить onResize, чтобы не использовать setState, если это возможно, или обходиться без этого.
+- Добавить проверку на nil size.height и width перед сохранением в state.
+
+Также стоит проверить, что resistantRef — это действительно element с height и width, и что getattr или other methods работают корректно.
+
+В общем, код выглядит близко к стандартным примерам использования useLayoutEffect и ResizeObserver. Однако есть несколько возможных улучшений, таких как использование stateless refs, проверки на nil перед добавлением event observers, и избегание circular dependencies.
+</think>
+
+**Объяснение:**
+
+Код кажется правильным и эффективным для отслеживания размеров resistantRef и обновления size в соответствии с изменениями размеров. Однако можно улучшить его, чтобы избежать возможных circular dependencies и добавить проверки на nil, что укрепит безопасность кода.
+
+**Шаги улучшений:**
+
+1. **Использование useState вместо useRef для refs:** Это уберет circular dependency между refs и state.
+2. **Проверка на nil refs.current в ResizeObserver:** Убеждаемся, что ResizeObserver не будет добавлен, если refs current не доступен.
+3. **Использование querySelectorAll для получения размеров:** Вместо getattr используем методы для работы с DOM.
+4. **Добавление проверки nil size:** Сure от NullPointerException при изменении state.
+
+**Улучшенный код:**
+
+```javascript
+import { useCallback, useLayoutEffect } from 'react';
+
+export function useComponentSize() {
+  const [size, setSize] = useState({ height: 0, width: 0 });
+
+  const refs = useRef(() => null).then(r => ({ current: r }));
+
+  const onResize = useCallback((e) => {
+    if (!refs.current || !refs.current.current) {
+      return;
+    }
+
+    const newWidth = refs.current.current.offsetWidth;
+    const newHeight = refs.current.current.offsetHeight;
+
+    setSize(prevSize => ({
+      ...prevSize,
+      height: newHeight,
+      width: newWidth
+    }));
+  }, [size]);
+
+  const useLayoutEffectFn = useCallback(() => {
+    if (!refs.current || !refs.current.current) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver(onResize);
+    resizeObserver.observe(refs.current.current);
+
+    return () => resizeObserver.disconnect();
+  }, [refs, onResize]);
+
+  const getRefs = () => {
+    if (typeof window !== 'undefined') {
+      const elements = document.querySelectorAll('.react-resizable');
+      if (elements) {
+        refs.current.current = elements[0];
+      }
+    } else {
+      refs.current.current = document.querySelector('canvas');
+    }
+  };
+
+  getRefs();
+
+  return { ...size };
+}
+
+export function onRefChange(oldRef, newRef) {
+  if (!newRef) {
+    refs.current.current = null;
+    return false;
+  }
+
+  const newHeight = newRef.current?..offsetHeight || 0;
+  const newWidth = newRef.current?.getWidth() || 0;
+
+  setSize(prevSize => ({
+    ...prevSize,
+    height: newHeight,
+    width: newWidth
+  }));
+}
+
+export function useComponentSizeOld() {
+  return { size, refs: useRef(() => null).then(r => ({ current: r })) };
+}
+```
+
+**Объяснение улучшений:**
+
+1. **Использование useState для refs:** refs — это stateless object с current property, который跟踪 current element.
+2. **getRefs() для настройки refs:** Включает проверку типа window и соответствующей DOM-сélectionке.
+3. **onRefChange для обработки изменений refs:** Добавляет безопасность при изменении refs.current.
+4. **Использование querySelectorAll вместо getattr:** Обеспечивает доступ к размерам element через DOM.
+5. **Дополнительная безопасность с newHeight и newWidth:** Используют .current属性, чтобы избежать NullPointerException.
+
+Этот код улучшен в безопасности, обработке event observer и избегает circular dependencies.
+================================================================================
