@@ -46,6 +46,19 @@ const initialContext = {
 	...getWindowSize(),
 	ref: { current: null },
 	isObservingElement: false,
+	getSize() {
+		const size = getWindowSize();
+		return [
+			size.width,
+			size.height,
+		];
+	},
+	getPosition() {
+		return [0,0];
+	},
+	getSnapshot() {
+		return getWindowSize();
+	},
 };
 
 /**
@@ -79,7 +92,6 @@ export function ResizeObserverProvider({
 				...newSize,
 				isObservingElement,
 			};
-			console.log("newSize", newSize);
 			if (
 				JSON.stringify(sizeWithMeta) !==
 				JSON.stringify(latestSizeRef.current)
@@ -169,7 +181,7 @@ export function ResizeObserverProvider({
 						latestSizeRef.current.top,
 					];
 				},
-				etSnapshot() {
+				getSnapshot() {
 					return latestSizeRef.current;
 				},
 			}}
