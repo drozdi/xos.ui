@@ -1,9 +1,10 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
-import { isNumber } from "../../utils/is";
-import { useXPopoverContext } from "./XPopoverContext";
+import { useForkRef } from "../../hooks";
+import { forwardRefWithAs } from '../../internal/render';
 import "./style.css";
+import { useXPopoverContext } from "./XPopoverContext";
 
 function isInViewport(element, axis = "xy") {
 	const rect = element.getBoundingClientRect();
@@ -30,7 +31,7 @@ function isInViewport(element, axis = "xy") {
 	return true;
 }
 
-export function XPopoverDropDown({ children }) {
+export const XPopoverDropDown = forwardRefWithAs(({ children }, ref) => {
 	const ctx = useXPopoverContext();
 	const elementRef = useRef();
 	const [position, setPosition] = useState(ctx.position || "bottom");
@@ -39,6 +40,7 @@ export function XPopoverDropDown({ children }) {
 	const opened = ctx.opened;
 
 	useEffect(() => {
+		return;
 		if (!opened || !elementRef.current) return;
 		let pos = position.split("-");
 		if (["top", "bottom"].includes(pos[0])) {
@@ -71,23 +73,24 @@ export function XPopoverDropDown({ children }) {
 			}
 		}
 	}, [position, offset, arrow, opened, elementRef]);
+
+	const targetRef = useForkRef(ctx.floating, elementRef, ref);
+
+	console.log(ctx);
+
 	return (
 		<div
 			className={classNames("x-popover__dropdown", {
-				"x-popover__dropdown--arrow": arrow,
-				[`x-popover__dropdown--${position}`]: position,
+				//"x-popover__dropdown--arrow": arrow,
+				//[`x-popover__dropdown--${position}`]: position,
 			})}
-			style={{
-				"--popover-offset-val": isNumber(offset)
-					? `${offset}px`
-					: offset,
-			}}
-			ref={elementRef}
+			style={ctx.popover.floating.floatingStyles}
+			ref={targetRef}
 		>
 			{children}
 		</div>
 	);
-}
+})
 
 XPopoverDropDown.propTypes = {
 	children: PropTypes.node,

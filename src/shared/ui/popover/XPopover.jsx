@@ -1,14 +1,26 @@
-import classNames from "classnames";
 import PropTypes from "prop-types";
+import { useCallback } from "react";
 import { useDisclosure } from "../../hooks";
 import { useId } from "../../hooks/use-id";
 import { XPopoverProvider } from "./XPopoverContext";
 import "./style.css";
+import { usePopover } from './use-popover';
 
 export function XPopover({ id, arrow, position = "bottom", offset, children }) {
+	const popover = usePopover({
+		position
+	})
 	const uid = useId(id);
 	const [opened, { toggle: onToggle, open: onOpen, close: onClose }] =
 		useDisclosure();
+	console.log(popover);
+	const reference = useCallback((node) => {
+		  popover.floating.refs.setReference(node);
+	}, [popover.floating.refs.setReference]);
+	
+	const floating = useCallback((node) => {
+		popover.floating.refs.setFloating(node);
+	}, [popover.floating.refs.setFloating]);
 
 	return (
 		<XPopoverProvider
@@ -24,15 +36,12 @@ export function XPopover({ id, arrow, position = "bottom", offset, children }) {
 				arrow,
 				position,
 				offset,
+				popover,
+				reference,
+				floating
 			}}
 		>
-			<div
-				className={classNames("x-popover", {
-					"x-popover--show": opened,
-				})}
-			>
 				{children}
-			</div>
 		</XPopoverProvider>
 	);
 }

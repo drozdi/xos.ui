@@ -1,7 +1,7 @@
 @reference "@style";
 
 .x-popover {
-	@apply relative inline-block;
+	@apply inline-block;
 }
 
 .x-popover__dropdown {

@@ -1,21 +1,15 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { cloneElement, forwardRef, useEffect, useRef } from "react";
-import { useXPopoverContext } from "./XPopoverContext";
+import { Children, cloneElement } from "react";
+import { useForkRef } from "../../hooks";
+import { forwardRefWithAs } from '../../internal/render';
 import "./style.css";
+import { useXPopoverContext } from "./XPopoverContext";
 
-export const XPopoverTarget = forwardRef(function XPopoverTarget(
-	{ children, type = "dialog", ...props },
-	ref
-) {
+export const XPopoverTarget = forwardRefWithAs(({ children, type = "dialog", ...props}, ref) => {
+	Children.only(children);
 	const ctx = useXPopoverContext();
-	const elementRef = useRef(null);
-
-	useEffect(() => {
-		console.log(elementRef.current?.getBoundingClientRect());
-		ctx.placement = elementRef.current?.getBoundingClientRect();
-	}, [elementRef]);
-
+	const targetRef = useForkRef(ctx.reference, ref);
 	const accessibleProps = {
 		"aria-haspopup": type,
 		"aria-expanded": ctx.opened,
@@ -27,7 +21,7 @@ export const XPopoverTarget = forwardRef(function XPopoverTarget(
 		...accessibleProps,
 		className: classNames(props?.className, children?.props?.className),
 		onClick: ctx?.onToggle,
-		ref: elementRef,
+		ref: targetRef,
 	});
 });
 XPopoverTarget.propTypes = {
