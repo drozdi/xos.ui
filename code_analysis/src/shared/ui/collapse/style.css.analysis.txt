@@ -1,0 +1,89 @@
+Анализ файла: src\shared\ui\collapse\style.css
+================================================================================
+<think>
+Okay, I need to help the user by checking their Tailwind CSS code for errors and suggest optimizations. Let me go through each part step by step.
+
+First, looking at the code structure, it starts with a reference to Tailwind CSS, which is correct. The class is defined using `@reference "tailwindcss";` which seems fine, but I remember that in newer versions of Tailwind, you can omit this line if all classes are imported via `@layer`.
+
+Next, there's the `.x-collapse` class with some utility imports and utility properties. Wait, I think that in Tailwind, we don't use `@apply` directly in class definitions like that. Instead, it should be within a custom tag or using the compose operator. So this part is incorrect.
+
+Then, each of these classes has multiple @apply statements which isn't valid because each utility can only have one style chain starting with @apply. So I need to break them down into separate components or use the correct composition methods.
+
+Looking at `@apply grid transition-all grid-rows-[0fr] ease-in-out duration-200 relative;`, this seems wrong because `grid` isn't a utility function that can be applied directly like that. Instead, it's part of a utility chain, so I should separate these out or use the compose operator.
+
+Also, I notice that in the first two rules, `.x-collapse-panel` is repeated with commas, which isn't necessary and might cause issues because class names shouldn't have duplicates in one rule set.
+
+Moving on to `@apply m-0 p-0;`, same issue as before. Each utility should be broken down or used correctly within a single @apply statement if needed.
+
+Looking at the rest of the code, each class is applying multiple transitions and styles without proper structuring. This could lead to syntax errors because each @apply must start with a valid utility function name followed by the properties.
+
+I also see that some classes have nested @apply statements which isn't allowed. Each @apply should only contain one set of properties after the initial style modifiers.
+
+To fix these issues, I'll need to correct each class definition by separating them into individual components or using the compose operator properly. This will ensure each utility is applied correctly and avoid syntax errors.
+
+Additionally, consolidating similar rules can make the code cleaner and prevent redundancy. For example, combining the two `x-collapse-panel` rules into one with a conditional statement might improve readability and functionality.
+
+I should also check if Tailwind's version being used supports these utility classes and whether they're applied correctly without any overrides or conflicts.
+
+Finally, after making these corrections, I'll format each class definition properly to follow Tailwind's best practices, ensuring that each @apply has only one set of style modifiers.
+</think>
+
+Here is the analysis and suggestions for improving your code:
+
+1. **Invalid Structure**: The code uses `@apply` incorrectly within class definitions. In Tailwind CSS, you should not use `@apply` directly in class properties.
+
+2. **Redundant Rules**: The `.x-collapse-panel` rule has duplicate declarations which are redundant and may cause conflicts or errors.
+
+3. **Missing Composition**: Some classes have multiple `@apply` statements, but each utility can only have one style chain starting with `@apply`.
+
+Here is the corrected code:
+
+```css
+@reference "tailwindcss";
+
+.x-collapse {
+	@layer(
+		[
+			[
+				"grid",
+				transition: "all ease-in-out duration-200",
+				["grid-rows-[0fr]"] 
+			],
+			[
+				"overflow-hidden",
+				transition: "all ease-in-out duration-200"
+			]
+		]
+	)
+}
+
+.x-collapse-panel {
+	@layer(
+		[
+			[
+				"m-0 p-0"
+			],
+			[
+				"block transition-all duration-200 ease-in-out"
+			]
+		]
+	)
+}
+```
+
+**Suggestions for Improvements:**
+
+1. **Use `@layer` Instead of Direct Apply**: This is the correct way to apply multiple utility classes in Tailwind CSS.
+
+2. **Avoid Redundancy**: Combine duplicate rules into a single declaration with conditional styling if needed.
+
+3. **Follow Proper Syntax**: Ensure each rule set follows proper syntax structure, separating individual styles or using appropriate composition methods like `@layer`.
+
+4. **Break Down Complex Rules**: If the rule gets too long, break it down into multiple utility classes for better readability and maintainability.
+
+5. **Conditional Styling**: Use `@layer` with a list of rules to conditionally apply different styles based on certain conditions (like active state in your example).
+
+6. **Use the Compose Operator (`·`) if Needed**: If you're using Tailwind through a custom tag, make sure to use the compose operator instead of direct class application.
+
+By restructuring your code this way, it will be more maintainable and less prone to syntax errors.
+================================================================================

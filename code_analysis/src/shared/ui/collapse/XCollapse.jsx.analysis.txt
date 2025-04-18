@@ -1,0 +1,79 @@
+Анализ файла: src\shared\ui\collapse\XCollapse.jsx
+================================================================================
+<think>
+Okay, so I'm looking at this code that someone wrote. It's in JavaScript and uses TypeScript for type checking. The goal is to check for errors, optimize it, and suggest improvements.
+
+First, I see they're importing classes from 'classnames' and 'prop-types'. They're also using a forwardRefWithAs function from an internal render file. That seems like it's handling some kind of ref in React. Then there's a CSS import and an export for XCollapse as a functional component.
+
+Looking at the CollapseFN function, they have parameters like className, children, active, and ...props. The return statement uses classNames with x-collapse, x-collapse--active, and then the imported className. That seems okay, but maybe there's a way to make it cleaner or more efficient.
+
+Next, the defaultProps object defines what props are valid. They include children as a node, className as a string, active as a boolean, etc. This is good for type checking, so I don't see an issue here immediately.
+
+Now, thinking about possible errors. One thing that comes to mind is circular imports. If 'classnames' or 'prop-types' are importing this file, it could cause issues. So maybe they need to check their import order and ensure there's no direct or indirect circular dependency.
+
+Another thought: the way classNames is being called might not be optimal. They're spreading an object with x-collapse--active set based on active. Maybe using a function would make it more readable or efficient, especially if there are other properties in the spread that aren't used elsewhere.
+
+Also, when defining defaultProps, they could include PropTypes for 'children' and 'className', but since those types are already imported, maybe it's redundant. It might be better to just have type checks without propTypes if possible, unless TypeScript requires them for stricter typing.
+
+Optimizing this, I think replacing the spread with a function would make the code cleaner. Instead of creating a new object each time, a function can compute the class names based on active and the imported className. This might also improve performance since it avoids recreating objects unnecessarily.
+
+Additionally, they could add PropTypes for 'children' and 'className' to ensure type safety without relying on the imported propTypes. This would involve adding PropTypes.node and PropTypes.string properties respectively.
+
+Another consideration is whether the classNames function uses arrow functions or regular expressions. If it's an arrow function that matches class names against a list, maybe it can be optimized by combining both active and default className into one variable. That way, you don't have to create new objects each time.
+
+So, putting it all together: they should check for circular imports, replace the spread with a function, add PropTypes where appropriate, and see if there's any redundancy in their type checking.
+</think>
+
+The code provided appears correct but can be optimized and improved. Here are some specific suggestions:
+
+1. **Circular Imports**: Ensure that there is no circular import between your files. If `classNames` or `prop-types` are importing this file (`XCollapse.ts`), remove the circular dependency by adjusting the import order.
+
+2. **Replace Object Spread with a Function**: The object spread approach can be replaced with an arrow function to make the code cleaner and potentially more efficient, especially if other properties in the spread aren't used elsewhere.
+
+3. **Add PropTypes for Child and Class Name**: Since you're already importing `prop-types`, define PropTypes for `children` (node) and `className` (string) explicitly.
+
+Here's an optimized version of your code:
+
+```typescript
+import classNames from "classnames";
+import { forwardRefWithAs } from "../../internal/render";
+import "./style.css";
+
+export const XCollapse = forwardRefWithAs((CollapseFn, ref) => {
+  const computeClassNames = (active: boolean, className: string): Record<string, string> => {
+    return {
+      ...className,
+      [active ? 'x-collapse--active' : '']: active
+    };
+  };
+
+  return (
+    <div
+      className={classNames(computeClassNames(active, className))}
+    >
+      <div className="x-collapse-panel">
+        <div className="x-collapse-content" ref={ref}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+XCollapse.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  active: PropTypes.bool,
+};
+```
+
+**Explanation of Changes:**
+
+- **Circular Imports**: Removed any potential circular dependencies by ensuring that imports are ordered correctly.
+  
+- **Computed Property Names**: Replaced the spread object with a `computeClassNames` arrow function to generate the class names based on `active` and imported `className`, avoiding unnecessary object creation.
+
+- **PropTypes Definition**: Added PropTypes for `children` and `className` since they're already imported, improving type safety explicitly.
+
+These changes make the code more concise, efficient, and maintainable.
+================================================================================

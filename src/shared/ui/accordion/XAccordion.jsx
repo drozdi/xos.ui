@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useId } from "../../hooks/use-id";
 import { scopedKeydownHandler } from "../../internal/events/scoped-keydown-handler";
 import { isArray } from "../../utils/is";
@@ -28,7 +28,7 @@ export function XAccordion({
 		multiple ? [].concat(propsValue) : propsValue ?? undefined
 	);
 
-	const handleChange = (event, value) => {
+	const handleChange = useCallback((event, value) => {
 		onChange?.({
 			...event,
 			value,
@@ -46,7 +46,7 @@ export function XAccordion({
 			},
 		});
 		setCurrent(() => value);
-	};
+	}, [name, onChange, uid]);
 
 	const context = useMemo(() => {
 		return {
@@ -89,7 +89,7 @@ export function XAccordion({
 				orientation: "xy",
 			}),
 		};
-	}, [uid, current, multiple]);
+	}, [uid, current, multiple, handleChange]);
 
 	useLayoutEffect(() => {
 		let newValue;
@@ -101,7 +101,7 @@ export function XAccordion({
 			newValue = multiple ? [] : undefined;
 		}
 		handleChange({}, newValue);
-	}, [multiple]);
+	}, [multiple, current, handleChange]);
 
 	useLayoutEffect(() => {
 		setCurrent(() =>
