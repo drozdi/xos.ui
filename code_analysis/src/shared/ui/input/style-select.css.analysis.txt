@@ -1,0 +1,70 @@
+Анализ файла: src\shared\ui\input\style-select.css
+================================================================================
+<think>
+Okay, let me try to help the user with their CSS code. They provided a snippet and asked for checking errors, optimization, and improvements.
+
+First, I'll look at the code structure. It seems they're using Tailwind CSS since it's concise and utility-based. I notice some things that could be optimized or fixed.
+
+In the select.x-input-native rule, there are comments before @apply in the nested options. Those are inline comments which might not be necessary here, so I'll remove them for cleaner code.
+
+The .x-input-container:has(select) uses an inherited pseudo-element with p-[1px]. It's better to directly apply padding since it's more efficient and readable than using a default element. So I'll replace that line.
+
+Looking at the comments in .x-input--outline, they're trying to style the outline but have redundant code inside a commented block. Since the outline is already covered by parent elements, adding border there might cause issues or be redundant, so I'll remove those lines.
+
+I also notice some spacing and formatting issues. Adding proper line breaks after each rule improves readability without affecting functionality.
+
+Putting it all together, these changes should make the code cleaner, more efficient, and less error-prone.
+</think>
+
+Для улучшения предоставленного кода CSS выполним следующие действия:
+
+1. Удалить неccdедательные комментарии
+2. Сстараться сделать структуру кода более читабельной
+3. Оптимизировать9s
+4. Проверить за собой для ошибок
+
+Заметил, что некоторые элементы selector уже указаны дважды (например, `select.x-input-native` уже указан как в первом, так и во втором rules). Также есть некоторыеdundant code.
+
+Итоговый улучшенный код:
+
+```css
+@reference "@style";
+
+select.x-input-native {
+    @apply appearance-none bg-surface cursor-pointer;
+    & option:not(:disabled) {
+        @apply x-bg-surface;
+    }
+    &:not(:checked) option {
+        @apply opacity-50;
+    }
+    &:checked option {
+        @apply text-white;
+    }
+}
+
+.x-input-container {
+    has(select) p-[1px];
+}
+
+/* Возможно, нужно убрать или уточнить код для .x-input--outline */
+```
+
+Улучшения:
+
+1. Удалены лишние комментарии
+2. Повышен стиль selector с использованием правильного патчинга
+3. Добавлены дополнительные пробелы для лучшей читаемости
+4. Использование `has(select)` вместо nav element для лучшей производительности
+5. Удаленыdundant rules для .x-input--outline (поскольку они уже указаны в основном selector)
+6. Добавлены пробелы в rule for .x-input-container для большей читаемости
+
+Также важно отметить, что использование `p-[1px]` лучше, чем `@apply p-[1px]`, так как это позволяет избежать использования наследующих свойств.
+
+Если нужно настроить border для .x-input--outline, лучше сделать его частью основного selector:
+```css
+.x-input--outline {
+    outline: 1px solid inherit;
+}
+```
+================================================================================
