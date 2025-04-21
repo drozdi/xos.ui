@@ -65,7 +65,7 @@ function App() {
 
 									<XBadge>asjdghj 1</XBadge>
 									<XBadge>asjdghj 2</XBadge>
-									<XBadge>asjdghj 3</XBadge>
+									<XBadge>asjdghj 4</XBadge>
 								</>
 							)}
 							{false && (
