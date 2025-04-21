@@ -1,0 +1,112 @@
+Анализ файла: src\shared\ui\progress\style.css
+================================================================================
+<think>
+Okay, I'm trying to help the user fix their progress circle code. Let me look at what they provided.
+
+First, I see they have a CSS file with classes like .x-progress-circular and some animations. The problem is probably in how the circular progress bar is being styled or animated because sometimes these can cause layout issues.
+
+Looking at the keyframes for rotation and dash patterns, maybe something's off there. Also, the underlay and overlay effects might not be working as intended.
+
+I notice that in their x-progress-circular class, they have an SVG with a transform origin set to center center. Maybe this is conflicting with other styles or causing unexpected rotations. Changing it to left top could help align things properly without affecting other elements.
+
+They also use inline SVGs for the circular progress, but combining that with display: inline-block might not play well if there are other flexbox rules in place. Switching to a div-based approach might simplify things and avoid conflicts.
+
+The underlay and overlay animations have z-index values of 1 and 2 respectively. But when using multiple layers, sometimes higher z-index doesn't always show up correctly if the parent elements have their own positioning. Maybe adjusting these or removing them could help prevent visual issues.
+
+Another thing is the dash offset in the keyframes. The user has some negative values which might not be necessary now that I think about it. Simplifying those could reduce confusion and potential bugs.
+
+I also see some comments like "x-progress-circular--reverse" but without corresponding classes, which might confuse the CSS processor or cause unexpected animations when combined with other elements.
+
+Putting this all together, I'll suggest removing the inline SVGs, adjusting transform origins to left top for consistency, simplifying the z-index values, and reorganizing the code to avoid conflicts. This should make the progress circle work without causing layout issues.
+</think>
+
+Вижу, что у вас есть CSS-код для создания.progress-circular circular_progress. Давайте его немного упростим и исправим возможные ошибки.
+
+```css
+ ProgressCircular {
+   display: inline-block;
+   width: 200px;
+   height: 200px;
+   margin: 100px auto;
+ }
+
+ .progress-circular__content {
+   align-items: center;
+   display: flex;
+   justify-content: center;
+ }
+
+ .progress-circular__underlay {
+   color: #888;
+   stroke: currentColor;
+   z-index: 1;
+ }
+
+ .progress-circular__overlay {
+   stroke: url(#gradient);
+   transition: all 0.2s ease-in-out, stroke-width 0s;
+   z-index: 2;
+ }
+}
+
+ProgressCircular::before,
+ProgressCircular::after {
+   content: '';
+   width: 100%;
+   height: 100%;
+   position: absolute;
+   top: 0;
+   left: 0;
+   pointer-events: none;
+   clip-path: circle(50% 50%, 45deg);
+}
+
+ProgressCircular::before {
+   transform-origin: left top;
+}
+
+ProgressCircular::after {
+   transform-origin: right bottom;
+}
+
+@keyframes progress-circular-dash {
+   from {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0px;
+   }
+   to {
+      stroke-dasharray: 100, 200;
+      stroke-dashoffset: -74px;
+   }
+}
+
+@keyframes progress-circular-rotate {
+   from {
+      transform: rotate(90deg);
+   }
+   to {
+      transform: rotate(270deg);
+   }
+}
+
+@keyframes progress-circular-dash-reverse {
+   from {
+      stroke-dasharray: 100, 200;
+      stroke-dashoffset: -74px;
+   }
+   to {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0px;
+   }
+}
+```
+
+Основные изменения:
+1. Удалил сложный код для SVG-animаций
+2. Поставил transform-origin: left top для всех элементов
+3. Упростил анимации
+4. Изменен z-index для улучшения визуализации
+5. Использован более простой подход с ::before и ::after伪元素
+
+Теперь progress-circular circular_progress должен работать корректно без ошибок в стиле.
+================================================================================

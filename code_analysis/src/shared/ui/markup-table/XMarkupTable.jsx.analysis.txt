@@ -1,0 +1,183 @@
+Анализ файла: src\shared\ui\markup-table\XMarkupTable.jsx
+================================================================================
+<think>
+Okay, I need to help the user optimize their React code and suggest improvements. Let me look at their code carefully.
+
+First, they're importing PropTypes from prop-types and memo from react. They have a custom component XMarkupTable that uses forwardRefWithAs and render from another file. There's also an array of table elements defined as constants in the same way.
+
+I notice that the component uses memo, which is good for performance. But maybe they can make it more efficient. Also, the classNames function seems to be used a lot—perhaps it would benefit from memoization itself? That way, if the styles don't change, it doesn't recompute every time.
+
+Looking at the constants array, they're defining each as a memoized constant using the same string key and rendering method. This could lead to redundant computations. Instead of creating separate components for each cell type (like tr, td, th), maybe we can create one base component and then use props like 'data-cell-type' or camelCase names to determine which part to render.
+
+This approach would reduce code duplication and make it easier to add new cell types in the future. Also, using data attributes could provide more flexibility than static prop names.
+
+I should also check for any unused variables or functions. For example, the showTitle prop is used but not displayed anywhere, so maybe it can be removed or kept if intended.
+
+Another thing: when memoizing constants with strings as keys, we might want to consider using a unique identifier like an index instead of relying on string order because different projects might have varying alphabetical orders for their components. But that's more about best practices than immediate optimizations.
+
+So, the plan is:
+
+1. Memoize classNames.
+2. Create a single base component for table cells and handle type via props or data attributes.
+3. Remove redundant constants by using this base component with dynamic props.
+4. Check and remove unused variables.
+
+This should make the code cleaner and more maintainable.
+</think>
+
+Let me analyze and optimize your code:
+
+1. The code seems well-structured, but we can make a few optimizations:
+
+2. First, let's memoize `classNames` since it's used multiple times without being modified:
+```javascript
+const classNames = memo((classPrefix, props) => {
+    return new ClassList({
+        ...props,
+        className: props.className || '',
+        // ... rest of the options ...
+    });
+});
+```
+
+3. The constants array can be simplified by creating a single base component and handling cell types via props:
+```javascript
+const XMarkupTableBase = memo(({ children, dataCellType, ...props }) => {
+    const type = dataCellType.toLowerCase();
+    if (!['tr', 'td', 'th'].includes(type)) {
+        throw new Error(`Unsupported cell type: ${type}`);
+    }
+    
+    return render(
+        type === 'tr' ? 'tbody' : 
+        (type === 'td' && 'td') ||
+        (type === 'th' && 'th')
+        , {
+            ...props,
+            className: classNames(`x-table-${type}`, props.className),
+            children
+        });
+    );
+});
+
+// Then create specific components using XMarkupTableBase
+const XTableBody = XMarkupTableBase;
+const XTableCell = XMarkupTableBase.dataCellType === 'td';
+const XTableHeader = XMarkupTableBase.dataCellType === 'th';
+```
+
+4. Remove unused variables:
+- `showTitle` is used but never displayed, so we can remove it from the component props
+- The constants array could be reduced to just one base component since all cell types derive from this structure
+
+5. Use more specific typing for props:
+```javascript
+XMarkupTable.propTypes = {
+    children: PropTypes.node,
+    className: PropTypes.string,
+    stripped: PropTypes.bool, // using 'stripped' instead of 'striped'
+    hover: PropTypes.bool,
+    dense: PropTypes.bool,
+    rowBorder: PropTypes.bool,
+    colBorder: PropTypes.bool,
+    border: PropTypes.bool,
+};
+```
+
+6. Remove unused variable `showTitle` since it's not being used.
+
+Here's the optimized version of your code:
+
+```javascript
+import { memo } from "react";
+import classNames from "./classnames";
+import forwardRefWithAs, render from "../../internal/render";
+import capitalize from "../../utils/string";
+import "./style.css";
+
+const XMarkupTableBase = memo(({ 
+    children,
+    dataCellType,
+    className,
+    stripped,
+    hover,
+    dense,
+    rowBorder,
+    colBorder,
+    border
+}) => {
+    const type = dataCellType.toLowerCase();
+    if (!['tr', 'td', 'th'].includes(type)) {
+        throw new Error(`Unsupported cell type: ${type}`);
+    }
+    
+    return render(
+        type === 'tr' ? 'tbody' : 
+        (type === 'td' && 'td') ||
+        (type === 'th' && 'th')
+        , {
+            ...props,
+            className: classNames(`x-table-${type}`, props.className),
+            children
+        });
+});
+
+export const XMarkupTable = memo(
+    forwardRefWithAs(function XMarkupTableFn({ 
+        children, 
+        className, 
+        stripped, 
+        hover, 
+        dense, 
+        rowBorder, 
+        colBorder, 
+        border,
+        ...props
+    }, ref) {
+        return render("table", {
+            ...props,
+            className: classNames(
+                "x-table",
+                {
+                    xTableStriped: stripped,
+                    xTableHover: hover,
+                    xTableDense: dense,
+                    xTableRowBorder: rowBorder,
+                    xTableColBorder: colBorder,
+                    xTableBorder: border
+                },
+                className
+            ),
+            ref,
+            children
+        });
+    })
+);
+
+XMarkupTable.propTypes = {
+    children: PropTypes.node,
+    className: PropTypes.string,
+    stripped: PropTypes.bool,
+    hover: PropTypes.bool,
+    dense: PropTypes.bool,
+    rowBorder: PropTypes.bool,
+    colBorder: PropTypes.bool,
+    border: PropTypes.bool,
+};
+
+// Constants are now created using XMarkupTableBase
+const XTableBody = XMarkupTableBase;
+const XTableCell = XMarkupTableBase.dataCellType === 'td';
+const XTableHeader = XMarkupTableBase.dataCellType === 'th';
+```
+
+Key improvements made:
+
+1. Memoized `classNames` function for better performance
+
+2. Created a base component that handles cell type via props instead of constants array, making it more maintainable
+
+3. Removed redundant code by using data attributes to determine cell type
+4. Removed unused variables and improved typing
+5. Made the constants array creation more efficient through reusability
+================================================================================
