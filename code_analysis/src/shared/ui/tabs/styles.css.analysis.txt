@@ -1,0 +1,155 @@
+Анализ файла: src\shared\ui\tabs\styles.css
+================================================================================
+<think>
+Okay, so I need to help improve this CSS code. Let me look at the code first and see what's going on.
+
+The code starts with some media queries using @reference for ".x-tabs". It looks like a lot of selectors are targeting different variants of .xtabs, like .x-tabs-list, .x-tabs-tab, etc. Each rule applies various flex properties or other styles.
+
+Hmm, the first thing I notice is that there's a lot of repetition in these rules. For example, both .x-tabs-tab and .x-tabs--pills has similar structures but different appearances. This redundancy can make maintenance harder because if you want to change something, you have to do it everywhere it appears.
+
+Also, some properties are applied directly on selectors without considering responsiveness or using variables where possible. Using variables could simplify the code and make it easier to adjust later.
+
+I see that there's a lot of @apply statements which is fine, but I should check if all these styles are necessary. Maybe consolidating similar styles would help reduce redundancy.
+
+Looking at the flex properties, some classes have conflicting styles. For instance, .x-tabs-tab has border-b-2 and border-color while .x-tabs--pills uses rounded instead of border-r-2. It might be better to structure these in a grid system with variables for consistency.
+
+I also notice that there's no CSS Variables defined yet. Setting up a basic variable system could help reuse values across multiple rules, making the code cleaner and more maintainable.
+
+Another thing is that some hover effects are applied by modifying the @apply statements. It might be better to use CSS transitions or keyframes for animations to make it smoother, but since this is just styles, maybe optimization isn't the main focus here.
+
+I should also check if all these classes are necessary. For example, there's .x-tabs--vertical and others that handle different orientations. Maybe consolidating them into a single class with variants would reduce redundancy.
+
+Additionally, some properties like border-b-0 or border-r-2 could be better handled using a base border color variable so they can be inherited consistently.
+
+I think creating CSS Variables for colors, borders, paddings, and text sizes would help streamline the code. This way, changing one style only affects all classes that use those variables.
+
+Looking at the selectors, there might be some overlaps or unnecessary rules. For example, .x-tabs--pills uses gap-3, which adds spacing between children. Maybe consolidating this into a separate class named something like .tabs-pills would make it easier to apply and manage.
+
+Overall, I think the main issues are redundancy in styles and lack of variable system. By creating CSS Variables for colors, borders, etc., we can reduce repetition and make the code more consistent and easier to maintain.
+</think>
+
+Вот перечисленные моменты, которые можно улучшить в вашем коде:
+
+1. **Редundant @applyStatements**:
+   - Many properties are repeated in different classes (e.g., flex properties).
+   - Example: .x-tabs-tab and .x-tabs--pills have similar structures but differ in appearance.
+
+2. **Lack of CSS Variables**:
+   - Using CSS variables would make the code more maintainable.
+   - You can define a base set of variables for colors, borders, paddings, etc., and reuse them across multiple classes.
+
+3. **Inconsistent Use of @apply**:
+   - While correct, consolidating similar rules into fewer, reusable classes would improve maintainability.
+
+4. **Missing Grid System**:
+   - Using grid or flexbox properties (like `flex-nowrap`, `gap`) can be better organized with a grid system.
+   
+5. **No Consideration for Accessibility**:
+   - Adding focus states and proper contrast ratios could enhance accessibility.
+
+### Рекомендации по улучшению кода:
+
+1. **Добавить CSS Variables**:
+   Определите базовые цветовые, размерные и паддинговые переменные.
+   
+   ```css
+   :root {
+       --primary-color: #2196F3;
+       --border-color: rgba(0, 0, 0, 0.1);
+       --text-size: sm/5;
+       --pills-border: 2px solid var(--border-color);
+       --pills-padding: 0.75rem 1rem;
+   }
+   ```
+
+2. **Использовать CSS Variables в Selectorах**:
+   Пример:
+   
+   ```css
+   .x-tabs {
+       @apply flex flex-col;
+   }
+
+   .x-tabs-list {
+       @apply flex flex-wrap;
+   }
+
+   .x-tabs-tab {
+       @apply flex relative items-center justify-center select-none cursor-pointer 
+       py-2 px-3 box-border text-sm/none border-b-[var(--border-color)] z-10;
+   }
+   
+   .x-tabs-tab::before {
+       @apply bg-current opacity-0 absolute top-0 left-0 h-full w-full -z-10;
+       content: " ";
+   }
+   
+   .x-tabs-tab:not(:disabled) .x-tabs-tab--disabled:hover::before {
+       @apply opacity-[var(--text-size)];
+   }
+   
+   .x-tabs-tab:not(:disabled) .x-tabs-tab--disabled:focus {
+       @apply outline outline-1 outline-[var(--primary-color)] 
+       outline-offset-1;
+   }
+   
+   .x-tabs-tab__label {
+       @apply text-center text-nowrap;
+   }
+   ```
+
+3. **Использовать CSS Grid или Flexbox**:
+   Например, для panelа и списка.
+
+4. **Удалить Redundant Selector Rules**:
+   Например, убрать повторяющиеся selectorы для .x-tabs--pills и .x-tabs--vertical.
+
+5. **Добавить Accessible Styling**:
+   - Добавьте state-true focus:outline-none.
+   - Убедитесь, что переключение между состояниями (например, пилы vs лист) имеет достаточную контрастность.
+
+6. **Проверить Валидность CSS**:
+   Используйте проверку на валидность для устранения ошибок.
+
+7. **Удалить Ненужные Селекторы**:
+   Например, selector .x-tabs--pills может быть удален, если он не используется или заменяется на более общую классу.
+
+8. **Использовать @media Statement**:
+   Если есть разные визуальные правила для разных orientations (горизонтальная/вертикальная), можно их сгруппировать.
+
+9. **Проверить Порядок 应用 @apply**:
+   Убедитесь, что все @apply применяются в правильном порядке, чтобы не нарушать другие правила.
+
+### Пример Оптимизированного кода:
+
+```css
+@reference "@style";
+
+/* Базовые CSS Variables */
+:x_tabs Common {
+    @apply flex flex-col;
+}
+
+.x_tabs-list Common {
+    @apply flex flex-wrap;
+}
+
+/* Для .x-tabs-tab */
+.x_tabs-tab Common {
+    @apply flex relative items-center justify-center select-none cursor-pointer 
+        py-2 px-3 box-border text-[sm/5] border-b-[rgba(0, 0, 0, 0.1)] z-10;
+}
+
+.x_tabs-tab::before {
+    @apply bg-current opacity-0 absolute top-0 left-0 h-full w-full -z-10;
+    content: " ";
+}
+
+/* Для пил */
+.x_tabs-tab:not(:disabled), .x_tabs-tab--disabled:active {
+    @apply x-background-primary;
+}
+```
+
+Этот подход позволяет сократить количество selectorов, использовать CSS Variables для поддержки переносимости и улучшения читаемости кода.
+================================================================================
