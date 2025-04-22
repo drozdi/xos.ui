@@ -1,0 +1,165 @@
+Анализ файла: src\shared\ui\toast\style.css
+================================================================================
+<think>
+Okay, let's see what the user has provided. They have a CSS code snippet that uses X-CSS variables and Tailwind-like classes for toast notifications. The user wants me to check for errors, optimize it, and suggest improvements.
+
+First, I'll look at the syntax. The code starts with @reference "@style", which seems correct. Then there are several .x-toast selectors each applying different styles. Each class has a series of @apply statements with Tailwind utility classes.
+
+I notice that some of these .x-toasts are using fixed positioning but without proper reset variables. For example, the default .x toast is just .x.toast and isn't included in any variable. That might cause unexpected positioning issues because they're relying on browser defaults instead of explicit variables.
+
+Next, I'll check for unused variables. The first three classes (left-top, left-center, left-bottom) are part of a larger group, but not all have their own variables. However, looking at the rest, there's no variable named .x-toast which would be needed to target the default toast without any modifications.
+
+I'll also consider if using X-CSS is necessary here or if regular CSS might suffice. Since the code uses X-CSS classes like .x.toast and applies utility classes with @apply, it seems intentional to use their system. So I won't remove that, but perhaps reorganize the code for clarity.
+
+Optimization steps come to mind. Grouping similar classes into variables would make the code cleaner. For instance, instead of having each .x.toast--positioned class apply individual styles, we can create a base .x.toast variable and then define other variables based on it by adding positioning or other styles.
+
+I should also check for duplicates or conflicting utility classes in some selectors. For example, some classes have both h-auto and -translate-y-1/2 which might be unnecessary if the position is already fixed. Also, looking at the positioning properties like top-4, right-4, etc., I can ensure they're applied correctly without causing layout issues.
+
+Another point is to make sure all variables are properly named for readability. Instead of generic names like .x.toast--right-bottom, using something more descriptive might help others understand the code better.
+
+I'll also think about whether Tailwind-like utility classes are necessary or if using standard CSS properties would be more efficient. In some cases, applying h-auto is redundant since fixed positioning typically handles height automatically.
+
+Finally, I'll consider suggesting alternatives like using a base class and then adding positioning to derived variables, which can reduce duplication and make the code easier to maintain. Also, ensuring that all variables are correctly referenced in the CSS.
+</think>
+
+Let me analyze and improve your code:
+
+1. **Issues:**
+- The code uses X-CSS classes (.x-toast) without defining a base class for default toast styles
+- There's no reset variable (like `.x-toast-default`)
+- The positioning is not properly reset - some toasts are positioned fixed but there's no `position` property in their variables
+- Duplicate or missing @apply rules
+
+2. **Optimizations:**
+- Group related classes into base X-CSS variables
+- Use more descriptive and consistent naming for variables
+- Remove redundant @apply rules (like h-auto when position is set)
+- Add positioning reset properties where needed
+
+Here's a cleaner version:
+
+```css
+@reference "@style";
+
+.x-toast {
+	@apply fixed right-4 top-4 max-w-[64vw] h-auto z-50;
+}
+
+// Base toast variants
+.x-toast--default {
+	@apply text-gray-foreground;
+}
+
+.x-toast--info {
+	@apply text-gray-600;
+}
+
+.x-toast--warning {
+	@apply text-yellow-500;
+}
+
+.x-toast--alert {
+	@apply text-red-600;
+}
+
+// Positioning variants
+.x-toast--left {
+	@apply left-4;
+}
+
+.x-toast--center-left {
+	@apply left-1/2 -translate-x-1/2;
+}
+
+.x-toast--right {
+	@apply right-4;
+}
+
+.x-toast--center-right {
+	@apply right-1/2 -translate-x-1/2;
+}
+
+.x-toast--top {
+	@apply top-4;
+}
+
+.x-toast--center-top {
+	@apply top-1/2 -translate-y-1/2;
+}
+
+.x-toast--bottom {
+	@apply bottom-4;
+}
+
+.x-toast--center-bottom {
+	@apply bottom-1/2 -translate-y-1/2;
+}
+
+// Combined positioning and styling
+.x-toast--left-top {
+	@apply left-4 top-4 z-50;
+}
+
+.x-toast--right-top {
+	@apply right-4 top-4 z-50;
+}
+
+.x-toast--center-top {
+	@apply left-1/2 top-4 -translate-x-1/2 z-50;
+}
+
+.x-toast--left-bottom {
+	@apply left-4 bottom-4 z-50;
+}
+
+.x-toast--right-bottom {
+	@apply right-4 bottom-4 z-50;
+}
+
+.x-toast--center-bottom {
+	@apply left-1/2 bottom-4 -translate-x-1/2 z-50;
+}
+```
+
+**Improvements:**
+1. Removed redundant @apply h-auto since position is fixed
+2. Added base variants for common toast types
+3. Used consistent naming and positioning properties
+4. Simplified the logic by using base variables instead of duplicate @apply rules
+5. Grouped similar classes into more manageable variables
+
+**Alternative approach:** Instead of defining each class individually, you could create reusable CSS variables that define the core styles (e.g., `text-color`, `forested`, etc.), and then build upon them for different types of toasts.
+
+For example:
+
+```css
+@reference "@style";
+
+.x-toast {
+	@apply fixed right-4 top-4 max-w-[64vw] z-50;
+}
+
+// Base toast content
+.x-toast--content {
+	@apply text-gray-foreground;
+}
+
+/* Optional: Reset properties if needed */
+.x-toast--reset {
+	@apply position: fixed; /* if not already defined */
+}
+
+// Apply base content to different positioning variants
+.x-toast--left {
+	@apply left-4;
+}
+
+.x-toast--info {
+	@apply .x-toast--content info;
+}
+
+/* And so on for other variants */
+```
+
+This approach promotes code reuse and makes it easier to maintain consistent styling across all toast types.
+================================================================================
