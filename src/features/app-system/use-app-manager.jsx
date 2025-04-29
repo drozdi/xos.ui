@@ -1,48 +1,46 @@
 import { v4 as uuid } from 'uuid';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import settingManager from "../../entites/core/setting-manager";
 import { parameterize } from "../../shared/utils/request";
 import { AppProvider } from "../app";
 import { App } from "../app/lib/App";
-import { windowManager } from '../window-system/window-manager';
 
 
 const getName = (appName) => appName.displayName || appName;
 const genPath = (conf) => parameterize(conf.pathName || "", conf);
 const get$App = (instance) => instance?.props?.app || instance;
 const genId = () => `app-${uuid()}`;
-const createRoot = () => {
+export const createRoot = () => {
   const container = document.createElement("div");
   document.body.prepend(container);
   return createRoot(container);
 };
 
 const mountRoot = (app) => {
-    try {
-      app = get$App(app);
-      if (!app.root) {
-        app.root = createRoot();
-      }
-      app.root.render(app.element);
-    } catch (error) {
-      console.error("Error mounting app:", error);
-      throw error;
+  try {
+    app = get$App(app);
+    if (!app.root) {
+      app.root = createRoot();
     }
-  };
+    app.root.render(app.element);
+  } catch (error) {
+    console.error("Error mounting app:", error);
+    throw error;
+  }
+};
 
-  const unMountRoot = (app) => {
-		try {
-			const container = app.root?._internalRoot.containerInfo;
-			app.root?.unmount();
-			if (container) {
-				container.remove();
-			}
-		} catch (error) {
-			console.error("Error unmounting app:", error);
-			throw error;
+const unMountRoot = (app) => {
+	try {
+		const container = app.root?._internalRoot.containerInfo;
+		app.root?.unmount();
+		if (container) {
+			container.remove();
 		}
-	};
+	} catch (error) {
+		console.error("Error unmounting app:", error);
+		throw error;
+	}
+};
 
 
 export const useAppManager = create(
@@ -50,8 +48,7 @@ export const useAppManager = create(
     (set, get) => ({
       apps: {}, // Зарегистрированные приложения
 	    runs: {}, // Запущенные приложения
-
-      id: 0, // Идентификатор приложения
+      history: [], // История запущенных приложений
 	    activeApp: null, // Активное приложение
 
       get(appName) {
@@ -82,7 +79,7 @@ export const useAppManager = create(
     
         $app.on("close", () => {
           get().removeApp($app);
-          get().unMountRoot($app);
+          unMountRoot($app);
         });
     
         return $app;
@@ -140,18 +137,16 @@ export const useAppManager = create(
 
       createApp(Component, conf = {}, save = true) {
         try {
-          conf.smKey = conf.smKey ?? this.genId();
-          const $app = this.get$App(this.buildApp(Component, conf));
+          conf.smKey = conf.smKey ?? genId();
+          const $app = get$App(get().buildApp(Component, conf));
           if ($app.smKey === conf.smKey && save) {
-            let runs = settingManager.APP.get("run", []);
-            runs.push($app.smKey);
-            settingManager.APP.set($app.smKey, {
-              id: this.id,
-              conf: conf,
-              smKey: $app.smKey,
-              appName: this.getName(Component),
-            });
-            settingManager.APP.set("run", runs);
+            set(state => ({
+              history: [ ...state.history, {
+                conf: conf,
+                smKey: $app.smKey,
+                appName: getName(Component),
+              } ]
+            }));
           }
         } catch (error) {
           console.error("Error creating app:", error);
@@ -160,14 +155,14 @@ export const useAppManager = create(
       },
       removeApp($app) {
         try {
-          $app = this.get$App($app);
-          let smKey = $app.smKey;
-          let pathName = $app.pathName;
-          let runs = settingManager.APP.get("run", []);
-          runs = runs.filter((val) => val != smKey);
-          settingManager.APP.remove(smKey);
-          settingManager.APP.set("run", runs);
-          delete this.runs[pathName];
+          $app = get$App($app);
+          set(state => ({
+            history: state.history.filter(appConfig => appConfig.smKey != $app.smKey),
+            runs: {
+              ...state.runs,
+              [$app.pathName]: undefined
+            }
+          }));
         } catch (error) {
           console.error("Error removing app:", error);
           throw error;
@@ -175,17 +170,9 @@ export const useAppManager = create(
       },
       reloadApps() {
         try {
-          let runs = settingManager.APP.get("run", []);
-          runs.forEach((smKey) => {
-            let info = settingManager.APP.get(smKey, {
-              id: 0,
-              conf: {},
-              smKey: smKey,
-              appName: "",
-            });
-            this.id = Math.max(info.id, this.id);
-            let Component = info.appName;
-            this.buildApp(Component, info.conf);
+          get().history.forEach((appConfig) => {
+            let Component = appConfig.appName;
+            get().buildApp(Component, appConfig.conf);
           });
         } catch (error) {
           console.error("Error reloading apps:", error);
@@ -193,11 +180,40 @@ export const useAppManager = create(
         }
       },
 
+      // Закрытие всех приложений
+      closeAll() {
+        try {
+          Object.values(get().runs).forEach((app) => {
+            app.close();
+          });
+          set({
+            runs: {},
+            history: []
+          })
+        } catch (error) {
+          console.error("Error closing all apps:", error);
+          throw error;
+        }
+      },
+      // Активация приложения
+      activate(appName) {
+        if (get().activeApp) {
+          get().deactivate(get().activeApp);
+        }
+        get().activeApp = appName;
+        console.log(`App ${appName} activated`);
+      },
 
+      deactivate(appName) {
+        if (get().activeApp === appName) {
+          get().activeApp = null;
+          console.log(`App ${appName} deactivated`);
+        }
+      },
 
 
       // Метод регистрации приложения
-      registerApp: (appConfig) => {
+      /*registerApp: (appConfig) => {
         const defaultConfig = {
           minSize: { width: 400, height: 300 },
           maxSize: { width: 2000, height: 2000 },
@@ -213,10 +229,10 @@ export const useAppManager = create(
           }
         }));
         
-      },
+      },*/
       
       // Метод запуска приложения
-      launchApp: async (appId, options = {}) => {
+      /*launchApp: async (appId, options = {}) => {
         const app = get().apps[appId];
         if (!app) throw new Error(`App ${appId} not registered`);
         
@@ -248,24 +264,12 @@ export const useAppManager = create(
         }));
         
         return windowId;
-      },
+      },*/
       
-      // Восстановление сессии
-      restoreSession: async () => {
-        const savedWindows = windowManager.getWindows();
-        for (const window of savedWindows) {
-          if (get().apps[window.appId]) {
-            await get().launchApp(window.appId, {
-              skipHistory: true,
-              windowState: window
-            });
-          }
-        }
-      }
     }),
     {
       name: 'app-manager',
-      partialize: (state) => ({ runs: state.runs })
+      partialize: (state) => ({ history: state.history })
     }
   )
 );
