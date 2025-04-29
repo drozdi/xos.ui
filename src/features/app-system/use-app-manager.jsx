@@ -1,6 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { parameterize } from "../../shared/utils/request";
 import { windowManager } from '../window-system/window-manager';
+
+const getName = (appName) => {
+  return appName.displayName || appName;
+}
+const genPath = (conf) => {
+  return parameterize(conf.pathName || "", conf);
+}
 
 export const useAppManager = create(
   persist(
@@ -10,6 +18,18 @@ export const useAppManager = create(
 
       id: 0, // Идентификатор приложения
 	    activeApp: null, // Активное приложение
+
+      get(appName) {
+        const name = getName(appName);
+        return get().apps[name];
+      },
+
+      register(appName, conf = {}) {
+        const name = getName(appName);
+        set(state => ({
+          apps: { ...state.apps, [name]: conf }
+        }));
+      },
 
       // Метод регистрации приложения
       registerApp: (appConfig) => {
